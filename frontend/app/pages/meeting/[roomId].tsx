@@ -31,9 +31,14 @@ import { ChatArea } from "@/components/ChatArea";
 import { RootState, useAppDispatch } from "../../state/store";
 import { useSelector } from "react-redux";
 import PageWrapper from "@/components/PageWrapper";
-import { useCreateTokenMutation, useGetMeetingQuery } from "@/state/services";
+import {
+  useCreateTokenMutation,
+  useGetMeetingQuery,
+  useLazyGetMeetingQuery,
+} from "@/state/services";
 import { usePrivy } from "@privy-io/react-auth";
 import isEmpty from "just-is-empty";
+import { MEETINGS } from "@/types";
 
 export type TPeerMetadata = {
   displayName: string;
@@ -45,10 +50,12 @@ interface Props {
 export default function MeetPage() {
   const router = useRouter();
   const roomId = router.query.roomId as string;
-
-  const { data } = useGetMeetingQuery({ roomId: roomId as string });
-  const meeting = data?.data;
   const [createToken] = useCreateTokenMutation();
+  const [meeting, setMeeting] = useState<MEETINGS | undefined>();
+  const [queryMeeting, { isFetching, isLoading }] = useLazyGetMeetingQuery();
+
+  // const { data } = useGetMeetingQuery({ roomId: roomId as string });
+  // const meeting = data?.data;
 
   const { user } = usePrivy();
   const activePeers = useActivePeers();
@@ -56,7 +63,6 @@ export default function MeetPage() {
   const [displayName, setDisplayName] = useState<string>("");
   const videoRef = useRef<HTMLVideoElement>(null);
   const screenShareRef = useRef<HTMLVideoElement>(null);
-  const [lobbyPeersIds, setLobbyPeersIds] = useState<string[]>([]);
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
   const [isJoining, setIsJoining] = useState<boolean>(false);
@@ -104,17 +110,17 @@ export default function MeetPage() {
   } = useLocalPeer<TPeerMetadata>();
   const { peerIds } = usePeerIds();
 
-  useEffect(() => {
-    if (!shareScreenStream && videoStream && videoRef.current) {
-      videoRef.current.srcObject = videoStream;
-    }
-  }, [videoStream, shareScreenStream]);
+  // useEffect(() => {
+  //   if (!shareScreenStream && videoStream && videoRef.current) {
+  //     videoRef.current.srcObject = videoStream;
+  //   }
+  // }, [videoStream, shareScreenStream]);
 
-  useEffect(() => {
-    if (shareScreenStream && screenShareRef.current) {
-      screenShareRef.current.srcObject = shareScreenStream;
-    }
-  }, [shareScreenStream]);
+  // useEffect(() => {
+  //   if (shareScreenStream && screenShareRef.current) {
+  //     screenShareRef.current.srcObject = shareScreenStream;
+  //   }
+  // }, [shareScreenStream]);
 
   async function handleJoinRoom(token?: string) {
     try {
@@ -129,7 +135,6 @@ export default function MeetPage() {
   }
 
   async function handleCreateNewToken() {
-    console.log("handleCreateToken");
     try {
       setIsJoining(true);
 
@@ -180,6 +185,25 @@ export default function MeetPage() {
   function isNotBot(remotePeerId: string) {
     return !remotePeerId.includes("bot");
   }
+
+  async function getMeeting() {
+    try {
+      const roomId = router.query.roomId as string;
+      const { data } = await queryMeeting({
+        roomId: roomId as string,
+      }).unwrap();
+      const meeting = data;
+      setMeeting(meeting);
+    } catch (error) {}
+  }
+
+  useEffect(() => {
+    router.events.on("routeChangeComplete", async () => {
+      await getMeeting();
+    });
+    return router.events.off("routeChangeComplete", getMeeting);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
   const hasRemotePeers = peerIds?.length > 0;
   return (
     <PageWrapper>

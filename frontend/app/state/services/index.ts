@@ -10,12 +10,22 @@ import {
   USERS,
 } from "../types/index.";
 
-export const AghotaApi = createApi({
-  reducerPath: "AghotaApi",
+export const GreenSpaceDAOApi = createApi({
+  reducerPath: "GreenSpaceDAOApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "/api/",
   }),
-  tagTypes: ["MeetingRecords", "Meetings", "Users", "Rooms", "Tokens"],
+  tagTypes: [
+    "MeetingRecords",
+    "Meetings",
+    "Users",
+    "Rooms",
+    "Tokens",
+    "Articles",
+    "FitnessPlans",
+    "MealPlans",
+    "Communities",
+  ],
 
   endpoints: (builder) => ({
     getUser: builder.query<Partial<APIResponse<USERS>>, Record<string, any>>({
@@ -70,7 +80,7 @@ export const AghotaApi = createApi({
     >({
       query: (params) => {
         return {
-          url: `meetings?${objectToSearchParams(params)}`,
+          url: `meeting-records?${objectToSearchParams(params)}`,
         };
       },
       providesTags: (result) =>
@@ -164,4 +174,4 @@ export const {
   useLazyGetMeetingsQuery,
   useLazyGetUserQuery,
   useGetMeetingQuery,
-} = AghotaApi;
+} = GreenSpaceDAOApi;
