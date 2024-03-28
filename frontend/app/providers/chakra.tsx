@@ -1,16 +1,16 @@
 import {
   ChakraBaseProvider,
-  extendBaseTheme,
+  extendTheme,
   theme as chakraTheme,
+  StyleFunctionProps,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
-const { Button, Link, List, FormLabel, Input } = chakraTheme.components;
 const config = {
   initialColorMode: "dark",
   useSystemColorMode: false,
 };
-export const theme = extendBaseTheme({
+export const theme = extendTheme({
   fonts: {
     heading: "var(--font-poppins)",
     body: "var(--font-poppins)",
@@ -72,23 +72,28 @@ export const theme = extendBaseTheme({
   },
   config,
   components: {
-    List,
-    Input,
-    FormLabel,
-    Link,
     Button: {
-      ...Button,
       variants: {
-        solid: {
-          bg: "gs-green.700",
-          _hover: {
-            bg: "gs-green.800",
-          },
+        solid: (styleProps: StyleFunctionProps) => {
+          if (styleProps.colorScheme === "gs-green") {
+            return {
+              bg: "gs-green.700",
+              _hover: {
+                bg: "gs-green.800",
+              },
+            };
+          }
+          // if (styleProps.colorScheme === "gs-yellow") {
+          //   return {
+          //     bg: "gs-yellow.600",
+          //     _hover: {
+          //       bg: "gs-yellow.800",
+          //     },
+          //   };
+          // }
         },
       },
       defaultProps: {
-        ...Button.defaultProps,
-
         colorScheme: "gs-green",
         variant: "solid",
       },
