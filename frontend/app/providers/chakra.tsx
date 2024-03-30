@@ -78,19 +78,20 @@ export const theme = extendTheme({
           if (styleProps.colorScheme === "gs-green") {
             return {
               bg: "gs-green.700",
+              color: "white",
               _hover: {
                 bg: "gs-green.800",
               },
             };
           }
-          // if (styleProps.colorScheme === "gs-yellow") {
-          //   return {
-          //     bg: "gs-yellow.600",
-          //     _hover: {
-          //       bg: "gs-yellow.800",
-          //     },
-          //   };
-          // }
+          if (styleProps.colorScheme === "gs-yellow") {
+            return {
+              bg: "gs-yellow.500",
+              _hover: {
+                bg: "gs-yellow.600",
+              },
+            };
+          }
         },
       },
       defaultProps: {

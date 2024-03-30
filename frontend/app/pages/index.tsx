@@ -2,6 +2,7 @@ import Head from "next/head";
 
 import { Box, Button } from "@chakra-ui/react";
 import PageLoader from "@/components/PageLoader";
+import { HeaderNav } from "@/components/HeaderNav";
 
 export default function Home() {
   return (
@@ -30,20 +31,21 @@ export default function Home() {
         />
         <link rel="manifest" href="/site.webmanifest"></link>
       </Head>
-      <PageLoader isLoading>
+      <PageLoader isLoading={false}>
         <Box
           as="main"
           bgRepeat={"no-repeat"}
-          bgGradient={"linear(-130deg,gs-green.700,black 60%)"}
+          bgGradient={"linear(236deg, #DCDDDB 0%, #329648  0%, black 100%)"}
           h={"100vh"}
           pos={"relative"}
         >
-          <Button layerStyle={"with-shadow"}>Join the waitlist</Button>
           <Box
             h={"full"}
             bg={"rgba(41, 41, 41,0.40)"}
             backdropFilter={"blur(30px)"}
-          ></Box>
+          >
+            <HeaderNav />
+          </Box>
         </Box>
       </PageLoader>
     </>
