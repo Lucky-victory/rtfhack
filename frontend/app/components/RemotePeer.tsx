@@ -19,7 +19,7 @@ import { Audio, Video } from "@huddle01/react/components";
 import React, { useEffect, useRef, useState } from "react";
 import { FiMic, FiMicOff, FiUser } from "react-icons/fi";
 import { useSelector } from "react-redux";
-import { TPeerMetadata } from "@/pages/meet/[roomId]";
+import { TPeerMetadata } from "@/types";
 
 type Props = {
   peerId: string;
