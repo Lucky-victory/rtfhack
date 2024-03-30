@@ -8,7 +8,7 @@ interface Props {
   children?: ReactNode;
 }
 export default function PageLoader({
-  isLoading = true,
+  isLoading = false,
   text = "Loading...",
   children,
 }: Props) {

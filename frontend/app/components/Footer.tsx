@@ -1,7 +1,6 @@
 import { Link } from "@chakra-ui/next-js";
 import { Box, Flex, HStack, Image, Stack, Text } from "@chakra-ui/react";
 import { FiFacebook, FiInstagram, FiTwitter } from "react-icons/fi";
-import { HiX } from "react-icons/hi";
 
 export default function Footer() {
   return (
