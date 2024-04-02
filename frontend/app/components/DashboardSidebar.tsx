@@ -1,3 +1,4 @@
+import { useResize } from "@/hooks";
 import { Link } from "@chakra-ui/next-js";
 import {
   Box,
@@ -20,9 +21,12 @@ export default function DashboardSideNav(props: {
     child?: string[];
   }>;
 }) {
-  const isMobile = false;
+  const { isMobileSize, isTabletSize } = useResize();
   const pathname = usePathname();
-
+  const miniSidebarStyles = {
+    w: "60px",
+    px: 0,
+  };
   const parts = pathname.split("/");
   const beforeLastPart = parts[parts.length - 2];
   const lastPart = parts[parts.length - 1];
@@ -40,46 +44,64 @@ export default function DashboardSideNav(props: {
       borderLeftColor: "gs-green.400",
       color: "gs-green.400",
     };
+
     return (
-      <ListItem
-        pos={"relative"}
-        px={3}
-        key={"navlink" + i}
-        fontSize={"16"}
-        className={""}
-      >
+      <ListItem pos={"relative"} key={"dash-sidebar-nav-link" + i}>
         <Link
           _hover={{ ...activeStyles, fontWeight: "normal" }}
-          rounded={"lg"}
+          rounded={isMobileSize ? "none" : "md"}
           borderLeft={"4px solid"}
           borderLeftColor={"transparent"}
           bg={"transparent"}
-          py={3}
+          py={"10px"}
           px={3}
+          fontWeight={300}
           {...(isActive && activeStyles)}
           textDecor={"none!important"}
           href={buildLink(props?.entryPath as string, link?.url)}
           alignItems={"center"}
           display={"flex"}
-          gap={5}
+          gap={4}
         >
-          <Icon as={link?.icon} size={24} />
-          {!isMobile && <Text as={"span"}>{link?.title}</Text>}
+          <Icon as={link?.icon} fontSize={isMobileSize ? 24 : 20} />
+          {!isMobileSize && (
+            <Text fontSize={"15px"} as={"span"}>
+              {link?.title}
+            </Text>
+          )}
         </Link>
       </ListItem>
     );
   });
   return (
     <Box
-      borderRight={"2px"}
+      borderRight={"1px"}
       borderRightColor={"gray.500"}
       bg={"gray.700"}
-      w={isMobile ? 70 + "px" : 260}
       h={"full"}
+      {...(isMobileSize ? miniSidebarStyles : { w: 230, px: 3 })}
     >
-      <Box pl={4} mb={5}>
+      <Box mb={5}>
         <Link href="/">
-          <Image alt="" src="/white-logo.svg" width={170} height={60 + "px"} />
+          {isMobileSize && (
+            <Image
+              alt=""
+              mx={"auto"}
+              mt={2}
+              display={"block"}
+              src="/icons/small-white-logo.svg"
+              width={40 + "px"}
+              height={40 + "px"}
+            />
+          )}
+          {!isMobileSize && (
+            <Image
+              alt=""
+              src="/white-logo.svg"
+              width={170}
+              height={60 + "px"}
+            />
+          )}
         </Link>
       </Box>
       <Flex direction={"column"} as={List} gap={4}>
