@@ -188,11 +188,16 @@ export function HeaderNav() {
               <HStack
                 // clipPath={"polygon(14% 0, 100% 0%, 100% 100%, 0% 100%);"}
                 bg={"gs-yellow.400"}
-                w={{ base: 250, lg: 350 }}
-                py={2}
-                justify={"center"}
+                minW={{ base: 150, lg: 350 }}
+                p={2}
+                // justify={"center"}
               >
-                <Button layerStyle={"with-shadow"} onClick={handleLogin}>
+                <Button
+                  display={"block"}
+                  w={"full"}
+                  layerStyle={"with-shadow"}
+                  onClick={handleLogin}
+                >
                   Connect Wallet
                 </Button>
               </HStack>
