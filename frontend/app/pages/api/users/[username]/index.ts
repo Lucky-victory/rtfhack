@@ -66,7 +66,7 @@ export const PUT: HTTP_METHOD_CB = async (
 ) => {
   try {
     const { ...rest } = req.body;
-    let { addressOrUsername: username } = req.query;
+    let { username } = req.query;
 
     const user = await db.query.users.findFirst({
       where: eq(users.username, username as string),
@@ -82,11 +82,19 @@ export const PUT: HTTP_METHOD_CB = async (
         404
       );
     }
-
-    const update = await db.update(users).set({ ...rest });
-
+    //TODO: Add authorization check
+    const updatedRecord = await db.transaction(async (tx) => {
+      await tx
+        .update(users)
+        .set(rest)
+        .where(eq(users.username, username as string));
+      return tx.query.users.findFirst({
+        where: eq(users.username, username as string),
+      });
+    });
     return await successHandlerCallback(req, res, {
       message: "user updated successfully",
+      data: updatedRecord,
     });
   } catch (error: any) {
     return await errorHandlerCallback(req, res, {

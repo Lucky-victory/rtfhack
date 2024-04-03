@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { meetings, users } from "@/db/schema";
+import { users } from "@/db/schema";
 import {
   HTTP_METHOD_CB,
   errorHandlerCallback,
@@ -24,20 +24,14 @@ export const GET: HTTP_METHOD_CB = async (
   res: NextApiResponse
 ) => {
   try {
-    const { authId, chainId, address } = req.query;
-    let where = authId
-      ? { where: eq(users.authId, authId as string) }
-      : {
-          where: and(
-            eq(users.chainId, chainId as string),
-            eq(users.address, address as string)
-          ),
-        };
-    const user = await db.query.users.findFirst({
-      ...where,
+    const user = await db.query.users.findMany({
+      columns: {
+        email: false,
+        password: false,
+      },
     });
     return successHandlerCallback(req, res, {
-      message: "user received successfully",
+      message: "users retrieved successfully",
       data: user || null,
     });
   } catch (error) {

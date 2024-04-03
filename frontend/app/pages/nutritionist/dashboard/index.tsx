@@ -8,7 +8,7 @@ export default function NutritionistDashboardPage() {
       <Flex direction={"column"} w={"full"} py={5} px={4}>
         <DashboardEmptyArea
           text="No data to show"
-          isEmpty={false}
+          isEmpty={true}
           isLoading={false}
         >
           children

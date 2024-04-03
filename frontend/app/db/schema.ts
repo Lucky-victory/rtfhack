@@ -93,7 +93,6 @@ export const fitnessPlans = mysqlTable(
       "draft"
     ),
     userId: varchar("user_id", { length: 255 }),
-
     authorAddress: varchar("author_address", { length: 50 }),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").onUpdateNow(),
@@ -143,16 +142,13 @@ export const meetingRecords = mysqlTable(
   {
     id: int("id").autoincrement().primaryKey(),
     meetingId: varchar("meeting_id", { length: 100 }),
-    roomId: varchar("room_id", { length: 255 }),
     userId: varchar("user_id", { length: 255 }),
-
     recordDuration: int("record_duration"),
     recordUri: varchar("record_uri", { length: 255 }),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").onUpdateNow(),
   },
   (t) => ({
-    roomIdx: index("room_idx").on(t.roomId),
     userIdx: index("user_idx").on(t.userId),
   })
 );
@@ -161,10 +157,11 @@ export const meetings = mysqlTable(
   {
     id: int("id").autoincrement().primaryKey(),
     title: varchar("title", { length: 255 }),
+    meetId: varchar("meet_id", { length: 255 }).$defaultFn(() =>
+      generateUrlSafeId(14)
+    ),
     roomId: varchar("room_id", { length: 100 }).notNull(),
     userId: varchar("user_id", { length: 255 }),
-
-    participants: int("participants"),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").onUpdateNow(),
   },
@@ -179,7 +176,6 @@ export const communities = mysqlTable("Communities", {
   status: mysqlEnum("status", ["published", "draft", "deleted"]).default(
     "published"
   ),
-
   views: int("views").default(0),
   title: varchar("title", { length: 255 }).notNull(),
   description: text("description"),
@@ -265,6 +261,11 @@ export const appointments = mysqlTable("Appointments", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").onUpdateNow(),
 });
+export const meetingParticipants = mysqlTable("MeetingParticipants", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: varchar("user_id", { length: 155 }),
+  meetingId: varchar("meeting_id", { length: 100 }),
+});
 
 // relations
 export const appointmentsRelations = relations(
@@ -315,12 +316,27 @@ export const communityMessagesRelations = relations(
     attachments: many(messageAttachment),
   })
 );
+
+export const meetingParticipantsRelations = relations(
+  meetingParticipants,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [meetingParticipants.userId],
+      references: [users.authId],
+    }),
+    meeting: one(meetings, {
+      fields: [meetingParticipants.meetingId],
+      references: [meetings.id],
+    }),
+  })
+);
 export const meetingRelations = relations(meetings, ({ one, many }) => ({
   records: many(meetingRecords),
   author: one(users, {
     fields: [meetings.userId],
     references: [users.authId],
   }),
+  participants: many(meetingParticipants),
   // // this and the above references a user, this for a local auth, while the other is for a third party auth
   // author: one(users, {
   //   fields: [meetings.userId],
