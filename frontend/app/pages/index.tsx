@@ -31,14 +31,17 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>GreenspaceDAO | Live Healthier and Longer</title>
+        <title>GreenspaceDAO | Live Longer and Healthier</title>
         <meta
           name="description"
           content="Want to Live Healthier and Longer?
 We're building healthy communities focused on longevity all around the world, we want to help people live longer, better through community inclusive programs that improve productivity,"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="og:image" content={url + "og.png"} />
+        <meta
+          name="og:image"
+          content={"https://greenspacedao.xyz/opengraph.png"}
+        />
         <link rel="icon" href="/icons/favicon.ico" />
         <link
           rel="apple-touch-icon"

@@ -1,4 +1,26 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import generateUniqueId from "generate-unique-id";
+
+export const generateCommunityId = (prefix = "GS") => {
+  return generateId((prefix = "GS"), 14, "_");
+};
+/**
+ *
+ * @param prefix  prefix f0r the ID
+ * @param len length of the ID
+ * @param sep separator fop the ID
+ * @returns
+ */
+export const generateId = (prefix = "", len = 10, sep = "") => {
+  return `${prefix}${sep}${generateUniqueId({
+    useLetters: false,
+    useNumbers: true,
+    length: len,
+  })}`;
+};
+export const generateUsername = (prefix = "GH", len = 10) => {
+  return generateId(prefix, len, "_");
+};
 export function objectToSearchParams(obj: Record<string, string>) {
   const params = new URLSearchParams();
 
