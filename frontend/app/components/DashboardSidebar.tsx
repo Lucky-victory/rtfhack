@@ -39,10 +39,10 @@ export default function DashboardSideNav(props: {
     const buildLink = (entry: string, url: string) =>
       url.toLowerCase() === "overview" ? entry + "" : entry + url;
     const activeStyles = {
-      bg: "gs-green.900",
+      bg: "gs-yellow.900",
       fontWeight: 500,
-      borderLeftColor: "gs-green.400",
-      color: "gs-green.400",
+      borderLeftColor: "gs-yellow.300",
+      color: "gs-yellow.300",
     };
 
     return (

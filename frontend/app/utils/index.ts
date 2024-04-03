@@ -1,8 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import generateUniqueId from "generate-unique-id";
+import { nanoid } from "nanoid";
+export const env = process.env.NODE_ENV || "development";
+export const IS_DEV = env === "development";
 
 export const generateCommunityId = (prefix = "GS") => {
-  return generateId((prefix = "GS"), 14, "_");
+  return generateNumId((prefix = "GS"), 14, "_");
 };
 /**
  *
@@ -11,7 +14,7 @@ export const generateCommunityId = (prefix = "GS") => {
  * @param sep separator fop the ID
  * @returns
  */
-export const generateId = (prefix = "", len = 10, sep = "") => {
+export const generateNumId = (prefix = "", len = 10, sep = "") => {
   return `${prefix}${sep}${generateUniqueId({
     useLetters: false,
     useNumbers: true,
@@ -19,7 +22,7 @@ export const generateId = (prefix = "", len = 10, sep = "") => {
   })}`;
 };
 export const generateUsername = (prefix = "GH", len = 10) => {
-  return generateId(prefix, len, "_");
+  return generateNumId(prefix, len, "_");
 };
 export function objectToSearchParams(obj: Record<string, string>) {
   const params = new URLSearchParams();
@@ -98,4 +101,7 @@ export async function mainHandler(
     default:
       return res.status(405).end();
   }
+}
+export function generateUrlSafeId(len = 21) {
+  return nanoid(len);
 }

@@ -1,4 +1,9 @@
-import { generateCommunityId, generateId, generateUsername } from "@/utils";
+import {
+  generateCommunityId,
+  generateNumId,
+  generateUrlSafeId,
+  generateUsername,
+} from "@/utils";
 import { relations } from "drizzle-orm";
 import {
   index,
@@ -105,9 +110,7 @@ export const users = mysqlTable(
     id: int("id").autoincrement().primaryKey(),
     chainId: varchar("chain_id", { length: 100 }),
     //use this as a user id from a third party auth provider
-    authId: varchar("auth_id", { length: 255 }).$defaultFn(() =>
-      generateId("", 24)
-    ),
+    authId: varchar("auth_id", { length: 255 }).$defaultFn(generateUrlSafeId),
     emailVerified: boolean("email_verified").default(false),
     fullName: varchar("full_name", { length: 120 }),
     username: varchar("username", { length: 50 })
@@ -176,10 +179,12 @@ export const communities = mysqlTable("Communities", {
   status: mysqlEnum("status", ["published", "draft", "deleted"]).default(
     "published"
   ),
+
+  views: int("views").default(0),
   title: varchar("title", { length: 255 }).notNull(),
   description: text("description"),
   visibility: mysqlEnum("visibility", ["public", "private"]).default("public"),
-  slug: varchar("slug", { length: 255 }).notNull(),
+  slug: varchar("slug", { length: 255 }),
   displayImage: varchar("display_image", { length: 255 }),
   coverImage: varchar("cover_image", { length: 255 }),
   userId: varchar("user_id", { length: 255 }),
@@ -236,13 +241,45 @@ export const communityMembers = mysqlTable("communityMembers", {
   id: int("id").autoincrement().primaryKey(),
   communityId: int("community_id"),
   userId: int("user_id"),
-  role: mysqlEnum("role", ["moderator", "admin", "member"]),
+  role: mysqlEnum("role", ["moderator", "admin", "member"]).default("member"),
   xp: int("xp").default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").onUpdateNow(),
 });
 
+// Appointments
+export const appointments = mysqlTable("Appointments", {
+  id: int("id").autoincrement().primaryKey(),
+  requestedBy: varchar("requested_id", { length: 155 }),
+  nutritionistId: varchar("nutritionistId", { length: 155 }),
+  status: mysqlEnum("status", [
+    "pending",
+    "accepted",
+    "rejected",
+    "expired",
+    "completed",
+  ]).default("pending"),
+  startTime: timestamp("start_time"),
+  endTime: timestamp("end_time"),
+  duration: int("duration"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").onUpdateNow(),
+});
+
 // relations
+export const appointmentsRelations = relations(
+  appointments,
+  ({ one, many }) => ({
+    requestedBy: one(users, {
+      fields: [appointments.requestedBy],
+      references: [users.authId],
+    }),
+    nutritionist: one(users, {
+      fields: [appointments.nutritionistId],
+      references: [users.authId],
+    }),
+  })
+);
 export const communityRelations = relations(communities, ({ one, many }) => ({
   events: many(communityEvents),
   challenges: many(communityChallenges),

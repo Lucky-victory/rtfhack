@@ -31,7 +31,7 @@ export default function PageLoader({
               mb={4}
               borderWidth={4}
               color="gs-yellow.700"
-              speed="0.65s"
+              speed="0.55s"
               emptyColor="gray.900"
               w={{ md: "80px", base: "60px" }}
               h={{ md: "80px", base: "60px" }}

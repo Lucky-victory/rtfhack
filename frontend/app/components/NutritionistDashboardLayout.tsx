@@ -64,7 +64,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           links={navLinks}
           entryPath="/nutritionist/dashboard/"
         />
-        <Flex direction={"column"} bg={"gs-gray.100"} h={"full"}>
+        <Flex direction={"column"} h={"full"} w={"full"}>
           <DashboardHeader />
           {children}
         </Flex>
