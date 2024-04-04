@@ -5,7 +5,7 @@ export const env = process.env.NODE_ENV || "development";
 export const IS_DEV = env === "development";
 
 export const generateCommunityId = (prefix = "GS") => {
-  return generateNumId((prefix = "GS"), 14, "_");
+  return generateNumId(prefix, 14, "-");
 };
 /**
  *
@@ -102,6 +102,25 @@ export async function mainHandler(
       return res.status(405).end();
   }
 }
-export function generateUrlSafeId(len = 21) {
-  return nanoid(len);
+export function generateUrlSafeId(len = 21, prefix = ""): string {
+  return prefix + nanoid(len);
+}
+interface NestedObject {
+  [key: string]: any;
+}
+
+export function flattenArray<T extends NestedObject, U>(
+  array: T[],
+  callback: (item: T) => U | null
+): U[] {
+  const flattenedArray: U[] = [];
+
+  array.forEach((item) => {
+    const flattenedItem = callback(item);
+    if (flattenedItem !== null) {
+      flattenedArray.push(flattenedItem);
+    }
+  });
+
+  return flattenedArray;
 }

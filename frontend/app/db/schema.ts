@@ -108,7 +108,7 @@ export const users = mysqlTable(
   {
     id: int("id").autoincrement().primaryKey(),
     chainId: varchar("chain_id", { length: 100 }),
-    //use this as a user id from a third party auth provider
+    //this can be used as a user id from a third party auth provider
     authId: varchar("auth_id", { length: 255 }).$defaultFn(generateUrlSafeId),
     emailVerified: boolean("email_verified").default(false),
     fullName: varchar("full_name", { length: 120 }),
@@ -131,7 +131,7 @@ export const users = mysqlTable(
     pk: primaryKey({ columns: [t.address, t.authId] }),
     emailIdx: index("email_idx").on(t.email),
     userTypeIdx: index("user_type_idx").on(t.userType),
-    addressIdx: uniqueIndex("address_idx").on(t.address),
+    addressIdx: index("address_idx").on(t.address),
 
     usernameIdx: uniqueIndex("username_idx").on(t.username),
   })
@@ -160,6 +160,8 @@ export const meetings = mysqlTable(
     meetId: varchar("meet_id", { length: 255 }).$defaultFn(() =>
       generateUrlSafeId(14)
     ),
+    startTime: timestamp("start_time"),
+    endTime: timestamp("end_time"),
     roomId: varchar("room_id", { length: 100 }).notNull(),
     userId: varchar("user_id", { length: 255 }),
     createdAt: timestamp("created_at").defaultNow(),
@@ -177,7 +179,7 @@ export const communities = mysqlTable("Communities", {
     "published"
   ),
   views: int("views").default(0),
-  title: varchar("title", { length: 255 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
   description: text("description"),
   visibility: mysqlEnum("visibility", ["public", "private"]).default("public"),
   slug: varchar("slug", { length: 255 }),
@@ -191,7 +193,6 @@ export const communities = mysqlTable("Communities", {
 
 export const communityMessages = mysqlTable("CommunityMessages", {
   id: int("id").autoincrement().primaryKey(),
-
   communityId: int("community_id"),
   userId: int("user_id"),
   message: text("message"),
@@ -201,12 +202,16 @@ export const communityMessages = mysqlTable("CommunityMessages", {
 export const messageAttachment = mysqlTable("MessageAttachments", {
   id: int("id").autoincrement().primaryKey(),
   messageId: int("message_id"),
-  content: varchar("content", { length: 255 }),
+  content: text("content"),
 });
 export const communityEvents = mysqlTable("CommunityEvents", {
   id: int("id").autoincrement().primaryKey(),
   title: varchar("title", { length: 255 }).notNull(),
   details: mediumtext("details"),
+  slugId: varchar("slug_id", { length: 255 }).$defaultFn(() =>
+    generateUrlSafeId(14)
+  ),
+  coverImage: mediumtext("cover_image"),
   communityId: int("community_id"),
   startDate: timestamp("start_date"),
   endDate: timestamp("end_date"),
@@ -221,7 +226,11 @@ export const communityEvents = mysqlTable("CommunityEvents", {
 export const communityChallenges = mysqlTable("CommunityChallenges", {
   id: int("id").autoincrement().primaryKey(),
   title: varchar("title", { length: 255 }).notNull(),
+  slugId: varchar("slug_id", { length: 255 }).$defaultFn(() =>
+    generateUrlSafeId(14)
+  ),
   details: mediumtext("details"),
+  coverImage: mediumtext("cover_image"),
   communityId: int("community_id"),
   startDate: timestamp("start_date"),
   endDate: timestamp("end_date"),
@@ -242,7 +251,20 @@ export const communityMembers = mysqlTable("communityMembers", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").onUpdateNow(),
 });
-
+export const communityEventsTags = mysqlTable("communityEventsTags", {
+  id: int("id").autoincrement().primaryKey(),
+  eventId: int("event_id"),
+  name: varchar("name", { length: 50 }),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").onUpdateNow(),
+});
+export const communityChallengesTags = mysqlTable("communityChallengesTags", {
+  id: int("id").autoincrement().primaryKey(),
+  challengeId: int("challenges_id"),
+  name: varchar("name", { length: 50 }),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").onUpdateNow(),
+});
 // Appointments
 export const appointments = mysqlTable("Appointments", {
   id: int("id").autoincrement().primaryKey(),
@@ -291,6 +313,18 @@ export const communityRelations = relations(communities, ({ one, many }) => ({
     references: [users.authId],
   }),
 }));
+export const communityChallengesRelations = relations(
+  communityChallenges,
+  ({ one, many }) => ({
+    tags: many(communityChallengesTags),
+  })
+);
+export const communityEventsRelations = relations(
+  communityEvents,
+  ({ one, many }) => ({
+    tags: many(communityEventsTags),
+  })
+);
 export const communityMembersRelations = relations(
   communityMembers,
   ({ one, many }) => ({
