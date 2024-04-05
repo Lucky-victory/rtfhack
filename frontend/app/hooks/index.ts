@@ -1,4 +1,32 @@
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
+export const useActiveTab = (
+  paramName: string
+): [string, (tabName: string) => void] => {
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState("");
+
+  useEffect(() => {
+    const { query } = router;
+    const activeTabParam = query[paramName] as string;
+    setActiveTab(activeTabParam || ""); // Set active tab from URL query params
+  }, [router, paramName]);
+
+  const setActiveTabAndUpdateUrl = (tabName: string) => {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, [paramName]: tabName },
+      },
+      undefined,
+      { shallow: true }
+    );
+    setActiveTab(tabName);
+  };
+
+  return [activeTab, setActiveTabAndUpdateUrl];
+};
 
 export const useResize = () => {
   const [windowSize, setWindowSize] = useState<{
