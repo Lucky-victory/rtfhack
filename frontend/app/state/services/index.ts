@@ -253,11 +253,11 @@ export const GreenSpaceDAOApi = createApi({
     }), // TODO: Add return types
     getCommunity: builder.query<
       Partial<APIResponse<any>>,
-      { params: Record<string, any>; spaceIdOrId: string }
+      { params?: Record<string, any>; spaceIdOrId: string }
     >({
       query: ({ spaceIdOrId, params }) => {
         return {
-          url: `community/${spaceIdOrId}?${objectToSearchParams(params)}`,
+          url: `community/${spaceIdOrId}?${objectToSearchParams(params!)}`,
         };
       },
       providesTags: (result, error, { spaceIdOrId }) => {
@@ -266,11 +266,11 @@ export const GreenSpaceDAOApi = createApi({
     }),
     getCommunityEvent: builder.query<
       Partial<APIResponse<any>>,
-      { params: Record<string, any>; slugId: string }
+      { params?: Record<string, any>; slugId: string }
     >({
       query: ({ slugId, params }) => {
         return {
-          url: `community/events/${slugId}?${objectToSearchParams(params)}`,
+          url: `community/events/${slugId}?${objectToSearchParams(params!)}`,
         };
       },
       providesTags: (result, error, { slugId }) => {
@@ -279,11 +279,13 @@ export const GreenSpaceDAOApi = createApi({
     }),
     getCommunityChallenge: builder.query<
       Partial<APIResponse<any>>,
-      { params: Record<string, any>; slugId: string }
+      { params?: Record<string, any>; slugId: string }
     >({
       query: ({ slugId, params }) => {
         return {
-          url: `community/challenges/${slugId}?${objectToSearchParams(params)}`,
+          url: `community/challenges/${slugId}?${objectToSearchParams(
+            params!
+          )}`,
         };
       },
       providesTags: (result, error, { slugId }) => {

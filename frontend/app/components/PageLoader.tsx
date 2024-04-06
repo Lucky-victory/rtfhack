@@ -30,7 +30,7 @@ export default function PageLoader({
             <Spinner
               mb={4}
               borderWidth={4}
-              color="gs-yellow.700"
+              color="gs-yellow.500"
               speed="0.55s"
               emptyColor="gray.900"
               w={{ md: "80px", base: "60px" }}
