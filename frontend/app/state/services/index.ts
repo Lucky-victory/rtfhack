@@ -9,6 +9,7 @@ import {
   NEW_USER,
   USERS,
 } from "../types";
+import { FitnessPlan, Article, MealPlan } from "@/types/shared";
 
 export const GreenSpaceDAOApi = createApi({
   reducerPath: "GreenSpaceDAOApi",
@@ -33,6 +34,150 @@ export const GreenSpaceDAOApi = createApi({
   ],
 
   endpoints: (builder) => ({
+    getArticles: builder.query<
+      Partial<APIResponse<Article[]>>,
+      { status?: "all" | "published" | "draft"; authId?: string }
+    >({
+      query: (params) => {
+        return {
+          url: `articles?${objectToSearchParams(params)}`,
+        };
+      },
+      providesTags: (result) =>
+        // is result available?
+        result?.data
+          ? // successful query
+            [
+              ...result?.data.map(({ slug }) => ({
+                type: "Articles" as const,
+                id: slug,
+              })),
+              { type: "Articles", id: "LIST" },
+            ]
+          : // an error occurred, but we still want to refetch this query when `{ type: 'Articles', id: 'LIST' }` is invalidated
+            [{ type: "Articles", id: "LIST" }],
+    }),
+    getMealPlans: builder.query<
+      Partial<APIResponse<MealPlan[]>>,
+      { status?: "all" | "published" | "draft"; authId?: string }
+    >({
+      query: (params) => {
+        return {
+          url: `meal-plans?${objectToSearchParams(params)}`,
+        };
+      },
+      providesTags: (result) =>
+        // is result available?
+        result?.data
+          ? // successful query
+            [
+              ...result?.data.map(({ slug }) => ({
+                type: "MealPlans" as const,
+                id: slug,
+              })),
+              { type: "MealPlans", id: "LIST" },
+            ]
+          : // an error occurred, but we still want to refetch this query when `{ type: 'MealPlans', id: 'LIST' }` is invalidated
+            [{ type: "MealPlans", id: "LIST" }],
+    }),
+    getFitnessPlans: builder.query<
+      Partial<APIResponse<FitnessPlan[]>>,
+      { status?: "all" | "published" | "draft"; authId?: string }
+    >({
+      query: (params) => {
+        return {
+          url: `fitness-plans?${objectToSearchParams(params)}`,
+        };
+      },
+      providesTags: (result) =>
+        // is result available?
+        result?.data
+          ? // successful query
+            [
+              ...result?.data.map(({ slug }) => ({
+                type: "FitnessPlans" as const,
+                id: slug,
+              })),
+              { type: "FitnessPlans", id: "LIST" },
+            ]
+          : // an error occurred, but we still want to refetch this query when `{ type: 'FitnessPlans', id: 'LIST' }` is invalidated
+            [{ type: "FitnessPlans", id: "LIST" }],
+    }),
+    getArticle: builder.query<
+      Partial<APIResponse<Article>>,
+      { slug: string; use_id?: boolean }
+    >({
+      query: ({ slug, use_id = false }) => `articles/${slug}?use_id=${use_id}`,
+      providesTags: (result, error, { slug }) => {
+        return [{ type: "Articles" as const, id: slug }];
+      },
+    }),
+    getMealPlan: builder.query<
+      Partial<APIResponse<MealPlan>>,
+      { slug: string; use_id?: boolean }
+    >({
+      query: ({ slug, use_id = false }) =>
+        `meal-plans/${slug}?use_id=${use_id}`,
+      providesTags: (result, error, { slug }) => {
+        return [{ type: "MealPlans" as const, id: slug }];
+      },
+    }),
+    getFitnessPlan: builder.query<
+      Partial<APIResponse<FitnessPlan>>,
+      { slug: string; use_id?: boolean }
+    >({
+      query: ({ slug, use_id = false }) =>
+        `fitness-plans/${slug}?use_id=${use_id}`,
+      providesTags: (result, error, { slug }) => {
+        return [{ type: "FitnessPlans" as const, id: slug }];
+      },
+    }),
+    updateArticle: builder.mutation<APIResponse<Article>, Partial<Article>>({
+      query(data) {
+        const { slug, ...body } = data;
+        return {
+          url: `articles/${slug}`,
+          method: "PUT",
+          body,
+        };
+      },
+
+      invalidatesTags: (result, error, { slug }) => [
+        { type: "Articles", id: slug },
+      ],
+    }),
+    updateFitnessPlan: builder.mutation<
+      APIResponse<FitnessPlan>,
+      Partial<FitnessPlan>
+    >({
+      query(data) {
+        const { slug, ...body } = data;
+        return {
+          url: `fitness-plans/${slug}`,
+          method: "PUT",
+          body,
+        };
+      },
+
+      invalidatesTags: (result, error, { slug }) => [
+        { type: "FitnessPlans", id: slug },
+      ],
+    }),
+    updateMealPlan: builder.mutation<APIResponse<MealPlan>, Partial<MealPlan>>({
+      query(data) {
+        const { slug, ...body } = data;
+        return {
+          url: `meal-plans/${slug}`,
+          method: "PUT",
+          body,
+        };
+      },
+
+      invalidatesTags: (result, error, { slug }) => [
+        { type: "MealPlans", id: slug },
+      ],
+    }),
+
     getUser: builder.query<
       Partial<APIResponse<USERS>>,
       { username: string; params: Record<string, any> }
