@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { communityEvents } from "@/db/schema";
+import { appointments } from "@/db/schema";
 import {
   HTTP_METHOD_CB,
   errorHandlerCallback,
@@ -7,6 +7,7 @@ import {
   successHandlerCallback,
 } from "@/utils";
 import { eq, or } from "drizzle-orm";
+import isEmpty from "just-is-empty";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -25,21 +26,45 @@ export const GET: HTTP_METHOD_CB = async (
   try {
     const { slugId } = req.query as { slugId: string };
 
-    const challenge = await db.query.communityEvents.findFirst({
-      where: or(eq(communityEvents.slugId, slugId)),
+    const appointment = await db.query.appointments.findFirst({
+      where: or(eq(appointments.slugId, slugId)),
       with: {
-        tags: {
+        requestedBy: {
           columns: {
-            createdAt: false,
-            updatedAt: false,
+            id: true,
+            authId: true,
+            fullName: true,
+            avatar: true,
+            username: true,
+            userType: true,
+          },
+        },
+        nutritionist: {
+          columns: {
+            id: true,
+            authId: true,
+            fullName: true,
+            avatar: true,
+            username: true,
+            userType: true,
           },
         },
       },
     });
-
+    if (isEmpty(appointment)) {
+      return await successHandlerCallback(
+        req,
+        res,
+        {
+          message: `appointment with '${slugId}' does not exist`,
+          data: appointment,
+        },
+        404
+      );
+    }
     return successHandlerCallback(req, res, {
-      message: "challenge retrieved successfully",
-      data: challenge,
+      message: "appointment retrieved successfully",
+      data: appointment,
     });
   } catch (error) {
     return errorHandlerCallback(req, res, {
@@ -57,10 +82,10 @@ export const GET: HTTP_METHOD_CB = async (
 //     const data = req.body;
 
 //     const createdRecord = await db.transaction(async (tx) => {
-//       const [insertRes] = await tx.insert(communityEvents).values(data);
+//       const [insertRes] = await tx.insert(appointments).values(data);
 
-//       return tx.query.communityEvents.findFirst({
-//         where: eq(communityEvents.id, insertRes.insertId),
+//       return tx.query.appointments.findFirst({
+//         where: eq(appointments.id, insertRes.insertId),
 //       });
 //     });
 //     return successHandlerCallback(req, res, {

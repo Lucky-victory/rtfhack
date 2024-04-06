@@ -1,20 +1,20 @@
-import { db } from '@/db';
-import { mealPlans } from '@/db/schema';
+import { db } from "@/db";
+import { mealPlans } from "@/db/schema";
 import {
   HTTP_METHOD_CB,
   errorHandlerCallback,
   mainHandler,
   successHandlerCallback,
-} from '@/utils/api-utils';
-import { NextApiRequest, NextApiResponse } from 'next';
+} from "@/utils";
+import { NextApiRequest, NextApiResponse } from "next";
 
-import { IS_DEV } from '@/utils';
-import { and, desc, eq, or } from 'drizzle-orm';
-import { PostStatus } from '@/types/shared';
+import { IS_DEV } from "@/utils";
+import { and, desc, eq, or } from "drizzle-orm";
+import { PostStatus } from "@/types/shared";
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: '4mb',
+      sizeLimit: "4mb",
     },
   },
 };
@@ -32,34 +32,34 @@ export const GET: HTTP_METHOD_CB = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  const { s: status = 'published', ad } = req.query;
+  const { status = "published", authId } = req.query;
   let whereFilter =
-    status == 'all'
+    status == "all"
       ? {
           where: or(
-            eq(mealPlans.status, 'published'),
-            eq(mealPlans.status, 'draft')
+            eq(mealPlans.status, "published"),
+            eq(mealPlans.status, "draft")
           ),
         }
       : { where: eq(mealPlans.status, status as PostStatus) };
-  if (status == 'all' && ad) {
+  if (status == "all" && authId) {
     whereFilter = {
-      where: and(eq(mealPlans.authorAddress, ad as string)),
+      where: and(eq(mealPlans.userId, authId as string)),
     };
-  } else if (ad && status !== 'all') {
+  } else if (authId && status !== "all") {
     whereFilter = {
       where: and(
         eq(mealPlans.status, status as PostStatus),
-        eq(mealPlans.authorAddress, ad as string)
+        eq(mealPlans.userId, authId as string)
       ),
     };
   }
 
   try {
     const allmealPlans = await db.query.mealPlans.findMany({
-      ...whereFilter,
       orderBy: desc(mealPlans.createdAt),
-      where: eq(mealPlans.status, 'published'),
+      // where: eq(mealPlans.status, "published"),
+      ...whereFilter,
       with: {
         author: {
           columns: {
@@ -68,17 +68,18 @@ export const GET: HTTP_METHOD_CB = async (
             avatar: true,
             username: true,
             address: true,
+            authId: true,
           },
         },
       },
     });
     return await successHandlerCallback(req, res, {
-      message: 'mealPlans retrieved successfully',
+      message: "mealPlans retrieved successfully",
       data: allmealPlans,
     });
   } catch (error: any) {
     return await errorHandlerCallback(req, res, {
-      message: 'Something went wrong...',
+      message: "Something went wrong...",
       error: IS_DEV ? { ...error } : null,
     });
   }
@@ -90,10 +91,10 @@ export const POST: HTTP_METHOD_CB = async (
   try {
     const { status, ...rest } = req.body;
 
-    if (status === 'draft') {
+    if (status === "draft") {
       await db.insert(mealPlans).values({ ...rest, status });
       return await successHandlerCallback(req, res, {
-        message: 'Draft saved successfully',
+        message: "Draft saved successfully",
       });
     }
 
@@ -103,6 +104,18 @@ export const POST: HTTP_METHOD_CB = async (
         .values({ ...rest, status });
       return await tx.query.mealPlans.findFirst({
         where: eq(mealPlans.id, insertRes.insertId),
+        with: {
+          author: {
+            columns: {
+              id: true,
+              fullName: true,
+              avatar: true,
+              username: true,
+              address: true,
+              authId: true,
+            },
+          },
+        },
       });
     });
 
@@ -110,14 +123,14 @@ export const POST: HTTP_METHOD_CB = async (
       req,
       res,
       {
-        message: 'Meal plan created successfully',
+        message: "Meal plan created successfully",
         data: createdMealplan,
       },
       201
     );
   } catch (error: any) {
     return await errorHandlerCallback(req, res, {
-      message: 'Something went wrong...',
+      message: "Something went wrong...",
       error: IS_DEV ? { ...error } : null,
     });
   }

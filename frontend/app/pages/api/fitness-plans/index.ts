@@ -1,20 +1,20 @@
-import { db } from '@/db';
-import { fitnessPlans } from '@/db/schema';
+import { db } from "@/db";
+import { fitnessPlans } from "@/db/schema";
 import {
   HTTP_METHOD_CB,
   errorHandlerCallback,
   mainHandler,
   successHandlerCallback,
-} from '@/utils/api-utils';
-import { NextApiRequest, NextApiResponse } from 'next';
+} from "@/utils";
+import { NextApiRequest, NextApiResponse } from "next";
 
-import { IS_DEV } from '@/utils';
-import { and, desc, eq, or } from 'drizzle-orm';
-import { PostStatus } from '@/types/shared';
+import { IS_DEV } from "@/utils";
+import { and, desc, eq, or } from "drizzle-orm";
+import { PostStatus } from "@/types/shared";
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: '4mb',
+      sizeLimit: "4mb",
     },
   },
 };
@@ -32,25 +32,25 @@ export const GET: HTTP_METHOD_CB = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  const { s: status = 'published', ad } = req.query;
+  const { status = "published", authId } = req.query;
   let whereFilter =
-    status == 'all'
+    status == "all"
       ? {
           where: or(
-            eq(fitnessPlans.status, 'published'),
-            eq(fitnessPlans.status, 'draft')
+            eq(fitnessPlans.status, "published"),
+            eq(fitnessPlans.status, "draft")
           ),
         }
       : { where: eq(fitnessPlans.status, status as PostStatus) };
-  if (status == 'all' && ad) {
+  if (status == "all" && authId) {
     whereFilter = {
-      where: and(eq(fitnessPlans.authorAddress, ad as string)),
+      where: and(eq(fitnessPlans.userId, authId as string)),
     };
-  } else if (ad && status !== 'all') {
+  } else if (authId && status !== "all") {
     whereFilter = {
       where: and(
         eq(fitnessPlans.status, status as PostStatus),
-        eq(fitnessPlans.authorAddress, ad as string)
+        eq(fitnessPlans.userId, authId as string)
       ),
     };
   }
@@ -72,12 +72,12 @@ export const GET: HTTP_METHOD_CB = async (
       },
     });
     return await successHandlerCallback(req, res, {
-      message: 'fitnessPlans retrieved successfully',
+      message: "fitnessPlans retrieved successfully",
       data: allfitnessPlans,
     });
   } catch (error: any) {
     return await errorHandlerCallback(req, res, {
-      message: 'Something went wrong...',
+      message: "Something went wrong...",
       error: IS_DEV ? { ...error } : null,
     });
   }
@@ -89,10 +89,10 @@ export const POST: HTTP_METHOD_CB = async (
   try {
     const { status, ...rest } = req.body;
 
-    if (status === 'draft') {
+    if (status === "draft") {
       await db.insert(fitnessPlans).values({ ...rest, status });
       return await successHandlerCallback(req, res, {
-        message: 'Draft saved successfully',
+        message: "Draft saved successfully",
       });
     }
 
@@ -109,14 +109,14 @@ export const POST: HTTP_METHOD_CB = async (
       req,
       res,
       {
-        message: 'Fitness plan created successfully',
+        message: "Fitness plan created successfully",
         data: createdMealPlan,
       },
       201
     );
   } catch (error: any) {
     return await errorHandlerCallback(req, res, {
-      message: 'Something went wrong...',
+      message: "Something went wrong...",
       error: IS_DEV ? { ...error } : null,
     });
   }

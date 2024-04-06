@@ -56,6 +56,19 @@ export const PUT: HTTP_METHOD_CB = async (
   try {
     const data = req.body;
     const { spaceIdOrId } = req.query as { spaceIdOrId: string | number };
+    const community = await getData(req);
+
+    if (community) {
+      return await successHandlerCallback(
+        req,
+        res,
+        {
+          message: `Community with id '${spaceIdOrId}' does not exist`,
+          data: null,
+        },
+        404
+      );
+    }
     //TODO: Add authorization check
     const updatedRecord = await db.transaction(async (tx) => {
       await tx

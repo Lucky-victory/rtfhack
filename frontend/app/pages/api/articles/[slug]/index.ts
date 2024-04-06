@@ -1,17 +1,17 @@
-import { db } from '@/db';
-import { articles } from '@/db/schema';
+import { db } from "@/db";
+import { articles } from "@/db/schema";
 import {
   HTTP_METHOD_CB,
   errorHandlerCallback,
   mainHandler,
   successHandlerCallback,
-} from '@/utils/api-utils';
-import { NextApiRequest, NextApiResponse } from 'next';
+} from "@/utils";
+import { NextApiRequest, NextApiResponse } from "next";
 
-import { eq, or } from 'drizzle-orm';
+import { eq, or } from "drizzle-orm";
 
-import isEmpty from 'just-is-empty';
-import { IS_DEV } from '@/utils';
+import isEmpty from "just-is-empty";
+import { IS_DEV } from "@/utils";
 
 export default async function handler(
   req: NextApiRequest,
@@ -31,7 +31,7 @@ export const GET: HTTP_METHOD_CB = async (
     let { slug, use_id } = req.query;
 
     const whereFilter =
-      use_id == 'true'
+      use_id == "true"
         ? { where: eq(articles.id, parseInt(slug as string, 10)) }
         : { where: eq(articles.slug, slug as string) };
     const article = await db.query.articles.findFirst({
@@ -44,6 +44,7 @@ export const GET: HTTP_METHOD_CB = async (
             avatar: true,
             username: true,
             address: true,
+            authId: true,
           },
         },
       },
@@ -69,7 +70,7 @@ export const GET: HTTP_METHOD_CB = async (
     });
   } catch (error: any) {
     return await errorHandlerCallback(req, res, {
-      message: 'Something went wrong...',
+      message: "Something went wrong...",
       error: IS_DEV ? { ...error } : null,
     });
   }
@@ -98,21 +99,21 @@ export const PUT: HTTP_METHOD_CB = async (
     }
     //TODO: add a check to see if the user is the author of the article
 
-    if (status === 'draft') {
+    if (status === "draft") {
       await db.update(articles).set({ ...rest, status });
       return await successHandlerCallback(req, res, {
-        message: 'Draft updated successfully',
+        message: "Draft updated successfully",
       });
     }
 
     const update = await db.update(articles).set({ ...rest, status });
 
     return await successHandlerCallback(req, res, {
-      message: 'Article updated successfully',
+      message: "Article updated successfully",
     });
   } catch (error: any) {
     return await errorHandlerCallback(req, res, {
-      message: 'Something went wrong...',
+      message: "Something went wrong...",
     });
   }
 };

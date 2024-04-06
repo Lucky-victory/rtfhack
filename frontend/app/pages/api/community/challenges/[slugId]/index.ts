@@ -7,6 +7,7 @@ import {
   successHandlerCallback,
 } from "@/utils";
 import { eq, or } from "drizzle-orm";
+import isEmpty from "just-is-empty";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -36,7 +37,17 @@ export const GET: HTTP_METHOD_CB = async (
         },
       },
     });
-
+    if (isEmpty(challenge)) {
+      return await successHandlerCallback(
+        req,
+        res,
+        {
+          message: `challenge with '${slugId}' does not exist`,
+          data: challenge,
+        },
+        404
+      );
+    }
     return successHandlerCallback(req, res, {
       message: "challenge retrieved successfully",
       data: challenge,

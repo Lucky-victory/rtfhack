@@ -1,20 +1,20 @@
-import { db } from '@/db';
-import { articles } from '@/db/schema';
+import { db } from "@/db";
+import { articles } from "@/db/schema";
 import {
   HTTP_METHOD_CB,
   errorHandlerCallback,
   mainHandler,
   successHandlerCallback,
-} from '@/utils/api-utils';
-import { NextApiRequest, NextApiResponse } from 'next';
+} from "@/utils";
+import { NextApiRequest, NextApiResponse } from "next";
 
-import { IS_DEV } from '@/utils';
-import { and, desc, eq, or } from 'drizzle-orm';
-import { PostStatus } from '@/types/shared';
+import { IS_DEV } from "@/utils";
+import { and, desc, eq, or } from "drizzle-orm";
+import { PostStatus } from "@/types/shared";
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: '4mb',
+      sizeLimit: "4mb",
     },
   },
 };
@@ -32,25 +32,25 @@ export const GET: HTTP_METHOD_CB = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  const { s: status = 'published', ad } = req.query;
+  const { status = "published", authId } = req.query;
   let whereFilter =
-    status == 'all'
+    status == "all"
       ? {
           where: or(
-            eq(articles.status, 'published'),
-            eq(articles.status, 'draft')
+            eq(articles.status, "published"),
+            eq(articles.status, "draft")
           ),
         }
       : { where: eq(articles.status, status as PostStatus) };
-  if (status == 'all' && ad) {
+  if (status == "all" && authId) {
     whereFilter = {
-      where: and(eq(articles.authorAddress, ad as string)),
+      where: and(eq(articles.userId, authId as string)),
     };
-  } else if (ad && status !== 'all') {
+  } else if (authId && status !== "all") {
     whereFilter = {
       where: and(
         eq(articles.status, status as PostStatus),
-        eq(articles.authorAddress, ad as string)
+        eq(articles.userId, authId as string)
       ),
     };
   }
@@ -67,17 +67,18 @@ export const GET: HTTP_METHOD_CB = async (
             avatar: true,
             username: true,
             address: true,
+            authId: true,
           },
         },
       },
     });
     return await successHandlerCallback(req, res, {
-      message: 'Articles retrieved successfully',
+      message: "Articles retrieved successfully",
       data: allArticles,
     });
   } catch (error: any) {
     return await errorHandlerCallback(req, res, {
-      message: 'Something went wrong...',
+      message: "Something went wrong...",
       error: IS_DEV ? { ...error } : null,
     });
   }
@@ -89,10 +90,10 @@ export const POST: HTTP_METHOD_CB = async (
   try {
     const { status, ...rest } = req.body;
 
-    if (status === 'draft') {
+    if (status === "draft") {
       await db.insert(articles).values({ ...rest, status });
       return await successHandlerCallback(req, res, {
-        message: 'Draft saved successfully',
+        message: "Draft saved successfully",
       });
     }
 
@@ -100,6 +101,18 @@ export const POST: HTTP_METHOD_CB = async (
       const [insertRes] = await tx.insert(articles).values({ ...rest, status });
       return await tx.query.articles.findFirst({
         where: eq(articles.id, insertRes.insertId),
+        with: {
+          author: {
+            columns: {
+              id: true,
+              fullName: true,
+              avatar: true,
+              username: true,
+              address: true,
+              authId: true,
+            },
+          },
+        },
       });
     });
 
@@ -107,14 +120,14 @@ export const POST: HTTP_METHOD_CB = async (
       req,
       res,
       {
-        message: 'Article created successfully',
+        message: "Article created successfully",
         data: createdArticle,
       },
       201
     );
   } catch (error: any) {
     return await errorHandlerCallback(req, res, {
-      message: 'Something went wrong...',
+      message: "Something went wrong...",
       error: IS_DEV ? { ...error } : null,
     });
   }

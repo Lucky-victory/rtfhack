@@ -36,7 +36,6 @@ export const articles = mysqlTable(
     views: int("views").default(0),
     userId: varchar("user_id", { length: 255 }),
 
-    authorAddress: varchar("author_address_idx", { length: 50 }),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").onUpdateNow(),
   },
@@ -44,8 +43,6 @@ export const articles = mysqlTable(
     titleIdx: index("title_idx").on(t.title),
     slugIdx: index("slug_idx").on(t.slug),
     userIdx: index("user_idx").on(t.userId),
-
-    authorAddressIdx: index("author_address_idx").on(t.authorAddress),
   })
 );
 export const mealPlans = mysqlTable(
@@ -67,8 +64,6 @@ export const mealPlans = mysqlTable(
     }).notNull(),
 
     userId: varchar("user_id", { length: 255 }),
-
-    authorAddress: varchar("author_address", { length: 50 }),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").onUpdateNow(),
   },
@@ -76,8 +71,6 @@ export const mealPlans = mysqlTable(
     userIdx: index("user_idx").on(t.userId),
     titleIdx: index("title_idx").on(t.title),
     slugIdx: index("slug_idx").on(t.slug),
-
-    authorAddressIdx: index("author_address_idx").on(t.authorAddress),
   })
 );
 export const fitnessPlans = mysqlTable(
@@ -93,14 +86,12 @@ export const fitnessPlans = mysqlTable(
       "draft"
     ),
     userId: varchar("user_id", { length: 255 }),
-    authorAddress: varchar("author_address", { length: 50 }),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").onUpdateNow(),
   },
   (t) => ({
     titleIdx: index("title_idx").on(t.title),
     slugIdx: index("slug_idx").on(t.slug),
-    authorAddressIdx: index("author_address_idx").on(t.authorAddress),
   })
 );
 export const users = mysqlTable(
@@ -277,6 +268,9 @@ export const appointments = mysqlTable("Appointments", {
     "expired",
     "completed",
   ]).default("pending"),
+  slugId: varchar("slug_id", { length: 255 }).$defaultFn(() =>
+    generateUrlSafeId(14)
+  ),
   startTime: timestamp("start_time"),
   endTime: timestamp("end_time"),
   duration: int("duration"),
