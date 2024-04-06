@@ -124,3 +124,6 @@ export function flattenArray<T extends NestedObject, U>(
 
   return flattenedArray;
 }
+export function isDuplicate<T>(array:T[], property:(keyof T), value:string) {
+  return array.some((item) => item[property] === value);
+}
