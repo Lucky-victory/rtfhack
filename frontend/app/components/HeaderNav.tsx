@@ -18,19 +18,27 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
 import isMobile from "is-mobile";
-import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
+import {
+  DynamicWidget,
+  useDynamicContext,
+  useUserWallets,
+} from "@dynamic-labs/sdk-react-core";
 import { useAddUserMutation, useGetUserQuery } from "@/state/services";
 import { maskWalletAddress } from "@/utils";
 import { useResize } from "@/hooks";
 import { LuMenu } from "react-icons/lu";
+import { useEffect } from "react";
 
 export function HeaderNav() {
   const { isMobileSize, isTabletSize } = useResize();
   const { isOpen, onClose, onToggle } = useDisclosure();
-  const { authenticated, ready, login, logout, user } = usePrivy();
+  const { user, isAuthenticated } = useDynamicContext();
+
+  const wallets = useUserWallets();
   const [createUser, { data: createdUser }] = useAddUserMutation();
-  const { data: savedUserResponse } = useGetUserQuery({ authId: user?.id });
+  const { data: savedUserResponse } = useGetUserQuery({
+    usernameOrAuthId: user?.userId as string,
+  });
   const savedUser = savedUserResponse?.data;
 
   const linkStyles = {
@@ -56,18 +64,32 @@ export function HeaderNav() {
     },
   };
 
-  const { ready: walletReady, wallets } = useWallets();
+  console.log({ user, wallets, savedUser, isAuthenticated });
   async function handleLogin() {
-    login();
+    // login();
     if (!savedUser && user) {
       createUser({
-        address: user?.wallet?.address!,
-        chainId: user?.wallet?.chainId,
-        authId: user?.id,
+        address: wallets?.[0]?.address,
+        chainId: wallets?.[0]?.chain,
+        authId: user?.userId,
+        email: user?.email!,
+        fullName: user?.firstName + " " + user?.lastName,
       });
       console.log({ createdUser });
     }
   }
+  useEffect(() => {
+    if (!savedUser && user && user?.newUser) {
+      createUser({
+        address: wallets?.[0]?.address,
+        chainId: user?.chain,
+        authId: user?.userId,
+        email: user?.email!,
+        fullName: user?.firstName + " " + user?.lastName,
+      });
+      console.log({ createdUser });
+    }
+  }, [user, savedUser]);
   const links = [
     <>
       <ListItem>
@@ -152,9 +174,10 @@ export function HeaderNav() {
             </Box> */}
           </HStack>
           {!(isMobileSize || isTabletSize) && (
-            <Button layerStyle={"with-shadow"} onClick={handleLogin}>
-              Connect Wallet
-            </Button>
+            <DynamicWidget
+              buttonClassName="sign-up-btn"
+              buttonContainerClassName="sign-up-btn-container"
+            />
           )}
 
           {(isMobileSize || isTabletSize) && (
@@ -192,14 +215,15 @@ export function HeaderNav() {
                 p={2}
                 // justify={"center"}
               >
-                <Button
+                {/* <Button
                   display={"block"}
                   w={"full"}
                   layerStyle={"with-shadow"}
                   onClick={handleLogin}
                 >
                   Connect Wallet
-                </Button>
+                </Button> */}
+                <DynamicWidget />
               </HStack>
             </DrawerBody>
           </DrawerContent>

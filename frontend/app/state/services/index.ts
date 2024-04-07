@@ -2,12 +2,12 @@ import { objectToSearchParams } from "@/utils";
 import { fetchBaseQuery, createApi } from "@reduxjs/toolkit/query/react";
 import {
   APIResponse,
-  MEETINGS,
-  MEETING_RECORDS,
+  MEETING,
+  MEETING_RECORD,
   NEW_MEETING,
-  NEW_MEETING_RECORDS,
+  NEW_MEETING_RECORD,
   NEW_USER,
-  USERS,
+  USER,
 } from "../types";
 import { FitnessPlan, Article, MealPlan } from "@/types/shared";
 
@@ -179,20 +179,20 @@ export const GreenSpaceDAOApi = createApi({
     }),
 
     getUser: builder.query<
-      Partial<APIResponse<USERS>>,
-      { username: string; params: Record<string, any> }
+      Partial<APIResponse<USER>>,
+      { usernameOrAuthId: string; params?: Record<string, any> }
     >({
-      query: ({ username, params }) => {
+      query: ({ usernameOrAuthId, params }) => {
         return {
-          url: `users/${username}?${objectToSearchParams(params)}`,
+          url: `users/${usernameOrAuthId}?${objectToSearchParams(params!)}`,
         };
       },
-      providesTags: (result, error, { username }) => {
-        return [{ type: "Users" as const, id: username }];
+      providesTags: (result, error, { usernameOrAuthId }) => {
+        return [{ type: "Users" as const, id: usernameOrAuthId }];
       },
     }),
     getMeeting: builder.query<
-      Partial<APIResponse<MEETINGS>>,
+      Partial<APIResponse<MEETING>>,
       Record<string, any> & { roomId: string }
     >({
       query: ({ roomId, ...params }) => {
@@ -205,7 +205,7 @@ export const GreenSpaceDAOApi = createApi({
       },
     }),
     getMeetings: builder.query<
-      Partial<APIResponse<MEETINGS[]>>,
+      Partial<APIResponse<MEETING[]>>,
       Record<string, string>
     >({
       query: (params) => {
@@ -436,7 +436,7 @@ export const GreenSpaceDAOApi = createApi({
     }),
 
     getMeetingRecords: builder.query<
-      Partial<APIResponse<MEETING_RECORDS[]>>,
+      Partial<APIResponse<MEETING_RECORD[]>>,
       Record<string, string>
     >({
       query: (params) => {
@@ -502,7 +502,7 @@ export const GreenSpaceDAOApi = createApi({
       }),
       invalidatesTags: [{ type: "Tokens" as const, id: "LIST" }],
     }),
-    addUser: builder.mutation<APIResponse<USERS>, NEW_USER>({
+    addUser: builder.mutation<APIResponse<USER>, NEW_USER>({
       query: (data) => ({
         url: `users`,
         method: "POST",
@@ -510,7 +510,7 @@ export const GreenSpaceDAOApi = createApi({
       }),
       invalidatesTags: [{ type: "Users" as const, id: "LIST" }],
     }),
-    addMeeting: builder.mutation<APIResponse<MEETINGS>, NEW_MEETING>({
+    addMeeting: builder.mutation<APIResponse<MEETING>, NEW_MEETING>({
       query: (data) => ({
         url: `meetings`,
         method: "POST",
@@ -538,8 +538,8 @@ export const GreenSpaceDAOApi = createApi({
       invalidatesTags: [{ type: "Communities" as const, id: "LIST" }],
     }),
     addMeetingRecord: builder.mutation<
-      APIResponse<MEETING_RECORDS>,
-      NEW_MEETING_RECORDS
+      APIResponse<MEETING_RECORD>,
+      NEW_MEETING_RECORD
     >({
       query: (data) => ({
         url: `meeting-records`,

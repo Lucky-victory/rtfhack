@@ -6,7 +6,7 @@ import {
   mainHandler,
   successHandlerCallback,
 } from "@/utils";
-import { and, eq } from "drizzle-orm";
+import { and, eq, or } from "drizzle-orm";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -46,7 +46,23 @@ export const POST: HTTP_METHOD_CB = async (
   res: NextApiResponse
 ) => {
   try {
-    const data = req.body;
+    const { authId, email, address, ...data } = req.body;
+    const existingUser = await db.query.users.findFirst({
+      columns: {
+        password: false,
+      },
+      where: or(
+        eq(users.email, email as string),
+        eq(users.authId, authId as string),
+        eq(users.address, address as string)
+      ),
+    });
+    if (existingUser) {
+      return successHandlerCallback(req, res, {
+        message: "user already exists",
+        data: existingUser,
+      });
+    }
     const user = await db.transaction(async (tx) => {
       const [insertRes] = await tx.insert(users).values(data);
 

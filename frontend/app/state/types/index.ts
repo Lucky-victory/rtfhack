@@ -3,7 +3,7 @@ export type APIResponse<T = null> = {
   message?: string;
   error?: any;
 };
-export type USERS = {
+export type USER = {
   id: number;
   address: string;
   chainId?: string;
@@ -11,13 +11,14 @@ export type USERS = {
   role?: "admin" | "user";
   avatar?: string;
   authId?: string;
+  email: string;
   userType?: "member" | "nutritionist";
 };
 export type NEW_USER = Pick<
-  USERS,
-  "address" | "chainId" | "fullName" | "avatar" | "authId"
+  USER,
+  "address" | "chainId" | "fullName" | "avatar" | "authId" | "email"
 >;
-export type MEETINGS = {
+export type MEETING = {
   id: number;
   roomId: string;
   title: string;
@@ -30,7 +31,7 @@ export type MEETINGS = {
     authId: string;
   };
 };
-export type MEETING_RECORDS = {
+export type MEETING_RECORD = {
   id: number;
   meetingId?: number;
   roomId: string;
@@ -38,11 +39,11 @@ export type MEETING_RECORDS = {
   authId?: string;
   recordUri: string;
 };
-export type NEW_MEETING_RECORDS = Pick<
-  MEETING_RECORDS,
+export type NEW_MEETING_RECORD = Pick<
+  MEETING_RECORD,
   "meetingId" | "recordDuration" | "recordUri" | "roomId" | "authId"
 >;
-export type NEW_MEETING = Pick<MEETINGS, "roomId" | "authId" | "title">;
+export type NEW_MEETING = Pick<MEETING, "roomId" | "authId" | "title">;
 // export type UserSession = DefaultSession & {
 //   address: string;
 //   chainId?: number;

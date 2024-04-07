@@ -3,15 +3,12 @@ import { AppChakraProvider } from "@/providers/chakra";
 import { PrivyProvider } from "@privy-io/react-auth";
 import { HuddleClient, HuddleProvider } from "@huddle01/react";
 import "@/styles/globals.css";
-import {
-  DynamicContextProvider,
-  DynamicWidget,
-} from "@dynamic-labs/sdk-react-core";
 import type { AppProps } from "next/app";
-import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
-import { SolanaWalletConnectors } from "@dynamic-labs/solana";
 import { Provider } from "react-redux";
 import store from "@/state/store";
+import { auth } from "@/auth";
+import ProviderWrapper from "@/providers/dynamic";
+import { SessionProvider } from "next-auth/react";
 
 const huddleClient = new HuddleClient({
   projectId: process.env.NEXT_PUBLIC_HUDDLE_PROJECT_ID!,
@@ -32,21 +29,8 @@ export default function App({ Component, pageProps }: AppProps) {
           }
         `}
       </style>{" "}
-      <PrivyProvider
-        appId="clu26bnos0pnpfk84x65mc71z"
-        config={{
-          // Customize Privy's appearance in your app
-          appearance: {
-            showWalletLoginFirst: true,
-            theme: "light",
-            accentColor: "#008080",
-          },
-          // Create embedded wallets for users who don't have a wallet
-          embeddedWallets: {
-            createOnLogin: "users-without-wallets",
-          },
-        }}
-      >
+      <ProviderWrapper>
+        {/* <SessionProvider session={pageProps?.session}> */}
         <Provider store={store}>
           <HuddleProvider client={huddleClient}>
             <AppChakraProvider>
@@ -54,7 +38,23 @@ export default function App({ Component, pageProps }: AppProps) {
             </AppChakraProvider>
           </HuddleProvider>
         </Provider>
-      </PrivyProvider>
+        {/* </SessionProvider> */}
+      </ProviderWrapper>
     </>
   );
 }
+// const session = await auth();
+// if (session?.user) {
+//   // filter out sensitive data before passing to client.
+//   session.user = {
+//     name: session.user.name,
+//     email: session.user.email,
+//     image: session.user.image,
+//   };
+// }
+
+// return (
+//   <SessionProvider session={session}>
+//     <ClientExample />
+//   </SessionProvider>
+// );

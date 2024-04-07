@@ -33,9 +33,11 @@ export const GET: HTTP_METHOD_CB = async (
     const user = await db.query.users.findFirst({
       columns: {
         password: false,
-        email: false,
       },
-      where: eq(users.username, username as string),
+      where: or(
+        eq(users.username, username as string),
+        eq(users.authId, username as string)
+      ),
     });
 
     if (isEmpty(user)) {
