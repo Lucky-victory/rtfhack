@@ -1,5 +1,34 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { USER_SESSION } from "@/state/types";
+type UpdateSession = (data?: any) => Promise<USER_SESSION | null>;
+
+export const useUser = () => {
+  const { data: session, status } = useSession() as {
+    status: "authenticated" | "loading" | "unauthenticated";
+    data: USER_SESSION;
+    update: UpdateSession;
+  };
+  const [user, setUser] = useState<USER_SESSION["user"] | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (status === "authenticated" && session) {
+      setUser(session.user);
+    } else {
+      setUser(null);
+    }
+    setIsLoading(false);
+  }, [session, status]);
+
+  return {
+    user,
+    session,
+    isAuthenticated: status === "authenticated",
+    isLoading,
+  };
+};
 
 export const useActiveTab = (
   paramName: string

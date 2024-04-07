@@ -21,7 +21,7 @@ import isMobile from "is-mobile";
 
 import { useAddUserMutation, useGetUserQuery } from "@/state/services";
 import { maskWalletAddress } from "@/utils";
-import { useResize } from "@/hooks";
+import { useResize, useUser } from "@/hooks";
 import { LuMenu } from "react-icons/lu";
 import { useEffect, useTransition } from "react";
 import { useSession } from "next-auth/react";
@@ -29,6 +29,7 @@ import { useRouter } from "next/router";
 import WalletAdaptor from "./WalletAdapterBtn";
 
 import LogoutBtn from "./LogoutBtn";
+import AuthBtn from "./AuthBtn";
 
 export function HeaderNav() {
   const { isMobileSize, isTabletSize } = useResize();
@@ -60,21 +61,9 @@ export function HeaderNav() {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [isPending, startTransition] = useTransition();
-  console.log({ session, status });
+  const { user, isAuthenticated, isLoading, session: userSession } = useUser();
+  console.log({ session, status, user, isAuthenticated, isLoading });
 
-  useEffect(() => {
-    startTransition(() => {
-      // session &&
-      //   status === "authenticated" &&
-      //   router.push("./nutritionist/dashboard");
-    });
-  }, [session, status]);
-
-  useEffect(() => {
-    startTransition(() => {
-      session && console.log(session);
-    });
-  }, [session]);
   const links = [
     <>
       <ListItem>
@@ -97,6 +86,7 @@ export function HeaderNav() {
   return (
     <>
       <HStack
+        minH={"50px"}
         pl={5}
         bg={"blackAlpha.300"}
         justify={"space-between"}
@@ -161,8 +151,11 @@ export function HeaderNav() {
           {!(isMobileSize || isTabletSize) && (
             <>
               {/* <LogoutBtn /> */}
-
-              <WalletAdaptor className="sign-up-btn" />
+              {userSession ? (
+                <AuthBtn userSession={userSession} />
+              ) : (
+                <WalletAdaptor />
+              )}
             </>
           )}
 

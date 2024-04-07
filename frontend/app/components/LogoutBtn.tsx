@@ -4,6 +4,8 @@ import { Button } from "@chakra-ui/react";
 
 export default function LogoutBtn() {
   return (
-    <Button  onClick={() => signOut()}>Logout</Button>
+    <Button onClick={() => signOut()} colorScheme="red" rounded={"md"}>
+      Logout
+    </Button>
   );
 }

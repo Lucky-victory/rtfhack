@@ -55,9 +55,10 @@ export default NextAuth({
               email: existingUser.email,
               address: existingUser.address,
               role: existingUser.role,
+              emailVerified: existingUser.emailVerified,
               userType: existingUser.userType,
               createdAt: existingUser.createdAt,
-              isNewUser: false,
+             
               expirationTime,
             };
           }
@@ -77,13 +78,13 @@ export default NextAuth({
                 address: true,
                 role: true,
                 userType: true,
-                createdAt: true,
+                createdAt: true,emailVerified: true,
               },
             });
           });
           const user = {
             ...createdUser,
-            isNewUser: true,
+           
             expirationTime,
           };
           return user;

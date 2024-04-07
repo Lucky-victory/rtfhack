@@ -13,7 +13,24 @@ export type USER = {
   authId?: string;
   email: string;
   userType?: "member" | "nutritionist";
+  emailVerified: boolean;
 };
+export type USER_SESSION = {
+  user: Pick<
+    USER,
+    | "id"
+    | "address"
+    | "fullName"
+    | "authId"
+    | "email"
+    | "userType"
+    | "avatar"
+    | "role"
+    | "emailVerified"
+  >;
+  expires: string;
+};
+
 export type NEW_USER = Pick<
   USER,
   "address" | "chainId" | "fullName" | "avatar" | "authId" | "email"
