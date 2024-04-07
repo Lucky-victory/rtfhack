@@ -18,28 +18,21 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
 import isMobile from "is-mobile";
-import {
-  DynamicWidget,
-  useDynamicContext,
-  useUserWallets,
-} from "@dynamic-labs/sdk-react-core";
+
 import { useAddUserMutation, useGetUserQuery } from "@/state/services";
 import { maskWalletAddress } from "@/utils";
 import { useResize } from "@/hooks";
 import { LuMenu } from "react-icons/lu";
-import { useEffect } from "react";
+import { useEffect, useTransition } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import WalletAdaptor from "./WalletAdapterBtn";
+
+import LogoutBtn from "./LogoutBtn";
 
 export function HeaderNav() {
   const { isMobileSize, isTabletSize } = useResize();
   const { isOpen, onClose, onToggle } = useDisclosure();
-  const { user, isAuthenticated } = useDynamicContext();
-
-  const wallets = useUserWallets();
-  const [createUser, { data: createdUser }] = useAddUserMutation();
-  const { data: savedUserResponse } = useGetUserQuery({
-    usernameOrAuthId: user?.userId as string,
-  });
-  const savedUser = savedUserResponse?.data;
 
   const linkStyles = {
     display: isMobileSize || isTabletSize ? "block" : "inline-block",
@@ -64,32 +57,24 @@ export function HeaderNav() {
     },
   };
 
-  console.log({ user, wallets, savedUser, isAuthenticated });
-  async function handleLogin() {
-    // login();
-    if (!savedUser && user) {
-      createUser({
-        address: wallets?.[0]?.address,
-        chainId: wallets?.[0]?.chain,
-        authId: user?.userId,
-        email: user?.email!,
-        fullName: user?.firstName + " " + user?.lastName,
-      });
-      console.log({ createdUser });
-    }
-  }
+  const router = useRouter();
+  const { data: session, status } = useSession();
+  const [isPending, startTransition] = useTransition();
+  console.log({ session, status });
+
   useEffect(() => {
-    if (!savedUser && user && user?.newUser) {
-      createUser({
-        address: wallets?.[0]?.address,
-        chainId: user?.chain,
-        authId: user?.userId,
-        email: user?.email!,
-        fullName: user?.firstName + " " + user?.lastName,
-      });
-      console.log({ createdUser });
-    }
-  }, [user, savedUser]);
+    startTransition(() => {
+      // session &&
+      //   status === "authenticated" &&
+      //   router.push("./nutritionist/dashboard");
+    });
+  }, [session, status]);
+
+  useEffect(() => {
+    startTransition(() => {
+      session && console.log(session);
+    });
+  }, [session]);
   const links = [
     <>
       <ListItem>
@@ -174,10 +159,11 @@ export function HeaderNav() {
             </Box> */}
           </HStack>
           {!(isMobileSize || isTabletSize) && (
-            <DynamicWidget
-              buttonClassName="sign-up-btn"
-              buttonContainerClassName="sign-up-btn-container"
-            />
+            <>
+              {/* <LogoutBtn /> */}
+
+              <WalletAdaptor className="sign-up-btn" />
+            </>
           )}
 
           {(isMobileSize || isTabletSize) && (
@@ -223,7 +209,8 @@ export function HeaderNav() {
                 >
                   Connect Wallet
                 </Button> */}
-                <DynamicWidget />
+
+                <WalletAdaptor className="sign-up-btn" />
               </HStack>
             </DrawerBody>
           </DrawerContent>

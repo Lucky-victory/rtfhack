@@ -36,7 +36,8 @@ export const GET: HTTP_METHOD_CB = async (
       },
       where: or(
         eq(users.username, username as string),
-        eq(users.authId, username as string)
+        eq(users.authId, username as string),
+        eq(users.address, username as string)
       ),
     });
 

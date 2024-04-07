@@ -1,3 +1,4 @@
+import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 import generateUniqueId from "generate-unique-id";
 import { nanoid } from "nanoid";
@@ -124,6 +125,18 @@ export function flattenArray<T extends NestedObject, U>(
 
   return flattenedArray;
 }
-export function isDuplicate<T>(array:T[], property:(keyof T), value:string) {
+export function isDuplicate<T>(array: T[], property: keyof T, value: string) {
   return array.some((item) => item[property] === value);
 }
+
+export const apiPost = async (
+  endpoint: string,
+  params: Record<string, any>
+) => {
+  const result = await axios.post(`${endpoint}`, params, {
+    headers: {
+      "content-type": "application/json",
+    },
+  });
+  return result.data;
+};
