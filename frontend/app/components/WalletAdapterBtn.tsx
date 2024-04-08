@@ -26,7 +26,6 @@ type ButtonProps = PropsWithChildren<{
 export default function WalletAdaptor(props: ButtonProps) {
   const { publicKey, signMessage } = useWallet();
   const [signed, setSigned] = useState(false);
-  const o = w.useWalletModal();
 
   const signCustomMessage = async () => {
     const address = publicKey?.toBase58();

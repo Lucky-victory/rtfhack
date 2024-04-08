@@ -10,9 +10,7 @@ export default function MemberDashboardPage() {
           text="No data to show"
           isEmpty={true}
           isLoading={false}
-        >
-          children
-        </DashboardEmptyArea>
+        ></DashboardEmptyArea>
       </Flex>
     </DashboardLayout>
   );

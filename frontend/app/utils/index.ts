@@ -2,9 +2,7 @@ import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 import generateUniqueId from "generate-unique-id";
 import { nanoid } from "nanoid";
-import { db } from "@/db";
-import { users } from "@/db/schema";
-import { eq, or } from "drizzle-orm";
+
 export const env = process.env.NODE_ENV || "development";
 export const IS_DEV = env === "development";
 import slugify from "slugify";
@@ -147,35 +145,35 @@ export const apiPost = async (
   });
   return result.data;
 };
-export const getUserFromDB = async (
-  usernameOrIdOrAddress: string | number,
-  columns = {}
-) => {
-  const defaultCols = {
-    id: true,
-    address: true,
-    fullName: true,
-    username: true,
-    avatar: true,
-    userType: true,
-    authId: true,
-    role: true,
-  };
-  const cols = { ...defaultCols, ...columns };
-  try {
-    const user = await db.query.users.findFirst({
-      where: or(
-        eq(users.username, usernameOrIdOrAddress as string),
-        eq(users.address, usernameOrIdOrAddress as string),
-        eq(users.authId, usernameOrIdOrAddress as string)
-      ),
-      columns: cols,
-    });
-    return user;
-  } catch (error) {
-    throw error;
-  }
-};
+// export const getUserFromDB = async (
+//   usernameOrIdOrAddress: string | number,
+//   columns = {}
+// ) => {
+//   const defaultCols = {
+//     id: true,
+//     address: true,
+//     fullName: true,
+//     username: true,
+//     avatar: true,
+//     userType: true,
+//     authId: true,
+//     role: true,
+//   };
+//   const cols = { ...defaultCols, ...columns };
+//   try {
+//     const user = await db.query.users.findFirst({
+//       where: or(
+//         eq(users.username, usernameOrIdOrAddress as string),
+//         eq(users.address, usernameOrIdOrAddress as string),
+//         eq(users.authId, usernameOrIdOrAddress as string)
+//       ),
+//       columns: cols,
+//     });
+//     return user;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 export function selectObjectKeys<T extends object>(obj: T) {
   const resultArray = [];
   if (isEmpty(obj)) return [];

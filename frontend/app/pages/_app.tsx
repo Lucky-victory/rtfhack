@@ -19,6 +19,7 @@ import { clusterApiUrl } from "@solana/web3.js";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { useMemo } from "react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
+import AppProviders from "@/providers";
 const huddleClient = new HuddleClient({
   projectId: process.env.NEXT_PUBLIC_HUDDLE_PROJECT_ID!,
   options: {
@@ -47,19 +48,19 @@ export default function App({ Component, pageProps }: AppProps) {
       {/*  TODO: Add the appropriate types */}
       {/* @ts-ignore */}
       <SessionProvider session={pageProps.session}>
-        <ConnectionProvider endpoint={endpoint}>
-          <WalletProvider wallets={wallets} autoConnect>
-            <WalletModalProvider>
-              <Provider store={store}>
+        <AppProviders>
+          <ConnectionProvider endpoint={endpoint}>
+            <WalletProvider wallets={wallets} autoConnect>
+              <WalletModalProvider>
                 <HuddleProvider client={huddleClient}>
                   <AppChakraProvider>
                     <Component {...pageProps} />
                   </AppChakraProvider>
                 </HuddleProvider>
-              </Provider>
-            </WalletModalProvider>
-          </WalletProvider>
-        </ConnectionProvider>
+              </WalletModalProvider>
+            </WalletProvider>
+          </ConnectionProvider>
+        </AppProviders>
       </SessionProvider>
     </>
   );

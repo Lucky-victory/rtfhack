@@ -11,7 +11,7 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  plugins: [require("rippleui"), require("@tailwindcss/typography")],
+  plugins: [require("@tailwindcss/typography")],
   theme: {
     extend: {
       backgroundImage: {

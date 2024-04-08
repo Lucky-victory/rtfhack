@@ -17,6 +17,7 @@ import {
 import { Link } from "@chakra-ui/next-js";
 
 import { useAccount } from "wagmi";
+import * as w from "@solana/wallet-adapter-react-ui";
 
 import { useAppContext } from "@/context/state";
 import { useResize } from "@/hooks";
@@ -24,10 +25,15 @@ import { useEffect, useTransition } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { LuMenu } from "react-icons/lu";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 export function HeaderNav() {
   const { isMobileSize, isTabletSize } = useResize();
+  const o = w.useWalletModal();
 
+  function openConnectModal() {
+    o.setVisible(true);
+  }
   const linkStyles = {
     display: isMobileSize || isTabletSize ? "block" : "inline-block",
     fontSize: "16px",
@@ -56,15 +62,16 @@ export function HeaderNav() {
   const [isPending, startTransition] = useTransition();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
-    isOpen: isMobileNavbarOpen,onToggle:onMobileNavbarToggle,
-    onOpen: onMobileNavbarOpen,
+    isOpen: isMobileNavbarOpen,
+    onToggle: onMobileNavbarToggle,
+    // onOpen: onMobileNavbarOpen,
     onClose: onMobileNavbarClose,
   } = useDisclosure();
 
   const { setAddress, setEnsName, user } = useAppContext();
 
-  const { address } = useAccount();
-  const { isConnected } = useAccount();
+  const { publicKey, signMessage } = useWallet();
+  const address = publicKey?.toBase58();
   // const { user, isAuthenticated, isLoading, session: userSession } = useAuth();
   // console.log({ session, status, user, isAuthenticated, isLoading });
   // useEffect(() => {

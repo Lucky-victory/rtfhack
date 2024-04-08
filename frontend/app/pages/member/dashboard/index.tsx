@@ -2,7 +2,7 @@ import DashboardEmptyArea from "@/components/DashboardEmptyArea";
 import DashboardLayout from "@/components/MemberDashboardLayout";
 import { Flex } from "@chakra-ui/react";
 
-export default function MemberDashboardPage(){
+export default function MemberDashboardPage() {
   return (
     <DashboardLayout>
       <Flex direction={"column"} w={"full"} py={5} px={4}>
@@ -10,9 +10,7 @@ export default function MemberDashboardPage(){
           text="No data to show"
           isEmpty={true}
           isLoading={false}
-        >
-          children
-        </DashboardEmptyArea>
+        ></DashboardEmptyArea>
       </Flex>
     </DashboardLayout>
   );

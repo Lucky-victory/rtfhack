@@ -11,8 +11,7 @@ export default function MemberDashboardPage() {
           isEmpty={true}
           isLoading={false}
         >
-          children
-        </DashboardEmptyArea>
+                  </DashboardEmptyArea>
       </Flex>
     </DashboardLayout>
   );

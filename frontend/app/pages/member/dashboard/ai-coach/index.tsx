@@ -10,8 +10,9 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
 import isEmpty from "just-is-empty";
 import OpenAI from "openai";
 import { TextContentBlock } from "openai/resources/beta/threads/messages/messages.mjs";
-import { useAccount } from "wagmi";
+// import { useAccount } from "wagmi";
 import DashBoardLayout from "@/components/MemberDashboardLayout";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 const samplePrompts = [
   "What nutrition is best for a female BMI of 20?",
@@ -29,8 +30,8 @@ interface ChatState {
 }
 
 const explorer = () => {
-  const { address } = useAccount();
-
+  const { publicKey } = useWallet();
+  const address = publicKey?.toBase58();
   const [state, updateState] = useReducer(
     (current: ChatState, update: Partial<ChatState>): ChatState => ({
       ...current,

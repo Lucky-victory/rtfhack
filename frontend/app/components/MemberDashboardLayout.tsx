@@ -14,7 +14,11 @@ import {
   HiOutlineListBullet,
   HiOutlineSquares2X2,
 } from "react-icons/hi2";
-import { HiOutlineUserCircle, HiOutlineUserGroup } from "react-icons/hi";
+import {
+  HiAcademicCap,
+  HiOutlineUserCircle,
+  HiOutlineUserGroup,
+} from "react-icons/hi";
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const navLinks = [
     {
@@ -27,6 +31,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       url: "nutritionists",
       title: "Nutritionists",
       icon: HiOutlineUserCircle,
+      child: [],
+    },
+    {
+      url: "ai-coach",
+      title: "AI Coach",
+      icon: HiAcademicCap,
       child: [],
     },
     {
@@ -57,10 +67,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         minH={600}
         bg={"black"}
       >
-        <DashboardSideNav
-          links={navLinks}
-          entryPath="/nutritionist/dashboard/"
-        />
+        <DashboardSideNav links={navLinks} entryPath="/member/dashboard/" />
         <Flex direction={"column"} h={"full"} w={"full"}>
           <DashboardHeader />
           {children}
