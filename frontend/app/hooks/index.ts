@@ -4,6 +4,19 @@ import { useSession } from "next-auth/react";
 import { USER_SESSION } from "@/state/types";
 type UpdateSession = (data?: any) => Promise<USER_SESSION | null>;
 
+export function useDebounce<T>(value: T, delay?: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), delay || 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
 export const useAuth = () => {
   const { data: session, status } = useSession() as {
     status: "authenticated" | "loading" | "unauthenticated";

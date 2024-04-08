@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import Icon from '@/components/Icon';
-import Footer from '@/components/footer';
-import Header from '@/components/header';
-import { shortenText } from '@/helpers';
-import { useGetMealPlansQuery } from '@/state/services';
-import { MealPlan } from '@/types/shared';
-import { Link } from '@chakra-ui/next-js';
+import Icon from "@/components/Icon";
+import Footer from "@/components/Footer";
+import { HeaderNav } from "@/components/HeaderNav";
+import { shortenText } from "@/utils";
+import { useGetMealPlansQuery } from "@/state/services";
+import { MealPlan } from "@/types/shared";
+import { Link } from "@chakra-ui/next-js";
 import {
   Box,
   Button,
@@ -15,19 +15,19 @@ import {
   Image,
   Stack,
   Text,
-} from '@chakra-ui/react';
-import Head from 'next/head';
-import { useState } from 'react';
+} from "@chakra-ui/react";
+import Head from "next/head";
+import { useState } from "react";
 
 const MealPlansPage = () => {
-  const [btnIcon, setBtnIcon] = useState('bookmark_add');
+  const [btnIcon, setBtnIcon] = useState("bookmark_add");
 
   const { data, isFetching, isLoading } = useGetMealPlansQuery({});
   const mealPlans = data?.data as MealPlan[];
   const handleAddMealPlan = (plan: MealPlan) => {
-    setBtnIcon('done');
+    setBtnIcon("done");
     setTimeout(() => {
-      setBtnIcon('bookmark_add');
+      setBtnIcon("bookmark_add");
     }, 2000);
   };
   return (
@@ -35,68 +35,68 @@ const MealPlansPage = () => {
       <Head>
         <title>Rejuvenate | Meal Plans</title>
       </Head>
-      <Header />
-      <Box className='bg-primaryBeige'>
+      <HeaderNav />
+      <Box className="bg-primaryBeige">
         <Stack
-          direction={'row'}
+          direction={"row"}
           px={{ lg: 6, base: 4 }}
           py={8}
-          wrap={'wrap'}
+          wrap={"wrap"}
           spacing={{ base: 4, lg: 6 }}
-          mx={'auto'}
+          mx={"auto"}
           maxW={1200}
-          bg={'gray.100'}
+          bg={"gray.100"}
         >
           {!isLoading &&
             mealPlans?.length &&
             mealPlans?.map((plan) => (
               <Stack
                 key={plan?.id}
-                rounded={'lg'}
-                boxShadow={'md'}
-                bg={'white'}
-                minH={'250px'}
+                rounded={"lg"}
+                boxShadow={"md"}
+                bg={"white"}
+                minH={"250px"}
                 p={2}
                 maxW={350}
                 gap={4}
                 pb={5}
               >
                 <Box
-                  h={'170px'}
-                  bg={'gray.200'}
-                  roundedTop={'md'}
-                  overflow={'hidden'}
-                  pos={'relative'}
+                  h={"170px"}
+                  bg={"gray.200"}
+                  roundedTop={"md"}
+                  overflow={"hidden"}
+                  pos={"relative"}
                 >
                   <Box
-                    pos={'absolute'}
-                    roundedRight={'md'}
+                    pos={"absolute"}
+                    roundedRight={"md"}
                     left={0}
                     bottom={0}
-                    bg={'primaryColor.700'}
-                    color={'white'}
+                    bg={"primaryColor.700"}
+                    color={"white"}
                     px={3}
                     py={2}
                   >
                     <Text
-                      as={'span'}
-                      textTransform={'capitalize'}
-                      fontSize={'small'}
-                      fontWeight={'bold'}
+                      as={"span"}
+                      textTransform={"capitalize"}
+                      fontSize={"small"}
+                      fontWeight={"bold"}
                     >
                       {plan?.time}
                     </Text>
                   </Box>
                   <Image
-                    alt=''
-                    h={'full'}
-                    w={'full'}
-                    objectFit={'cover'}
-                    src={plan?.image ?? '/images/meal-plan.jpg'}
+                    alt=""
+                    h={"full"}
+                    w={"full"}
+                    objectFit={"cover"}
+                    src={plan?.image ?? "/images/meal-plan.jpg"}
                   />
                 </Box>
                 <Box>
-                  <Heading size={'md'}>{plan?.title}</Heading>
+                  <Heading size={"md"}>{plan?.title}</Heading>
 
                   <Text mt={3}>
                     {shortenText(
@@ -107,21 +107,21 @@ const MealPlansPage = () => {
                     )}
                   </Text>
                 </Box>
-                <HStack spacing={'6'} flex={1}>
+                <HStack spacing={"6"} flex={1}>
                   <Button
                     as={Link}
-                    href={'/meal-plans/' + plan?.slug}
-                    rounded={'full'}
-                    size={'sm'}
-                    variant='outline'
-                    gap={'3'}
+                    href={"/meal-plans/" + plan?.slug}
+                    rounded={"full"}
+                    size={"sm"}
+                    variant="outline"
+                    gap={"3"}
                   >
-                    <Icon name='visibility' size={20} /> <span>View plan</span>
+                    <Icon name="visibility" size={20} /> <span>View plan</span>
                   </Button>
                   <Button
-                    rounded={'full'}
+                    rounded={"full"}
                     // onClick={() => handleAddMealPlan(plan)}
-                    size={'sm'}
+                    size={"sm"}
                     gap={3}
                   >
                     <Icon name={btnIcon} size={20} /> <span>Add to list</span>

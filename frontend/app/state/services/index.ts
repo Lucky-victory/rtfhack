@@ -33,7 +33,14 @@ export const GreenSpaceDAOApi = createApi({
     "Appointments",
   ],
 
-  endpoints: (builder) => ({
+  endpoints: (builder) => ({sendUserInfoToAI: builder.mutation<APIResponse<any>, any>({
+      query: (data) => ({
+        url: `ai/`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: [{ type: 'Articles' as const, id: 'LIST' }],
+    }),
     getArticles: builder.query<
       Partial<APIResponse<Article[]>>,
       { status?: "all" | "published" | "draft"; authId?: string }
@@ -551,8 +558,21 @@ export const GreenSpaceDAOApi = createApi({
     }),
   }),
 });
-export const {
+export const { useSendUserInfoToAIMutation,
   useAddMeetingMutation,
+  useGetArticleQuery,
+  useGetArticlesQuery,
+  useGetFitnessPlanQuery,
+  useGetFitnessPlansQuery,
+  useGetMealPlanQuery,
+  useGetMealPlansQuery,
+  useLazyGetArticleQuery,
+  useUpdateArticleMutation,
+  useUpdateFitnessPlanMutation,
+  useUpdateMealPlanMutation,
+  useLazyGetArticlesQuery,
+  useLazyGetFitnessPlanQuery,
+  useLazyGetFitnessPlansQuery,
   useAddMeetingRecordMutation,
   useAddUserMutation,
   useCreateRoomMutation,

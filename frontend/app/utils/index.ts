@@ -2,9 +2,13 @@ import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 import generateUniqueId from "generate-unique-id";
 import { nanoid } from "nanoid";
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { eq, or } from "drizzle-orm";
 export const env = process.env.NODE_ENV || "development";
 export const IS_DEV = env === "development";
-
+import slugify from "slugify";
+import isEmpty from "just-is-empty";
 export const generateCommunityId = (prefix = "GS") => {
   return generateNumId(prefix, 14, "-");
 };
@@ -143,3 +147,73 @@ export const apiPost = async (
   });
   return result.data;
 };
+export const getUserFromDB = async (
+  usernameOrIdOrAddress: string | number,
+  columns = {}
+) => {
+  const defaultCols = {
+    id: true,
+    address: true,
+    fullName: true,
+    username: true,
+    avatar: true,
+    userType: true,
+    authId: true,
+    role: true,
+  };
+  const cols = { ...defaultCols, ...columns };
+  try {
+    const user = await db.query.users.findFirst({
+      where: or(
+        eq(users.username, usernameOrIdOrAddress as string),
+        eq(users.address, usernameOrIdOrAddress as string),
+        eq(users.authId, usernameOrIdOrAddress as string)
+      ),
+      columns: cols,
+    });
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
+export function selectObjectKeys<T extends object>(obj: T) {
+  const resultArray = [];
+  if (isEmpty(obj)) return [];
+  return Object.keys(obj).map((key) => {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      const spacedKey = key.replace(/([a-z])([A-Z])/g, "$1 $2");
+      const formattedKey =
+        spacedKey.charAt(0).toUpperCase() + spacedKey.slice(1);
+
+      const keyString = `${formattedKey}`;
+
+      return keyString;
+    }
+  });
+
+  // return resultArray;
+}
+export const generateSlug = (text: string) =>
+  slugify(text + "-" + nanoid(6), {
+    lower: true,
+    remove: /[*+~.()'"!:@]/g,
+    strict: true,
+  });
+export function removeKeyFromObject<T extends object>(
+  arr: T[],
+  keysToRemove: (keyof T)[] = []
+) {
+  if (isEmpty(arr)) return [];
+  return arr?.map((obj) => {
+    const newObj: Record<string, any> = {};
+    Object.keys(obj).forEach((key) => {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        if (!keysToRemove.includes(key as keyof T)) {
+          newObj[key] = obj[key as keyof T];
+        }
+      }
+    });
+    // const omits = keysToRemove.join('|') as const;
+    return newObj as T;
+  });
+}

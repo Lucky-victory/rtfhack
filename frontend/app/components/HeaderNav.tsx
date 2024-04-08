@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Drawer,
   DrawerBody,
@@ -14,26 +13,20 @@ import {
   List,
   ListItem,
   useDisclosure,
-  useMediaQuery,
 } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
-import isMobile from "is-mobile";
 
-import { useAddUserMutation, useGetUserQuery } from "@/state/services";
-import { maskWalletAddress } from "@/utils";
-import { useResize, useAuth } from "@/hooks";
-import { LuMenu } from "react-icons/lu";
+import { useAccount } from "wagmi";
+
+import { useAppContext } from "@/context/state";
+import { useResize } from "@/hooks";
 import { useEffect, useTransition } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import WalletAdaptor from "./WalletAdapterBtn";
-
-import LogoutBtn from "./LogoutBtn";
-import AuthBtn from "./AuthBtn";
+import { LuMenu } from "react-icons/lu";
 
 export function HeaderNav() {
   const { isMobileSize, isTabletSize } = useResize();
-  const { isOpen, onClose, onToggle } = useDisclosure();
 
   const linkStyles = {
     display: isMobileSize || isTabletSize ? "block" : "inline-block",
@@ -61,8 +54,19 @@ export function HeaderNav() {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [isPending, startTransition] = useTransition();
-  const { user, isAuthenticated, isLoading, session: userSession } = useAuth();
-  console.log({ session, status, user, isAuthenticated, isLoading });
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isMobileNavbarOpen,onToggle:onMobileNavbarToggle,
+    onOpen: onMobileNavbarOpen,
+    onClose: onMobileNavbarClose,
+  } = useDisclosure();
+
+  const { setAddress, setEnsName, user } = useAppContext();
+
+  const { address } = useAccount();
+  const { isConnected } = useAccount();
+  // const { user, isAuthenticated, isLoading, session: userSession } = useAuth();
+  // console.log({ session, status, user, isAuthenticated, isLoading });
   // useEffect(() => {
   //   if (isAuthenticated) {
   //     startTransition(() => {
@@ -71,6 +75,12 @@ export function HeaderNav() {
   //   }
   // }),
   //   [isAuthenticated];
+  useEffect(() => {
+    setAddress(`${address}`);
+    //setEnsName(ensName);
+  }, [address, setAddress]);
+
+  const isLoggedin = () => user && user?.userAddress !== "";
   const links = [
     <>
       <ListItem>
@@ -157,19 +167,46 @@ export function HeaderNav() {
           </HStack>
           {!(isMobileSize || isTabletSize) && (
             <>
-              {/* <LogoutBtn /> */}
+              {address && !isLoggedin() && (
+                <HStack spacing={4}>
+                  <Button
+                    // colorScheme="primaryColor"
+                    variant={"outline"}
+                    onClick={() => onOpen()}
+                  >
+                    Login
+                  </Button>
+                  <Button
+                    // colorScheme="primaryColor"
+                    variant={"solid"}
+                    onClick={() => onOpen()}
+                  >
+                    Register
+                  </Button>
+                </HStack>
+              )}
+              {!address && (
+                <Button size={"lg"} onClick={openConnectModal}>
+                  Connect Wallet
+                </Button>
+              )}
+            </>
+          )}
+          {/*{!(isMobileSize || isTabletSize) && (
+            <>
+              
               {userSession ? (
                 <AuthBtn userSession={userSession} />
               ) : (
                 <WalletAdaptor />
               )}
             </>
-          )}
+          )}*/}
 
           {(isMobileSize || isTabletSize) && (
             <IconButton
               ml={3}
-              onClick={onToggle}
+              onClick={onMobileNavbarToggle}
               fontSize={24}
               aria-label="toggle mobile menu"
             >
@@ -179,7 +216,7 @@ export function HeaderNav() {
         </HStack>
       </HStack>
       {(isMobileSize || isTabletSize) && (
-        <Drawer isOpen={isOpen} onClose={onClose}>
+        <Drawer isOpen={isMobileNavbarOpen} onClose={onMobileNavbarClose}>
           <DrawerOverlay />
           <DrawerContent>
             <DrawerCloseButton />
@@ -211,12 +248,35 @@ export function HeaderNav() {
                 </Button> */}
 
                 <>
-                  {/* <LogoutBtn /> */}
+                  {address && !isLoggedin() && (
+                    <HStack spacing={4}>
+                      <Button
+                        // colorScheme='primaryColor'
+                        variant={"outline"}
+                        onClick={() => onOpen()}
+                      >
+                        Login
+                      </Button>
+                      <Button
+                        // colorScheme='primaryColor'
+                        variant={"solid"}
+                        onClick={() => onOpen()}
+                      >
+                        Register
+                      </Button>
+                    </HStack>
+                  )}
+                  {!address && (
+                    <Button size={"lg"} onClick={openConnectModal}>
+                      Connect Wallet
+                    </Button>
+                  )}
+                  {/* 
                   {userSession ? (
                     <AuthBtn userSession={userSession} />
                   ) : (
                     <WalletAdaptor />
-                  )}
+                  )} */}
                 </>
               </HStack>
             </DrawerBody>

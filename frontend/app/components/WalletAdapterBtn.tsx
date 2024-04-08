@@ -7,7 +7,8 @@ import {
   useState,
 } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import * as w from "@solana/wallet-adapter-react-ui";
+
 import "@solana/wallet-adapter-react-ui/styles.css";
 import base58 from "bs58";
 import { apiPost } from "@/utils";
@@ -25,6 +26,7 @@ type ButtonProps = PropsWithChildren<{
 export default function WalletAdaptor(props: ButtonProps) {
   const { publicKey, signMessage } = useWallet();
   const [signed, setSigned] = useState(false);
+  const o = w.useWalletModal();
 
   const signCustomMessage = async () => {
     const address = publicKey?.toBase58();
@@ -58,7 +60,7 @@ export default function WalletAdaptor(props: ButtonProps) {
 
   return (
     <>
-      <WalletMultiButton {...props} />
+      <w.WalletMultiButton {...props} />
     </>
   );
 }
