@@ -219,18 +219,13 @@ We're building healthy communities focused on longevity all around the world, we
                         <Box>
                           <Heading
                             letterSpacing={"1px"}
-                            className="text-primaryGreen"
                             as={"h3"}
                             mb={2}
                             size={"md"}
                           >
                             {nutritionist.fullName}
                           </Heading>
-                          <Text
-                            as={Flex}
-                            gap={1}
-                            className="text-secondaryGray"
-                          >
+                          <Text as={Flex} gap={1}>
                             <HiOutlineLocationMarker
                               name="location_on"
                               size={20}
@@ -242,7 +237,6 @@ We're building healthy communities focused on longevity all around the world, we
                       <Button
                         onClick={() => handleClick(nutritionist)}
                         ml={"auto"}
-                        className="bg-primaryYellow text-primaryGreen"
                         gap={2}
                         fontWeight={500}
                         rounded={"full"}
@@ -253,21 +247,10 @@ We're building healthy communities focused on longevity all around the world, we
                       </Button>
                     </Flex>
                     <Box>
-                      <Heading
-                        mb={3}
-                        as={"h4"}
-                        fontWeight={600}
-                        size={"sm"}
-                        className="text-primaryGreen"
-                      >
+                      <Heading mb={3} as={"h4"} fontWeight={600} size={"sm"}>
                         About {nutritionist.fullName}
                       </Heading>
-                      <Text
-                        fontSize={"14px"}
-                        fontWeight={300}
-                        pb={4}
-                        className="text-primaryGray"
-                      >
+                      <Text fontSize={"14px"} fontWeight={300} pb={4}>
                         {nutritionist.bio}{" "}
                       </Text>
                     </Box>
@@ -280,42 +263,33 @@ We're building healthy communities focused on longevity all around the world, we
           <Modal size={"3xl"} isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader className="text-primaryGreen">
-                Booking appointment
-              </ModalHeader>
+              <ModalHeader>Booking appointment</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <Text className="text-secondaryGray" mb={5}>
+                <Text mb={5}>
                   You&apos;re booking{" "}
-                  <span className="text-primaryGreen">
-                    {selectedNutritionist?.fullName}{" "}
-                  </span>
+                  <span>{selectedNutritionist?.fullName} </span>
                 </Text>
                 {showBookingDetails && (
                   <Box>
-                    <Text
-                      fontWeight={"semibold"}
-                      mb={2}
-                      className="text-primaryGreen"
-                    >
+                    <Text fontWeight={"semibold"} mb={2}>
                       {" "}
                       Appointment Details:
                     </Text>
                     <Text>
                       {" "}
-                      <span className="text-secondaryGray"> Date: </span>
+                      <span> Date: </span>
                       {format(bookingDate, "E, d MMM yyyy hh:mm aaa")}
                     </Text>
                     <Text>
                       {" "}
-                      <span className="text-secondaryGray">Duration:</span>{" "}
-                      {sectionDuration} Mins{" "}
+                      <span>Duration:</span> {sectionDuration} Mins{" "}
                     </Text>
                   </Box>
                 )}
                 <Flex wrap={"wrap"} gap={6}>
                   <Box>
-                    <Heading size={"md"} className="text-primaryGreen" my={4}>
+                    <Heading size={"md"} my={4}>
                       Choose appointment date
                     </Heading>
 
@@ -330,7 +304,7 @@ We're building healthy communities focused on longevity all around the world, we
                     />
                   </Box>
                   <Box>
-                    <Heading size={"md"} className="text-primaryGreen" my={4}>
+                    <Heading size={"md"} my={4}>
                       Section Duration
                     </Heading>
 

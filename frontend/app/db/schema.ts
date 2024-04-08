@@ -23,6 +23,10 @@ import {
   datetime,
 } from "drizzle-orm/mysql-core";
 
+export const global = mysqlTable("global", {
+  id: serial("id").primaryKey(),
+  greenspaceAIId: mediumtext("greenspace_ai_id"),
+});
 export const articles = mysqlTable(
   "Articles",
   {
@@ -120,6 +124,7 @@ export const users = mysqlTable(
   {
     id: int("id").autoincrement().primaryKey(),
     chainId: varchar("chain_id", { length: 100 }),
+    aiCoachThreadIds: longtext("ai_coach_thread_ids"),
     //this can be used as a user id from a third party auth provider
     authId: varchar("auth_id", { length: 255 }).$defaultFn(generateUrlSafeId),
     emailVerified: boolean("email_verified").default(false),
