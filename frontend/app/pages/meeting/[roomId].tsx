@@ -8,14 +8,15 @@ import {
   Input,
   Stack,
   Text,
-  Grid,
-  GridItem,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useRouter } from "next/router";
+import {
+  InferGetServerSidePropsType,
+  type GetServerSidePropsContext,
+} from "next";
 import { FiChevronRight } from "react-icons/fi";
 import {
-  useLocalAudio,
   useLocalPeer,
   useLocalScreenShare,
   useLocalVideo,
@@ -28,12 +29,9 @@ import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import RemotePeer from "@/components/RemotePeer";
 import LocalPeer from "@/components/LocalPeer";
 import { ChatArea } from "@/components/ChatArea";
-import { RootState, useAppDispatch } from "../../state/store";
-import { useSelector } from "react-redux";
 import PageWrapper from "@/components/PageWrapper";
 import {
   useCreateTokenMutation,
-  useGetMeetingQuery,
   useLazyGetMeetingQuery,
 } from "@/state/services";
 import isEmpty from "just-is-empty";
@@ -44,9 +42,11 @@ import PageLoader from "@/components/PageLoader";
 interface Props {
   token: string;
 }
-export default function MeetPage() {
+export default function MeetPage({
+  roomId: roomIdFromServer,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
-  const roomId = router.query.roomId as string;
+  const roomId = roomIdFromServer || (router.query.roomId as string);
   const [createToken] = useCreateTokenMutation();
   const [meeting, setMeeting] = useState<MEETING | undefined>();
   const [queryMeeting, { isFetching, isLoading }] = useLazyGetMeetingQuery();
@@ -191,31 +191,25 @@ export default function MeetPage() {
     return !remotePeerId.includes("bot");
   }
 
-  async function getMeeting() {
-    try {
-      setRoomNotFound(false);
-      const roomId = router.query.roomId as string;
-      const { data } = await queryMeeting({
-        roomId: roomId as string,
-      }).unwrap();
-      const meeting = data;
-      setMeeting(meeting);
-      const roomNotFound = isEmpty(meeting);
-      setRoomNotFound(roomNotFound);
-      if (roomNotFound) {
-        router.push("/404");
-      }
-    } catch (error) {}
-  }
-
   useEffect(() => {
-    router.events.on("routeChangeComplete", async () => {
-      await getMeeting();
-    });
-    return router.events.off(
-      "routeChangeComplete",
-      async () => await getMeeting()
-    );
+    async function getMeeting() {
+      try {
+        setRoomNotFound(false);
+        // const roomId = router.query.roomId as string;
+        const { data } = await queryMeeting({
+          roomId: roomId as string,
+        }).unwrap();
+        const meeting = data;
+        setMeeting(meeting);
+        const roomNotFound = isEmpty(meeting);
+        setRoomNotFound(roomNotFound);
+        if (roomNotFound) {
+          // router.push("/404");
+        }
+      } catch (error) {}
+    }
+    getMeeting();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
   // const hasRemotePeers = peerIds?.length > 0;
@@ -225,9 +219,9 @@ export default function MeetPage() {
         <Flex
           as="main"
           h={"var(--chakra-vh)"}
-          minH={"700px"}
+          minH={"730px"}
           maxH={"1000px"}
-          bg={"gray.100"}
+          bg={"gray.900"}
           p={2}
         >
           {isIdle && (
@@ -290,10 +284,14 @@ export default function MeetPage() {
           )}
           {!isIdle && isConnected && (
             <Flex direction={"column"} gap={2} flex={1} minH={"full"}>
-              <MeetingHeader room={room} meetingTitle={meeting?.title} />
+              <MeetingHeader
+                isHost={role === "host"}
+                room={room}
+                meetingTitle={meeting?.title}
+              />
               <Flex
                 h={"full"}
-                bg={"gray.800"}
+                bg={"black"}
                 rounded={"30px"}
                 p={2}
                 gap={3}
@@ -308,33 +306,49 @@ export default function MeetPage() {
               minH={"full"}
               transition={"0.65s ease-in-out"}
              */}
-                <Stack
+                <Flex
+                  direction={{ base: "column", lg: "row" }}
                   minH="full"
                   flex={1}
                   gap={3}
                   mr={{
                     lg: !isMinimized ? "var(--chat-area-width,330px)" : "auto",
+                    base: 0,
                   }}
                 >
-                  <LocalPeer
-                    {...roomInstance}
-                    local={{
-                      isRecording: isRecording,
-                      onStartRecord: startRecording,
-                      onStopRecord: stopRecording,
-                      displayName: displayName,
-                      metadata: metadata,
-
-                      role: role,
-                      activePeers,
-                      localPeerId: localPeerId as string,
-                    }}
-                  />
-
+                  <Box maxW={1000} minH={450} w={"full"}>
+                    <LocalPeer
+                      {...roomInstance}
+                      local={{
+                        isRecording: isRecording,
+                        onStartRecord: startRecording,
+                        onStopRecord: stopRecording,
+                        displayName: displayName,
+                        metadata: metadata,
+                        role: role,
+                        activePeers,
+                        localPeerId: localPeerId as string,
+                      }}
+                    />
+                  </Box>
                   {/* participants area */}
                   {peerIds.filter((peerId) => isNotBot(peerId))?.length > 0 && (
-                    <Flex h={170} gap={3} overflowX={"auto"} p={2}>
-                      <HStack gap={3} flex={1}>
+                    <Flex
+                      h={{ lg: "auto", base: 170 }}
+                      // w={300}
+                      // gap={3}
+                      flexShrink={0}
+                      overflowX={{ lg: "auto" }}
+                      overflowY={{ base: "auto", lg: "hidden" }}
+                      p={2}
+                    >
+                      <Flex
+                        gap={3}
+                        flex={1}
+                        flexShrink={0}
+                        w={"full"}
+                        direction={{ base: "row", lg: "column" }}
+                      >
                         {peerIds.map(
                           (peerId) =>
                             isNotBot(peerId) && (
@@ -345,8 +359,8 @@ export default function MeetPage() {
                               />
                             )
                         )}
-                      </HStack>
-                      <IconButton
+                      </Flex>
+                      {/* <IconButton
                         pos={"sticky"}
                         right={0}
                         aria-label="show all participants"
@@ -355,10 +369,10 @@ export default function MeetPage() {
                         rounded={"30px"}
                       >
                         <FiChevronRight />
-                      </IconButton>
+                      </IconButton> */}
                     </Flex>
                   )}
-                </Stack>
+                </Flex>
 
                 {/* chat area */}
 
@@ -370,4 +384,14 @@ export default function MeetPage() {
       </PageWrapper>
     </PageLoader>
   );
+}
+export async function getServerSideProps({ query }: GetServerSidePropsContext) {
+  const { roomId } = query;
+
+  // Pass the pathname as props
+  return {
+    props: {
+      roomId: roomId as string,
+    },
+  };
 }

@@ -1,8 +1,8 @@
 'use client';
 
-import ArticleCard from '@/components/article';
-import Footer from '@/components/footer';
-import Header from '@/components/header';
+import ArticleCard from '@/components/ArticleCard';
+import Footer from '@/components/Footer';
+import Header from '@/components/HeaderNav';
 import { useGetArticlesQuery } from '@/state/services';
 import { type Article as IArticle } from '@/types/shared';
 import { Box, HStack, Heading, Skeleton, Flex } from '@chakra-ui/react';

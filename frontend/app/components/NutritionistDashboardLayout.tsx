@@ -4,12 +4,6 @@ import DashboardSideNav from "./DashboardSidebar";
 import DashboardHeader from "./DashboardHeader";
 import { ReactNode } from "react";
 import {
-  MdOutlineFastfood,
-  MdOutlinePostAdd,
-  MdOutlineSettings,
-  MdOutlineDashboard,
-} from "react-icons/md";
-import {
   HiOutlineCalendarDays,
   HiOutlineDocumentText,
   HiOutlineSquares2X2,
@@ -63,12 +57,14 @@ export default function NutritionistDashboardLayout({
         h={"var(--chakra-vh,100vh)"}
         minH={600}
         bg={"black"}
+        overflowY={"auto"}
+        maxH={650}
       >
         <DashboardSideNav
           links={navLinks}
           entryPath="/nutritionist/dashboard/"
         />
-        <Flex direction={"column"} h={"full"} w={"full"}>
+        <Flex direction={"column"} w={"full"}>
           <DashboardHeader />
           {children}
         </Flex>

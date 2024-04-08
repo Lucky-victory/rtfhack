@@ -24,6 +24,8 @@ export const GET: HTTP_METHOD_CB = async (
 ) => {
   try {
     const { roomId } = req.query;
+    console.log({ roomId });
+
     const meeting = await db.query.meetings.findFirst({
       with: {
         author: {

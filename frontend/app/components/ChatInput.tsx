@@ -30,7 +30,7 @@ export default function ChatInput({
   }
   return (
     <Box px={1} py={3}>
-      <HStack p={2} bg={"white"} rounded={"full"}>
+      <HStack p={2} bg={"black"} rounded={"full"}>
         <Input
           name="message"
           value={text}

@@ -202,7 +202,7 @@ export default function LocalPeer(props: Props) {
         transition={"ease-in-out"}
         transitionProperty={"boxShadow"}
         boxShadow={isSpeaking ? "0 0 0 2px yellow" : "none"}
-        bg={"gray.100"}
+        bg={"gray.800"}
         // p={4}
       >
         {props.state === "connected" && (
@@ -293,7 +293,7 @@ export default function LocalPeer(props: Props) {
                 ref={videoRef}
                 rounded={"md"}
                 // aspectRatio={"16/9"}
-                objectFit={"cover"}
+                objectFit={"contain"}
                 pos={"absolute"}
               ></Box>
             )}

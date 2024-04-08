@@ -128,6 +128,9 @@ export function flattenArray<T extends NestedObject, U>(
 export function isDuplicate<T>(array: T[], property: keyof T, value: string) {
   return array.some((item) => item[property] === value);
 }
+export function shortenText(text: string, len = 50) {
+  return text?.length > len ? text?.substring(0, len) + "..." : text;
+}
 
 export const apiPost = async (
   endpoint: string,

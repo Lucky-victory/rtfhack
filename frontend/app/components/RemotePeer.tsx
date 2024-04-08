@@ -45,12 +45,13 @@ const RemotePeer = ({ peerId, activePeers }: Props) => {
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const participantsCardStyle = {
     // overflow: "hidden",
-    minW: 200,
+    minW: { lg: 250, base: 240 },
     flex: 1,
     h: "full",
+    w: "full",
     // flexShrink: 0,
-    maxH: 350,
-    bg: "gray.100",
+    maxH: { lg: 200, base: 300 },
+    bg: "gray.800",
     rounded: "20px",
     pos: "relative" as ResponsiveValue<"relative">,
     maxW: 300,
@@ -144,7 +145,7 @@ const RemotePeer = ({ peerId, activePeers }: Props) => {
   return (
     <Box
       {...participantsCardStyle}
-      boxShadow={isSpeaking ? "0 0 0 2px blue" : "none"}
+      boxShadow={isSpeaking ? "0 0 0 2px yellow" : "none"}
     >
       <HStack
         top={1}
@@ -213,7 +214,7 @@ const RemotePeer = ({ peerId, activePeers }: Props) => {
           left={0}
           rounded={"inherit"}
           // aspectRatio={"16:9"}
-          objectFit={"cover"}
+          objectFit={"contain"}
           top={0}
           pos={"absolute"}
         ></Box>

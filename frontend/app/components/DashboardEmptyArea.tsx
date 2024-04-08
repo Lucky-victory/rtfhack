@@ -11,7 +11,7 @@ export default function DashboardEmptyArea({
   isEmpty?: boolean;
   loadingText?: string;
   isLoading?: boolean;
-  children: ReactNode;
+  children?: ReactNode;
   text?: string;
 }) {
   return (

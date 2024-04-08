@@ -17,10 +17,10 @@ import { KeyboardEvent, useState } from "react";
 
 export default function NewMeeting() {
   const router = useRouter();
-  const { user } = useAuth ()
-  const [meetingTitle, setMeetingTitle] = useState("");
+  const { user } = useAuth();
+  const [meetingTitle, setMeetingTitle] = useState("Health discussions");
   const [isSending, setIsSending] = useState(false);
-  const dispatch = useAppDispatch();
+
   const [createRoom, { isLoading, isSuccess }] = useCreateRoomMutation();
 
   const [addMeeting] = useAddMeetingMutation();
@@ -46,14 +46,12 @@ export default function NewMeeting() {
         title: meetingTitle,
         userId: user?.authId,
       }).unwrap();
-     
+
       setIsSending(false);
       router.push(`/meeting/${roomId}`);
     } catch (error) {
       console.log("Error creating room", { error });
     }
-
-    // handleCreateNewToken();
   }
   return (
     <Flex flexDir={"column"} gap={4} maxW={400}>
@@ -84,7 +82,7 @@ export default function NewMeeting() {
           gap={2}
           isLoading={isSending}
           onClick={async () => await handleCreateNewMeeting()}
-        //   colorScheme="teal"
+          //   colorScheme="teal"
         >
           {/* <BiVideoPlus size={24} /> */}
           Continue

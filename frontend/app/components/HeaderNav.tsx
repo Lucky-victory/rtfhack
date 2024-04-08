@@ -66,7 +66,7 @@ export function HeaderNav() {
   useEffect(() => {
     if (isAuthenticated) {
       startTransition(() => {
-        router.push("/member/dashboard");
+        // router.push("/member/dashboard");
       });
     }
   }),
