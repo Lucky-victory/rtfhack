@@ -1,3 +1,6 @@
+
+
+@import 'react-datepicker/dist/react-datepicker.css';
 :root {
   --chat-area-width: 330px;
 }

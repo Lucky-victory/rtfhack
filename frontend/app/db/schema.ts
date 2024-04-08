@@ -19,6 +19,8 @@ import {
   varchar,
   boolean,
   text,
+  time,
+  datetime,
 } from "drizzle-orm/mysql-core";
 
 export const articles = mysqlTable(
@@ -94,6 +96,25 @@ export const fitnessPlans = mysqlTable(
     slugIdx: index("slug_idx").on(t.slug),
   })
 );
+export const nutritionists = mysqlTable("Nutritionists", {
+  bio: varchar("bio", { length: 255 }),
+  location: varchar("location", { length: 255 }),
+  id: int("id").autoincrement().primaryKey(),
+  username: varchar("username", { length: 50 })
+    .unique()
+
+    .$defaultFn(() => generateUsername("GN_")),
+  userType: mysqlEnum("user_type", ["member", "nutritionist"])
+    .default("nutritionist")
+    .notNull(),
+  fullName: varchar("full_name", { length: 255 }),
+  avatar: varchar("avatar", { length: 255 }),
+  authId: varchar("auth_id", { length: 255 }).$defaultFn(generateUrlSafeId),
+  emailVerified: boolean("email_verified").default(false),
+  isVerified: boolean("is_verified").default(false),
+  updatedAt: timestamp("updated_at").onUpdateNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
 export const users = mysqlTable(
   "Users",
   {
@@ -259,8 +280,8 @@ export const communityChallengesTags = mysqlTable("communityChallengesTags", {
 // Appointments
 export const appointments = mysqlTable("Appointments", {
   id: int("id").autoincrement().primaryKey(),
-  requestedBy: varchar("requested_id", { length: 155 }),
-  nutritionistId: varchar("nutritionistId", { length: 155 }),
+  requestedBy: varchar("requested_by", { length: 155 }),
+  nutritionistId: varchar("nutritionist_id", { length: 155 }),
   status: mysqlEnum("status", [
     "pending",
     "accepted",
@@ -271,8 +292,8 @@ export const appointments = mysqlTable("Appointments", {
   slugId: varchar("slug_id", { length: 255 }).$defaultFn(() =>
     generateUrlSafeId(14)
   ),
-  startTime: timestamp("start_time"),
-  endTime: timestamp("end_time"),
+  startTime: datetime("start_time"),
+  endTime: datetime("end_time"),
   duration: int("duration"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").onUpdateNow(),

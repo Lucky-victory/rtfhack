@@ -63,14 +63,14 @@ export function HeaderNav() {
   const [isPending, startTransition] = useTransition();
   const { user, isAuthenticated, isLoading, session: userSession } = useAuth();
   console.log({ session, status, user, isAuthenticated, isLoading });
-  useEffect(() => {
-    if (isAuthenticated) {
-      startTransition(() => {
-        // router.push("/member/dashboard");
-      });
-    }
-  }),
-    [isAuthenticated];
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     startTransition(() => {
+  //       // router.push("/member/dashboard");
+  //     });
+  //   }
+  // }),
+  //   [isAuthenticated];
   const links = [
     <>
       <ListItem>

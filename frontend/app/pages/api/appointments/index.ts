@@ -8,6 +8,7 @@ import {
   successHandlerCallback,
 } from "@/utils";
 import { and, eq, lt, lte } from "drizzle-orm";
+import { timestamp } from "drizzle-orm/mysql-core";
 import isEmpty from "just-is-empty";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -107,33 +108,39 @@ export const POST: HTTP_METHOD_CB = async (
   res: NextApiResponse
 ) => {
   try {
-    const data = req.body;
+    const { startTime, endTime, ...data } = req.body;
     const createdAppointment = await db.transaction(async (tx) => {
-      const [insertRes] = await tx.insert(appointments).values(data);
+      const [insertRes] = await tx
+        .insert(appointments)
+        .values({
+          ...data,
+          startTime: timestamp(startTime),
+          endTime: timestamp(endTime),
+        });
       const createdAppointment = await tx.query.appointments.findFirst({
         where: eq(appointments.id, insertRes.insertId),
-        with: {
-          requestedBy: {
-            columns: {
-              id: true,
-              authId: true,
-              fullName: true,
-              avatar: true,
-              username: true,
-              userType: true,
-            },
-          },
-          nutritionist: {
-            columns: {
-              id: true,
-              authId: true,
-              fullName: true,
-              avatar: true,
-              username: true,
-              userType: true,
-            },
-          },
-        },
+        // with: {
+        //   requestedBy: {
+        //     columns: {
+        //       id: true,
+        //       authId: true,
+        //       fullName: true,
+        //       avatar: true,
+        //       username: true,
+        //       userType: true,
+        //     },
+        //   },
+        //   nutritionist: {
+        //     columns: {
+        //       id: true,
+        //       authId: true,
+        //       fullName: true,
+        //       avatar: true,
+        //       username: true,
+        //       userType: true,
+        //     },
+        //   },
+        // },
       });
       return createdAppointment;
     });
@@ -142,6 +149,8 @@ export const POST: HTTP_METHOD_CB = async (
       data: createdAppointment,
     });
   } catch (error) {
+    console.log({ error });
+
     return errorHandlerCallback(req, res, {
       message: "Something went wrong...",
       data: null,

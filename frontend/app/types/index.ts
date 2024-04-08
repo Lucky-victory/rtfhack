@@ -8,12 +8,13 @@ export type USER = {
   chainId?: string;
   fullName?: string | null;
   role?: "admin" | "user";
-  avatarUrl?: string;
+  avatar?: string;
   authId?: string;
+  username: string;
 };
 export type NEW_USER = Pick<
   USER,
-  "address" | "chainId" | "fullName" | "avatarUrl" | "authId"
+  "address" | "chainId" | "fullName" | "avatar" | "authId"
 >;
 export type MEETING = {
   id: number;

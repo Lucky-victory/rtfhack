@@ -1,3 +1,5 @@
+import { appointments } from "@/db/schema";
+
 export type APIResponse<T = null> = {
   data: T;
   message?: string;
@@ -15,6 +17,21 @@ export type USER = {
   userType?: "member" | "nutritionist";
   emailVerified: boolean;
   username: string;
+};
+export type Nutritionist = {
+  fullName: string;
+  location: string;
+  bio?: string;
+  id: number;
+  isVerified?: boolean;
+  address?: string;
+  role?: "admin" | "user";
+  avatar?: string;
+  authId?: string;
+  email?: string;
+  userType?: "member" | "nutritionist";
+  emailVerified?: boolean;
+  username?: string;
 };
 export type USER_SESSION = {
   user: Pick<
@@ -77,3 +94,7 @@ export type TPeerMetadata = {
   displayName: string;
   avatarUrl?: string;
 };
+export type NewAppointment = Pick<
+  typeof appointments.$inferInsert,
+  "duration" | "endTime" | "nutritionistId" | "requestedBy" | "startTime"
+>;
