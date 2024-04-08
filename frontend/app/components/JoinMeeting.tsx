@@ -31,11 +31,11 @@ export default function JoinMeeting() {
           autoComplete="off"
           py={3}
           h={"auto"}
-          colorScheme="teal"
+          colorScheme="gs-yellow"
           isDisabled={isSending}
           _focus={{
-            boxShadow: "0 0 0 1px teal",
-            borderColor: "teal",
+            boxShadow: "0 0 0 1px gray",
+            borderColor: "gs-yellow.400",
           }}
           onKeyUp={(e: KeyboardEvent) => {
             if (e.key == "Enter") handleJoinMeeting();
@@ -52,7 +52,7 @@ export default function JoinMeeting() {
           gap={2}
           isLoading={isSending}
           onClick={() => handleJoinMeeting()}
-          colorScheme="teal"
+          // colorScheme="teal"
         >
           Continue
         </Button>

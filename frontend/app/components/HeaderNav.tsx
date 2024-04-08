@@ -21,7 +21,7 @@ import isMobile from "is-mobile";
 
 import { useAddUserMutation, useGetUserQuery } from "@/state/services";
 import { maskWalletAddress } from "@/utils";
-import { useResize, useUser } from "@/hooks";
+import { useResize, useAuth } from "@/hooks";
 import { LuMenu } from "react-icons/lu";
 import { useEffect, useTransition } from "react";
 import { useSession } from "next-auth/react";
@@ -61,9 +61,16 @@ export function HeaderNav() {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [isPending, startTransition] = useTransition();
-  const { user, isAuthenticated, isLoading, session: userSession } = useUser();
+  const { user, isAuthenticated, isLoading, session: userSession } = useAuth();
   console.log({ session, status, user, isAuthenticated, isLoading });
-
+  useEffect(() => {
+    if (isAuthenticated) {
+      startTransition(() => {
+        router.push("/member/dashboard");
+      });
+    }
+  }),
+    [isAuthenticated];
   const links = [
     <>
       <ListItem>
@@ -203,7 +210,14 @@ export function HeaderNav() {
                   Connect Wallet
                 </Button> */}
 
-                <WalletAdaptor className="sign-up-btn" />
+                <>
+                  {/* <LogoutBtn /> */}
+                  {userSession ? (
+                    <AuthBtn userSession={userSession} />
+                  ) : (
+                    <WalletAdaptor />
+                  )}
+                </>
               </HStack>
             </DrawerBody>
           </DrawerContent>

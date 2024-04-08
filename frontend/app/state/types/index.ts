@@ -14,6 +14,7 @@ export type USER = {
   email: string;
   userType?: "member" | "nutritionist";
   emailVerified: boolean;
+  username: string;
 };
 export type USER_SESSION = {
   user: Pick<
@@ -26,6 +27,7 @@ export type USER_SESSION = {
     | "userType"
     | "avatar"
     | "role"
+    | "username"
     | "emailVerified"
   >;
   expires: string;
@@ -33,13 +35,13 @@ export type USER_SESSION = {
 
 export type NEW_USER = Pick<
   USER,
-  "address" | "chainId" | "fullName" | "avatar" | "authId" | "email"
+  "address" | "chainId" | "fullName" | "avatar"
 >;
 export type MEETING = {
   id: number;
   roomId: string;
   title: string;
-  authId?: string;
+  userId?: string;
   participants?: number;
   creator?: {
     id: number;
@@ -53,14 +55,14 @@ export type MEETING_RECORD = {
   meetingId?: number;
   roomId: string;
   recordDuration: number;
-  authId?: string;
+  userId?: string;
   recordUri: string;
 };
 export type NEW_MEETING_RECORD = Pick<
   MEETING_RECORD,
-  "meetingId" | "recordDuration" | "recordUri" | "roomId" | "authId"
+  "meetingId" | "recordDuration" | "recordUri" | "roomId" | "userId"
 >;
-export type NEW_MEETING = Pick<MEETING, "roomId" | "authId" | "title">;
+export type NEW_MEETING = Pick<MEETING, "roomId" | "userId" | "title">;
 // export type UserSession = DefaultSession & {
 //   address: string;
 //   chainId?: number;
@@ -71,3 +73,7 @@ export type NEW_MEETING = Pick<MEETING, "roomId" | "authId" | "title">;
 //     address?: string;
 //   };
 // };
+export type TPeerMetadata = {
+  displayName: string;
+  avatarUrl?: string;
+};

@@ -81,7 +81,7 @@ export default function MeetingHeader({
     <HStack
       justify={"space-between"}
       gap={5}
-      bg={"white"}
+      bg={"black"}
       rounded={"40px"}
       py={3}
       px={4}
@@ -97,7 +97,7 @@ export default function MeetingHeader({
                 mr={3}
                 colorScheme="teal"
                 variant={"ghost"}
-                bg={"teal.50"}
+                bg={"gs-yellow-dark.50"}
                 pos={"relative"}
                 // rounded={"full"}
                 gap={3}
@@ -119,9 +119,9 @@ export default function MeetingHeader({
                     size={"md"}
                     w={"full"}
                     gap={3}
-                    colorScheme="teal"
+                    // colorScheme=""
                     variant={"ghost"}
-                    bg={"teal.50"}
+                    bg={"gs-green.50"}
                     onClick={() => handleCopy()}
                   >
                     {hasCopied ? <LuCheck /> : <LuCopy />}{" "}

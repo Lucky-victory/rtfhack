@@ -3,7 +3,6 @@ import Head from "next/head";
 import { Box, Button } from "@chakra-ui/react";
 import PageLoader from "@/components/PageLoader";
 import { HeaderNav } from "@/components/HeaderNav";
-// import WaitListForm from "@/components/WaitListForm";
 import HeroArea from "@/components/HeroArea";
 import CommunityArea from "@/components/CommunityArea";
 import CoachArea from "@/components/CoachArea";

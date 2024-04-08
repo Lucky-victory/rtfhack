@@ -490,6 +490,7 @@ export const GreenSpaceDAOApi = createApi({
           displayName: string;
           address?: string;
           username?: string;
+          avatar?: string;
           authId: string;
         };
         params: { isCreator: boolean; roomId: string } & Record<string, any>;

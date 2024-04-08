@@ -75,11 +75,12 @@ export default function DashboardSideNav(props: {
   });
   return (
     <Box
+      flexShrink={0}
       borderRight={"1px"}
       borderRightColor={"gray.500"}
       bg={"gray.700"}
       h={"full"}
-      {...(isMobileSize ? miniSidebarStyles : { w: 230, px: 3 })}
+      {...(isMobileSize ? miniSidebarStyles : { w: 250, px: 3 })}
     >
       <Box mb={5}>
         <Link href="/">

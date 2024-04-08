@@ -26,7 +26,7 @@ export const GET: HTTP_METHOD_CB = async (
     const { roomId } = req.query;
     const meeting = await db.query.meetings.findFirst({
       with: {
-        creator: {
+        author: {
           columns: {
             chainId: true,
             authId: true,
@@ -35,7 +35,10 @@ export const GET: HTTP_METHOD_CB = async (
           },
         },
       },
-      where: eq(meetings.roomId, roomId as string),
+      where: or(
+        eq(meetings.meetId, roomId as string),
+        eq(meetings.roomId, roomId as string)
+      ),
     });
     return successHandlerCallback(req, res, {
       message: "Meeting received successfully",

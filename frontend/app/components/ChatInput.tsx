@@ -37,17 +37,17 @@ export default function ChatInput({
           autoComplete="off"
           onKeyUp={handleInputKeyUp}
           onChange={handleInputChange}
-          _focus={{ boxShadow: "0 0 0 1px teal", borderColor: "teal" }}
+          _focus={{ boxShadow: "0 0 0 1px gray", borderColor: "gs-yellow.400" }}
           placeholder="Type a message..."
           fontWeight={500}
-          colorScheme="teal"
+          colorScheme="gs-yellow"
           rounded={"full"}
         />
         <IconButton
           isDisabled={text === ""}
           onClick={sendMessage}
           rounded={"full"}
-          colorScheme="teal"
+          colorScheme="gs-yellow"
           aria-label="send message"
         >
           <FiSend />

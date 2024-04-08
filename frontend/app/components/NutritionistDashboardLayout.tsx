@@ -17,7 +17,11 @@ import {
   HiOutlinePresentationChartLine,
   HiOutlineLightBulb,
 } from "react-icons/hi2";
-export default function DashboardLayout({ children }: { children: ReactNode }) {
+export default function NutritionistDashboardLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const navLinks = [
     {
       url: "overview",

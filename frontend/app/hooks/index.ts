@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { USER_SESSION } from "@/state/types";
 type UpdateSession = (data?: any) => Promise<USER_SESSION | null>;
 
-export const useUser = () => {
+export const useAuth = () => {
   const { data: session, status } = useSession() as {
     status: "authenticated" | "loading" | "unauthenticated";
     data: USER_SESSION;

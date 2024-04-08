@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { ReactNode } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 
 export default function PageWrapper({
   children,
@@ -13,7 +13,7 @@ export default function PageWrapper({
   h?: string | number;
 
   bg?: string;
-  props: any;
+  props?: any;
 }) {
   return (
     <>
