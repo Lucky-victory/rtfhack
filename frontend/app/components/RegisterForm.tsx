@@ -1,4 +1,3 @@
-
 import React, { RefObject, useRef, useState } from "react";
 
 import { useRouter } from "next/router";
@@ -41,8 +40,8 @@ import SwiperMain from "swiper";
 import Icon from "./Icon";
 import NutritionistForm from "@/components/NutritionistForm";
 import { countries } from "@/utils/countries";
-import { useDebounce } from "@/hooks/useDebounce";
-import { communityAbi } from "../../../abis";
+import { useDebounce } from "@/hooks";
+import { communityAbi } from "../../abis";
 import { communityAddr } from "@/utils/constants";
 import { useStorageUpload } from "@thirdweb-dev/react";
 import {
@@ -129,9 +128,10 @@ const RegisterForm = ({
       setInTx(true);
       const { hash } = await writeContract({
         address: communityAddr,
-        abi: communityAbi,
+        abi: communityAbi as readonly unknown[],
         functionName: "registerUser",
         args: [cid, allTokensData.userNftUri],
+        //@ts-ignore
         value: parseEther(debouncedAmount || "0"),
       });
 
@@ -223,11 +223,9 @@ const RegisterForm = ({
         });
 
         await createUser({
-         
           fullName: data?.fullName,
           address: address as `0x${string}`,
           userType: SelectedUserType,
-          chainId: chainId,
         }).unwrap();
         sendUserToAI(formDataObject);
         await registerUserTx();

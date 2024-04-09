@@ -30,7 +30,7 @@ interface ChatState {
   active_question_disabled: boolean;
 }
 
-const explorer = () => {
+const AiCoachPage = () => {
   const { publicKey } = useWallet();
   const address = publicKey?.toBase58();
   const [state, updateState] = useReducer(
@@ -87,7 +87,8 @@ const explorer = () => {
         addressOrUsername: address,
       },
     });
-  }, [socketRef.current]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socketRef.current, address]);
 
   // const container = useRef<HTMLDivElement>(null);
 
@@ -244,7 +245,7 @@ const explorer = () => {
               <div className="flex flex-col gap-48 items-center">
                 <div className="flex flex-col gap-8 items-center">
                   <p className="max-w-prose text-balance text-center font-bellota text-2xl font-bold ">
-                    I'm here to help you live healthy and better!
+                    I&apos;m here to help you live healthy and better!
                   </p>
                   <div className="flex gap-4">
                     {samplePrompts.map((body, index) => (
@@ -339,4 +340,4 @@ const explorer = () => {
   );
 };
 
-export default explorer;
+export default AiCoachPage;

@@ -1,17 +1,17 @@
-import { db } from '@/db';
-import { fitnessPlans } from '@/db/schema';
+import { db } from "@/db";
+import { fitnessPlans } from "@/db/schema";
 import {
   HTTP_METHOD_CB,
   errorHandlerCallback,
   mainHandler,
   successHandlerCallback,
-} from '@/utils/api-utils';
-import { NextApiRequest, NextApiResponse } from 'next';
+} from "@/utils";
+import { NextApiRequest, NextApiResponse } from "next";
 
-import { eq, or } from 'drizzle-orm';
+import { eq, or } from "drizzle-orm";
 
-import isEmpty from 'just-is-empty';
-import { IS_DEV } from '@/utils';
+import isEmpty from "just-is-empty";
+import { IS_DEV } from "@/utils";
 
 const MAX_LOCKED_CONTENT_LENGTH = 200;
 export default async function handler(
@@ -69,7 +69,7 @@ export const GET: HTTP_METHOD_CB = async (
     });
   } catch (error: any) {
     return await errorHandlerCallback(req, res, {
-      message: 'Something went wrong...',
+      message: "Something went wrong...",
       error: IS_DEV ? { ...error } : null,
     });
   }
@@ -98,21 +98,21 @@ export const PUT: HTTP_METHOD_CB = async (
     }
     //TODO: add a check to see if the user is the author of the fitnessPlan
 
-    if (status === 'draft') {
+    if (status === "draft") {
       await db.update(fitnessPlans).set({ ...rest, status });
       return await successHandlerCallback(req, res, {
-        message: 'Draft updated successfully',
+        message: "Draft updated successfully",
       });
     }
 
     const update = await db.update(fitnessPlans).set({ ...rest, status });
 
     return await successHandlerCallback(req, res, {
-      message: 'Fitness plan updated successfully',
+      message: "Fitness plan updated successfully",
     });
   } catch (error: any) {
     return await errorHandlerCallback(req, res, {
-      message: 'Something went wrong...',
+      message: "Something went wrong...",
     });
   }
 };

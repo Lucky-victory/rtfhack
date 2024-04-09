@@ -133,6 +133,7 @@ export default function NutritionistPage() {
       startTime: bookingDate,
       endTime: addMinutesToBookingDate(sectionDuration, bookingDate),
     }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bookingDate, sectionDuration, user]);
   function addMinutesToBookingDate(
     minutes: number,

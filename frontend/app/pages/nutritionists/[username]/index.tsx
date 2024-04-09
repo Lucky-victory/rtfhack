@@ -1,5 +1,6 @@
-import ArticleCards from "../../../components/ArticleCards";
-import MatIcon from "../../../components/MatIcon";
+import ArticleCards from "@/components/ArticleCards";
+import Icon from "@/components/Icon";
+// import MatIcon from "../../../components/MatIcon";
 import {
   Avatar,
   Box,
@@ -72,7 +73,7 @@ export default function CretorProfile() {
             <HStack>
               <Heading>{user.fullName}</Heading>
               {user?.verified && (
-                <MatIcon name="verified" bold filled color="blue" />
+                <Icon name="verified" bold fill color="blue" />
               )}
             </HStack>
             <Text textAlign={"center"} maxW={500} color={"appBlack.300"}>
@@ -80,7 +81,7 @@ export default function CretorProfile() {
             </Text>
             <HStack my={4}>
               <Button variant={"solid"} rounded={"full"} gap={2}>
-                <MatIcon name="add" bold /> Follow
+                <Icon name="add" bold /> Follow
               </Button>
             </HStack>
             <HStack gap={4}>

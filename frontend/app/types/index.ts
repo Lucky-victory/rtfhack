@@ -11,10 +11,12 @@ export type USER = {
   avatar?: string;
   authId?: string;
   username: string;
+  userType?: USER_TYPE;
 };
+export type USER_TYPE = "member" | "nutritionist";
 export type NEW_USER = Pick<
   USER,
-  "address" | "chainId" | "fullName" | "avatar" | "authId"
+  "address" | "chainId" | "fullName" | "avatar" | "authId" | "userType"
 >;
 export type MEETING = {
   id: number;

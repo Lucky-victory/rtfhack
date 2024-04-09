@@ -52,7 +52,7 @@ export type USER_SESSION = {
 
 export type NEW_USER = Pick<
   USER,
-  "address" | "chainId" | "fullName" | "avatar"
+  "address" | "chainId" | "fullName" | "avatar" | "authId" | "userType"
 >;
 export type MEETING = {
   id: number;
@@ -60,7 +60,7 @@ export type MEETING = {
   title: string;
   userId?: string;
   participants?: number;
-  creator?: {
+  author?: {
     id: number;
     address: string;
     chainId?: number;

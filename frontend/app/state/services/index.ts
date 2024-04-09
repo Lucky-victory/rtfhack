@@ -33,13 +33,14 @@ export const GreenSpaceDAOApi = createApi({
     "Appointments",
   ],
 
-  endpoints: (builder) => ({sendUserInfoToAI: builder.mutation<APIResponse<any>, any>({
+  endpoints: (builder) => ({
+    sendUserInfoToAI: builder.mutation<APIResponse<any>, any>({
       query: (data) => ({
         url: `ai/`,
-        method: 'POST',
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: [{ type: 'Articles' as const, id: 'LIST' }],
+      invalidatesTags: [{ type: "Articles" as const, id: "LIST" }],
     }),
     getArticles: builder.query<
       Partial<APIResponse<Article[]>>,
@@ -427,6 +428,28 @@ export const GreenSpaceDAOApi = createApi({
           : // an error occurred, but we still want to refetch this query when `{ type: 'Appointments', id: 'LIST' }` is invalidated
             [{ type: "Appointments", id: "LIST" }],
     }),
+    getUsers: builder.query<
+      Partial<APIResponse<USER[]>>,
+      { t: "member" | "nutritionist" | "all" }
+    >({
+      query: ({ t }) => {
+        return {
+          url: `users?t=${t}`,
+        };
+      },
+      providesTags: (result) =>
+        // is result available?
+        result?.data
+          ? // successful query
+            [
+              ...result?.data.map(({ id }) => ({
+                type: "Users" as const,
+                id: id,
+              })),
+              { type: "Users", id: "LIST" },
+            ]
+          : [{ type: "Users", id: "LIST" }],
+    }),
     // TODO: Add return types
     getAppointment: builder.query<
       Partial<APIResponse<any>>,
@@ -558,7 +581,9 @@ export const GreenSpaceDAOApi = createApi({
     }),
   }),
 });
-export const { useSendUserInfoToAIMutation,
+export const {
+  useSendUserInfoToAIMutation,
+  useGetUsersQuery,
   useAddMeetingMutation,
   useGetArticleQuery,
   useGetArticlesQuery,

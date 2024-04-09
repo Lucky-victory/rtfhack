@@ -55,6 +55,7 @@ export default function WalletAdaptor(props: ButtonProps) {
 
   useEffect(() => {
     publicKey ? !signed && signCustomMessage() : setSigned(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [publicKey]);
 
   return (

@@ -1,8 +1,8 @@
-import { HTTP_METHOD_CB, mainHandler } from '@/utils/api-utils';
-import { NextApiRequest, NextApiResponse } from 'next';
-import { initial_condition } from '@/utils/prompts';
-import OpenAI from 'openai';
-require('dotenv').config();
+import { HTTP_METHOD_CB, mainHandler } from "@/utils";
+import { NextApiRequest, NextApiResponse } from "next";
+import { initial_condition } from "@/utils/prompts";
+import OpenAI from "openai";
+require("dotenv").config();
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, // defaults to process.env["OPENAI_API_KEY"]
@@ -27,13 +27,13 @@ export const POST: HTTP_METHOD_CB = async (
 
     const objToString = Object.keys(prompt).reduce(
       (acc, key) => (acc += `${key}: ${prompt[key]}\n`),
-      ''
+      ""
     );
     const completion = await openai.chat.completions.create({
       messages: [
-        { role: 'assistant', content: initial_condition },
+        { role: "assistant", content: initial_condition },
         {
-          role: 'user',
+          role: "user",
           content: `Given the following \n
         ${objToString}
          Calculate my rate of aging?
@@ -42,14 +42,14 @@ export const POST: HTTP_METHOD_CB = async (
     Respond with either Reverse, Fast, Moderate, or Slow. Remember as a json object.`,
         },
       ],
-      model: 'gpt-3.5-turbo',
+      model: "gpt-3.5-turbo",
     });
 
     return res.json({
-      data: JSON.parse(completion['choices'][0]['message'].content as string),
-      message: 'AI message successfully',
+      data: JSON.parse(completion["choices"][0]["message"].content as string),
+      message: "AI message successfully",
     });
   } catch (error) {
-    return res.json({ error, message: 'Something went wrong' });
+    return res.json({ error, message: "Something went wrong" });
   }
 };
