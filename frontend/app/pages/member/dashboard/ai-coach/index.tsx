@@ -13,6 +13,7 @@ import { TextContentBlock } from "openai/resources/beta/threads/messages/message
 // import { useAccount } from "wagmi";
 import DashBoardLayout from "@/components/MemberDashboardLayout";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { Box, Textarea } from "@chakra-ui/react";
 
 const samplePrompts = [
   "What nutrition is best for a female BMI of 20?",
@@ -242,7 +243,7 @@ const explorer = () => {
             {isEmpty(state.thread_messages) ? (
               <div className="flex flex-col gap-48 items-center">
                 <div className="flex flex-col gap-8 items-center">
-                  <p className="max-w-prose text-balance text-center font-bellota text-2xl font-bold text-[#194237]">
+                  <p className="max-w-prose text-balance text-center font-bellota text-2xl font-bold ">
                     I'm here to help you live healthy and better!
                   </p>
                   <div className="flex gap-4">
@@ -262,7 +263,10 @@ const explorer = () => {
                     .map((threadIdWithDate: string) => {
                       const [threadId, date] = threadIdWithDate.split("::");
                       return (
-                        <div onClick={() => handleGetThread(threadId)}>
+                        <div
+                          key={threadId}
+                          onClick={() => handleGetThread(threadId)}
+                        >
                           {threadId} {date}
                         </div>
                       );
@@ -273,7 +277,7 @@ const explorer = () => {
               state.thread_messages.map((chat, index) => {
                 return (
                   <ChatBubble
-                    key={index}
+                    key={index + "chat"}
                     name={chat.role === "assistant" ? "GreenspaceAI" : "Me"}
                     // TODO: Check it could be image too.
                     message={(chat.content[0] as TextContentBlock).text.value}
@@ -291,15 +295,24 @@ const explorer = () => {
               />
             )}
 
-            <div className=" flex flex-col justify-end gap-4 bg-white p-4 fixed bottom-4 max-w-[48.5rem] w-full h-min rounded-[20px] shadow-[0_0_50px_7px_rgba(0,0,0,0.08)]">
-              <div className="w-full bg-white p-4 rounded shadow-[0_0_50px_7px_rgba(0,0,0,0.08)]">
+            <Box
+              bg={"gray.800"}
+              className=" flex flex-col justify-end gap-4 p-4 fixed bottom-4 max-w-[48.5rem] w-full rounded-[20px] shadow-[0_0_50px_7px_rgba(0,0,0,0.08)]"
+            >
+              <Box
+                bg={"gray.800"}
+                className="w-full  p-4 rounded shadow-[0_0_50px_7px_rgba(0,0,0,0.08)]"
+              >
                 {/* This enables the textarea to auto grow! */}
                 <div className="relative">
                   <div className="whitespace-pre-line invisible min-h-[4rem] w-full">
                     {state.active_question}
                   </div>
-                  <textarea
-                    className="absolute inset-0 w-full overflow-y-hidden border-none focus:outline-none text-[#4C505F] h-[4.5rem] resize-none h-[initial]"
+                  <Textarea
+                    onKeyUp={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) handleAskQuestion();
+                    }}
+                    className="w-full overflow-y-hidden border-none focus:outline-none   resize-none h-[initial]"
                     placeholder="Ask me anything..."
                     onChange={(e) => {
                       updateState({
@@ -309,7 +322,7 @@ const explorer = () => {
                     value={state.active_question}
                   />
                 </div>
-              </div>
+              </Box>
 
               <div className="flex justify-end">
                 <MessageButton
@@ -318,7 +331,7 @@ const explorer = () => {
                   }}
                 />
               </div>
-            </div>
+            </Box>
           </div>
         </div>
       </div>
