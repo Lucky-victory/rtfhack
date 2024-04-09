@@ -236,7 +236,7 @@ const RegisterForm = ({
         await new Promise((resolve) => setTimeout(resolve, 2000));
         if (publicKey) {
           if (!signed) {
-            signCustomMessage();
+            await signCustomMessage();
           }
         } else {
           setSigned(false);

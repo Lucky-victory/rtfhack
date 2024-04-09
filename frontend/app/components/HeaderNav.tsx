@@ -29,6 +29,8 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import WalletAdaptor from "./WalletAdapterBtn";
 import RegisterForm from "./RegisterForm";
 import AuthBtn from "./AuthBtn";
+import LoginBtn from "./LoginBtn";
+import isEmpty from "just-is-empty";
 
 export function HeaderNav() {
   const { isMobileSize, isTabletSize } = useResize();
@@ -72,11 +74,13 @@ export function HeaderNav() {
   const { publicKey, signMessage } = useWallet();
   const address = publicKey?.toBase58();
   const {
-    user: AuthUser,
+    user: authUser,
     isAuthenticated,
     isLoading,
     session: userSession,
   } = useAuth();
+  console.log({ authUser });
+
   // console.log({ session, status, user, isAuthenticated, isLoading });
   // useEffect(() => {
   //   if (isAuthenticated) {
@@ -178,15 +182,9 @@ export function HeaderNav() {
           </HStack>
           {!(isMobileSize || isTabletSize) && (
             <>
-              {address && !isLoggedin() && (
+              {address && !isLoggedin() && isEmpty(userSession?.user) && (
                 <HStack spacing={4}>
-                  <Button
-                    colorScheme="black"
-                    variant={"outline"}
-                    onClick={() => onOpen()}
-                  >
-                    Login
-                  </Button>
+                  <LoginBtn />
                   <Button
                     // colorScheme="primaryColor"
                     variant={"solid"}
@@ -241,7 +239,7 @@ export function HeaderNav() {
               </List>
               <HStack
                 // clipPath={"polygon(14% 0, 100% 0%, 100% 100%, 0% 100%);"}
-                bg={"gs-yellow.400"}
+                // bg={"gs-yellow.400"}
                 minW={{ base: 150, lg: 350 }}
                 p={2}
                 // justify={"center"}
@@ -256,15 +254,9 @@ export function HeaderNav() {
                 </Button> */}
 
                 <>
-                  {address && !isLoggedin() && (
+                  {address && !isLoggedin() && isEmpty(userSession?.user) && (
                     <HStack spacing={4}>
-                      <Button
-                        colorScheme="gray"
-                        variant={"outline"}
-                        onClick={() => onOpen()}
-                      >
-                        Login
-                      </Button>
+                      <LoginBtn />
                       <Button
                         // colorScheme='primaryColor'
                         variant={"solid"}
