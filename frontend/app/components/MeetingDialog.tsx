@@ -39,7 +39,9 @@ export default function Dialog({
         aria-label="Leave meeting"
         colorScheme="red"
         rounded={"full"}
+        color={"white"}
         fontSize={"20px"}
+        bg={"red.800"}
         onClick={onOpen}
       >
         <FiPhone />

@@ -2,24 +2,27 @@ export type APIResponse<T> = {
   data: T | null;
   message?: string;
 };
-export type USERS = {
+export type USER = {
   id: number;
   address: string;
   chainId?: string;
   fullName?: string | null;
   role?: "admin" | "user";
-  avatarUrl?: string;
+  avatar?: string;
   authId?: string;
+  username: string;
+  userType?: USER_TYPE;
 };
+export type USER_TYPE = "member" | "nutritionist";
 export type NEW_USER = Pick<
-  USERS,
-  "address" | "chainId" | "fullName" | "avatarUrl" | "authId"
+  USER,
+  "address" | "chainId" | "fullName" | "avatar" | "authId" | "userType"
 >;
-export type MEETINGS = {
+export type MEETING = {
   id: number;
   roomId: string;
   title: string;
-  authId?: string;
+  userId?: string;
   participants?: number;
   creator?: {
     id: number;
@@ -28,30 +31,24 @@ export type MEETINGS = {
     authId: string;
   };
 };
-export type MEETING_RECORDS = {
+export type MEETING_RECORD = {
   id: number;
   meetingId?: number;
   roomId: string;
   recordDuration: number;
-  authId?: string;
+  userId?: string;
   recordUri: string;
 };
-export type NEW_MEETING_RECORDS = Pick<
-  MEETING_RECORDS,
-  "meetingId" | "recordDuration" | "recordUri" | "roomId" | "authId"
+export type NEW_MEETING_RECORD = Pick<
+  MEETING_RECORD,
+  "meetingId" | "recordDuration" | "recordUri" | "roomId" | "userId"
 >;
-export type NEW_MEETING = Pick<MEETINGS, "roomId" | "authId" | "title">;
-// export type UserSession = DefaultSession & {
-//   address: string;
-//   chainId?: number;
-//   user: {
-//     id: number;
-//     avatarUrl?: string;
-//     fullName?: string;
-//     address?: string;
-//   };
-// };
+export type NEW_MEETING = Pick<MEETING, "roomId" | "userId" | "title">;
+
 export type TPeerMetadata = {
   displayName: string;
-  avatarUrl?: string;
+  address?: string;
+  username?: string;
+  avatar?: string;
+  authId: string;
 };

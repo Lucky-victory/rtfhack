@@ -1,10 +1,11 @@
-import { TPeerMetadata } from "@/pages/meet/[roomId]";
+
 import { Box, Button, HStack, IconButton, Text } from "@chakra-ui/react";
 
 import { Room } from "@huddle01/web-core";
 import { FiCheck, FiSlash, FiUsers } from "react-icons/fi";
 import isEmpty from "just-is-empty";
 import { useEffect, useState } from "react";
+import { TPeerMetadata } from "@/types";
 export default function NewPeerRequest({
   room,
   peerId,
@@ -42,7 +43,7 @@ export default function NewPeerRequest({
       <HStack
         key={peerId}
         gap={4}
-        bg={"gray.100"}
+        bg={"gray.700"}
         px={"10px"}
         py={"6px"}
         rounded={"full"}

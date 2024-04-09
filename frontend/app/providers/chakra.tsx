@@ -14,6 +14,7 @@ export const theme = extendTheme({
   fonts: {
     heading: "var(--font-poppins)",
     body: "var(--font-poppins)",
+    a: "var(--font-poppins)",
   },
   colors: {
     "gs-green": {
@@ -39,6 +40,18 @@ export const theme = extendTheme({
       700: "#754605",
       800: "#472500",
       900: "#1a0a00",
+    },
+    "gs-yellow-dark": {
+      "50": "#1a0a00",
+      "100": "#2b1600",
+      "200": "#3c2200",
+      "300": "#4c2d00",
+      "400": "#5d3900",
+      "500": "#6d4500",
+      "600": "#7e5100",
+      "700": "#8f5d00",
+      "800": "#a06900",
+      "900": "#b07500",
     },
     "gs-beige": {
       50: "#f9f9eb",
@@ -78,19 +91,20 @@ export const theme = extendTheme({
           if (styleProps.colorScheme === "gs-green") {
             return {
               bg: "gs-green.700",
+              color: "white",
               _hover: {
                 bg: "gs-green.800",
               },
             };
           }
-          // if (styleProps.colorScheme === "gs-yellow") {
-          //   return {
-          //     bg: "gs-yellow.600",
-          //     _hover: {
-          //       bg: "gs-yellow.800",
-          //     },
-          //   };
-          // }
+          if (styleProps.colorScheme === "gs-yellow") {
+            return {
+              bg: "gs-yellow.500",
+              _hover: {
+                bg: "gs-yellow.600",
+              },
+            };
+          }
         },
       },
       defaultProps: {
