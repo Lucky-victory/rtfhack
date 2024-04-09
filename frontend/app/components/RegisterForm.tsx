@@ -40,7 +40,7 @@ import SwiperMain from "swiper";
 import Icon from "./Icon";
 import NutritionistForm from "@/components/NutritionistForm";
 import { countries } from "@/utils/countries";
-import { useDebounce } from "@/hooks";
+import { useCustomSign, useDebounce } from "@/hooks";
 import { communityAbi } from "../../abis";
 import { communityAddr } from "@/utils/constants";
 import { useStorageUpload } from "@thirdweb-dev/react";
@@ -75,6 +75,7 @@ const RegisterForm = ({
   //const [sendUserToAI] = useSendUserInfoToAIMutation();
   // const { chain } = useNetwork();
   // const chainId = chain?.id;
+  const { signCustomMessage, setSigned, signed } = useCustomSign();
   const [sendUserToAI, { data: userAIdataResponse }] =
     useSendUserInfoToAIMutation();
   const userAIdata = userAIdataResponse?.data;
@@ -85,7 +86,7 @@ const RegisterForm = ({
     // status: 'success',
     // title: 'Sign up was successful',
   });
-  //const c = getChainId(useConfig());
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const swiperRef = useRef<SwiperRef>();
@@ -146,7 +147,7 @@ const RegisterForm = ({
         duration: 3000,
         position: "top",
         status: "error",
-        title: "error encountered",
+        title: "Error encountered",
       });
       console.log(error);
     }
@@ -226,21 +227,35 @@ const RegisterForm = ({
 
         await createUser({
           fullName: data?.fullName,
-          address: address as `0x${string}`,
+          address: address!,
           userType: SelectedUserType,
         }).unwrap();
         sendUserToAI(formDataObject);
-        await registerUserTx();
-        await new Promise((resolve) => setTimeout(resolve, 10000));
-
+        //TODO: Call contract to register user
+        // await registerUserTx();
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        if (publicKey) {
+          if (!signed) {
+            signCustomMessage();
+          }
+        } else {
+          setSigned(false);
+        }
+        // publicKey ? !signed && signCustomMessage() : setSigned(false);
         if (typeof window !== "undefined") {
           window.localStorage.setItem("userData", JSON.stringify(userAIdata));
         }
-
-        //toast();
+        toast({
+          duration: 3000,
+          position: "top",
+          status: "success",
+          title: "Sign up was successful",
+        });
 
         reset();
         setIsSubmitting(false);
+        onClose();
+        router.push("/member/dashboard");
       }
     } catch (error) {
       console.log("error:", error);
@@ -684,7 +699,7 @@ const RegisterForm = ({
                           <Button type="submit" isLoading={isSubmitting}>
                             Complete Sign Up
                           </Button>
-                          {isSubmitting && <Spinner />}
+                          {/* {isSubmitting && <Spinner />} */}
                         </HStack>
                       </SwiperSlide>
                     </Swiper>

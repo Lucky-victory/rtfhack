@@ -64,7 +64,9 @@ export const POST: HTTP_METHOD_CB = async (
       });
     }
     const user = await db.transaction(async (tx) => {
-      const [insertRes] = await tx.insert(users).values(data);
+      const [insertRes] = await tx
+        .insert(users)
+        .values({ ...data, address, email, authId });
 
       const createdUser = await tx.query.users.findFirst({
         where: eq(users.id, insertRes.insertId),

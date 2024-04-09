@@ -37,10 +37,11 @@ export function useCustomSign() {
     }
   };
 
-  useEffect(() => {
-    publicKey ? !signed && signCustomMessage() : setSigned(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [publicKey]);
+  // useEffect(() => {
+  //   publicKey ? !signed && signCustomMessage() : setSigned(false);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [publicKey]);
+  return { signed, setSigned, signCustomMessage };
 }
 export function useDebounce<T>(value: T, delay?: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
