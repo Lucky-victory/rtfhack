@@ -1,10 +1,12 @@
 import { useCustomSign } from "@/hooks";
+import { useLazyGetUserQuery } from "@/state/services";
 import { Button } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function LoginBtn() {
+  //   const [getUser, { data: user }] = useLazyGetUserQuery();
   const router = useRouter();
   const { publicKey } = useWallet();
   const address = publicKey?.toBase58();
@@ -12,6 +14,7 @@ export default function LoginBtn() {
   const [isLoading, setIsLoading] = useState(false);
   async function handleLogin() {
     setIsLoading(true);
+    // const user = await getUser({ usernameOrAuthId: address! }).unwrap();
     if (publicKey) {
       if (!signed) {
         await signCustomMessage();

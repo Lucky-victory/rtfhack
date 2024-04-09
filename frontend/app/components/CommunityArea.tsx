@@ -53,7 +53,7 @@ export default function CommunityArea() {
           peer accountability sessions are key and are proven. The health
           challenges become a way of life.
         </Text>
-        <Button
+        {/* <Button
           textDecor={"none!important"}
           as={"a"}
           href={"#waitlist-form"}
@@ -61,7 +61,7 @@ export default function CommunityArea() {
           size={"lg"}
         >
           Join the waitlist
-        </Button>
+        </Button> */}
       </Stack>
     </Flex>
   );
