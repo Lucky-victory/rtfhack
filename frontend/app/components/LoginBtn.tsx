@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function LoginBtn() {
-  const [getUser, { data: user }] = useLazyGetUserQuery();
+  //   const [getUser, { data: user }] = useLazyGetUserQuery();
   const router = useRouter();
   const { publicKey } = useWallet();
   const address = publicKey?.toBase58();
