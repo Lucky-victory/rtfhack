@@ -1,22 +1,23 @@
 import { Box } from "@chakra-ui/react";
-import { ReactNode } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 
 export default function PageWrapper({
   children,
-
-  header,
-  maxW = 1400,
+  h = "auto",
+  bg = "black",
+  maxW = 1350,
+  props,
 }: {
   children?: ReactNode;
   maxW?: number;
-  header?: ReactNode;
+  h?: string | number;
+
+  bg?: string;
+  props?: any;
 }) {
   return (
     <>
-      <Box maxW={"1300px"} mx={"auto"}>
-        {header}
-      </Box>
-      <Box as="main" maxW={maxW} mx={"auto"}>
+      <Box h={"auto"} bg={bg} as="main" maxW={maxW} mx={"auto"} {...props}>
         {children}
       </Box>
     </>

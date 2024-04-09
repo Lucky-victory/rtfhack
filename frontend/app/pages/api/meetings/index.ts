@@ -46,7 +46,7 @@ export const POST: HTTP_METHOD_CB = async (
       const [insertResponse] = await tx.insert(meetings).values(data);
       const meeting = await tx.query.meetings.findFirst({
         with: {
-          creator: {
+          author: {
             columns: {
               id: true,
               authId: true,

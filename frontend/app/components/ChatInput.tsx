@@ -30,24 +30,24 @@ export default function ChatInput({
   }
   return (
     <Box px={1} py={3}>
-      <HStack p={2} bg={"white"} rounded={"full"}>
+      <HStack p={2} bg={"black"} rounded={"full"}>
         <Input
           name="message"
           value={text}
           autoComplete="off"
           onKeyUp={handleInputKeyUp}
           onChange={handleInputChange}
-          _focus={{ boxShadow: "0 0 0 1px teal", borderColor: "teal" }}
+          _focus={{ boxShadow: "0 0 0 1px gray", borderColor: "gs-yellow.400" }}
           placeholder="Type a message..."
           fontWeight={500}
-          colorScheme="teal"
+          colorScheme="gs-yellow"
           rounded={"full"}
         />
         <IconButton
           isDisabled={text === ""}
           onClick={sendMessage}
           rounded={"full"}
-          colorScheme="teal"
+          colorScheme="gs-yellow"
           aria-label="send message"
         >
           <FiSend />

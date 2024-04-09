@@ -1,8 +1,8 @@
 import { connectionUri } from "@/db";
 import type { Config } from "drizzle-kit";
 export default {
-  out: "./src/drizzle",
-  schema: "./src/db/schema.ts",
+  out: "./drizzle",
+  schema: "./db/schema.ts",
   driver: "mysql2",
   dbCredentials: {
     uri: connectionUri || "",

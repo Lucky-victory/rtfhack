@@ -201,8 +201,8 @@ export default function LocalPeer(props: Props) {
         h={"full"}
         transition={"ease-in-out"}
         transitionProperty={"boxShadow"}
-        boxShadow={isSpeaking ? "0 0 0 2px blue" : "none"}
-        bg={"gray.100"}
+        boxShadow={isSpeaking ? "0 0 0 2px yellow" : "none"}
+        bg={"gray.800"}
         // p={4}
       >
         {props.state === "connected" && (
@@ -276,7 +276,7 @@ export default function LocalPeer(props: Props) {
                 <Avatar
                   name={props?.local?.displayName}
                   size={"xl"}
-                  // src={props.local?.metadata?.avatarUrl}
+                  src={props.local?.metadata?.avatar}
                   icon={<FiUser size={50} />}
                 />
               </Stack>
@@ -293,7 +293,7 @@ export default function LocalPeer(props: Props) {
                 ref={videoRef}
                 rounded={"md"}
                 // aspectRatio={"16/9"}
-                objectFit={"cover"}
+                objectFit={"contain"}
                 pos={"absolute"}
               ></Box>
             )}
@@ -327,8 +327,8 @@ export default function LocalPeer(props: Props) {
             <Spinner
               thickness="4px"
               speed="0.75s"
-              emptyColor="gray.200"
-              color="teal.500"
+              emptyColor="gray.800"
+              color="gs-yellow.300"
               size="xl"
             />
             <Text fontSize={"20px"}>Connecting...</Text>
