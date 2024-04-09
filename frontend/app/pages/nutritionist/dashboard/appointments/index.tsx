@@ -85,9 +85,7 @@ export default function DashBoard() {
             <Box px={4} mt={6}>
               <Flex align={"center"} justify={"space-between"}>
                 <Flex align={"center"} gap={6}>
-                  <Heading size={"lg"} className="text-primaryGreen">
-                    Today&apos;s Appointments
-                  </Heading>{" "}
+                  <Heading size={"lg"}>Today&apos;s Appointments</Heading>{" "}
                   <Text
                     className="bg-primaryGreen text-white rounded-full py-1 px-4 "
                     fontSize={"sm"}
@@ -143,7 +141,6 @@ export default function DashBoard() {
                             size={"sm"}
                             variant={"outline"}
                             rounded={"full"}
-                            className="text-primaryGreen"
                           >
                             View Details
                           </Button>
@@ -181,7 +178,6 @@ export default function DashBoard() {
                             size={"sm"}
                             variant={"outline"}
                             rounded={"full"}
-                            className="text-primaryGreen"
                           >
                             View Details
                           </Button>
@@ -193,7 +189,7 @@ export default function DashBoard() {
               </TableContainer>
 
               <Box my={6}>
-                <Heading mb={5} size={"lg"} className="text-primaryGreen">
+                <Heading mb={5} size={"lg"}>
                   Upcoming Appointments
                 </Heading>
                 <DashboardEmptyArea
@@ -203,9 +199,7 @@ export default function DashBoard() {
               </Box>
 
               <Box>
-                <Heading size={"lg"} className="text-primaryGreen">
-                  Pending Appointments
-                </Heading>
+                <Heading size={"lg"}>Pending Appointments</Heading>
 
                 <TableContainer my={6}>
                   <Table>

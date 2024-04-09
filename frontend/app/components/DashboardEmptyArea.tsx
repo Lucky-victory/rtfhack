@@ -23,6 +23,7 @@ export default function DashboardEmptyArea({
           justify={"center"}
           align={"center"}
           rounded={"md"}
+          my={4}
           bg={"gray.700"}
         >
           {isLoading && (

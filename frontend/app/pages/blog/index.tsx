@@ -1,4 +1,3 @@
-
 import ArticleCard from "@/components/ArticleCard";
 import Footer from "@/components/Footer";
 import { HeaderNav } from "@/components/HeaderNav";
@@ -12,11 +11,7 @@ const BlogPage = () => {
   const articles = data?.data as IArticle[];
   return (
     <>
-      <Box
-        as="main"
-        className="bg-primaryBeige min-h-screen"
-        px={{ lg: 5, base: 4 }}
-      >
+      <Box as="main" className="min-h-screen" px={{ lg: 5, base: 4 }}>
         <Head>
           <title>Rejuvenate AI | Blog</title>
         </Head>
