@@ -26,14 +26,11 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { LuMenu } from "react-icons/lu";
 import { useWallet } from "@solana/wallet-adapter-react";
+import WalletAdaptor from "./WalletAdapterBtn";
 
 export function HeaderNav() {
   const { isMobileSize, isTabletSize } = useResize();
-  const o = w.useWalletModal();
 
-  function openConnectModal() {
-    o.visible
-  }
   const linkStyles = {
     display: isMobileSize || isTabletSize ? "block" : "inline-block",
     fontSize: "16px",
@@ -192,11 +189,7 @@ export function HeaderNav() {
                   </Button>
                 </HStack>
               )}
-              {!address && (
-                <Button size={"lg"} onClick={openConnectModal}>
-                  Connect Wallet
-                </Button>
-              )}
+              {!address && <WalletAdaptor />}
             </>
           )}
           {/*{!(isMobileSize || isTabletSize) && (
@@ -273,11 +266,7 @@ export function HeaderNav() {
                       </Button>
                     </HStack>
                   )}
-                  {!address && (
-                    <Button size={"lg"} onClick={openConnectModal}>
-                      Connect Wallet
-                    </Button>
-                  )}
+                  {!address && <WalletAdaptor />}
                   {/* 
                   {userSession ? (
                     <AuthBtn userSession={userSession} />
