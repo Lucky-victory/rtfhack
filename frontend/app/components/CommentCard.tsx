@@ -18,7 +18,7 @@ const CommentCard = (chat: {
       <p className=" text-xl font-outfit font-semibold text-[#484E62]">
         {chat.name}
       </p>
-      <Markdown className="prose overflow-scroll" remarkPlugins={[remarkGfm]}>
+      <Markdown className="prose " remarkPlugins={[remarkGfm]}>
         {chat.message}
       </Markdown>
       {chat.time && (
