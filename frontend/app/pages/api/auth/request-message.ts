@@ -28,9 +28,9 @@ export default async function handler(
     await Moralis.start({ apiKey: process.env.MORALIS_API_KEY });
 
   try {
-    // if (!DOMAIN || !URI) {
-    //   throw new Error("Please add APP_DOMAIN in the .env.local");
-    // }
+    if (!DOMAIN || !URI) {
+      throw new Error("Please add APP_DOMAIN in the .env.local");
+    }
 
     const message = await Moralis.Auth.requestMessage({
       address: address,
