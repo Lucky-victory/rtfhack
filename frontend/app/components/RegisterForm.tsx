@@ -57,6 +57,7 @@ import {
   watchNetwork,
   writeContract,
 } from "@wagmi/core";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 const RegisterForm = ({
   isOpen,
@@ -69,10 +70,11 @@ const RegisterForm = ({
     createUser,
     { data: createdUser, isLoading: isCreatingUser, isSuccess },
   ] = useAddUserMutation();
-  const { address } = useAccount();
+  const { publicKey } = useWallet();
+  const address = publicKey?.toBase58();
   //const [sendUserToAI] = useSendUserInfoToAIMutation();
-  const { chain } = useNetwork();
-  const chainId = chain?.id;
+  // const { chain } = useNetwork();
+  // const chainId = chain?.id;
   const [sendUserToAI, { data: userAIdataResponse }] =
     useSendUserInfoToAIMutation();
   const userAIdata = userAIdataResponse?.data;
@@ -212,7 +214,7 @@ const RegisterForm = ({
         const dataToUpload = [formDataObject];
         const cid = await upload({ data: dataToUpload });
         console.log("The index of 0 in the cid array: ", cid[0]);
-        console.log(chainId);
+        // console.log(chainId);
 
         setCid(cid[0]);
         setUser({
@@ -415,7 +417,7 @@ const RegisterForm = ({
 
                         <HStack my={6} justify={"flex-end"}>
                           <Button
-                            colorScheme="primaryColor"
+                            colorScheme="gray"
                             onClick={() => swiperNestedNext()}
                           >
                             Next
@@ -486,14 +488,14 @@ const RegisterForm = ({
 
                         <HStack gap={4} my={6} justify={"flex-end"}>
                           <Button
-                            colorScheme="primaryColor"
+                            colorScheme="gray"
                             variant={"outline"}
                             onClick={() => swiperNestedPrev()}
                           >
                             Back
                           </Button>
                           <Button
-                            colorScheme="primaryColor"
+                            colorScheme="gray"
                             onClick={() => swiperNestedNext()}
                           >
                             Next
@@ -588,14 +590,14 @@ const RegisterForm = ({
 
                         <HStack gap={4} my={6} justify={"flex-end"}>
                           <Button
-                            colorScheme="primaryColor"
+                            colorScheme="gray"
                             variant={"outline"}
                             onClick={() => swiperNestedPrev()}
                           >
                             Back
                           </Button>
                           <Button
-                            colorScheme="primaryColor"
+                            colorScheme="gray"
                             onClick={() => swiperNestedNext()}
                           >
                             Next
@@ -673,7 +675,7 @@ const RegisterForm = ({
                         <HStack gap={4} my={6} justify={"flex-end"}>
                           <Button
                             variant={"outline"}
-                            colorScheme="primaryColor"
+                            colorScheme="gray"
                             onClick={() => swiperNestedPrev()}
                           >
                             Back

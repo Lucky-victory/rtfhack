@@ -27,6 +27,7 @@ import { useRouter } from "next/router";
 import { LuMenu } from "react-icons/lu";
 import { useWallet } from "@solana/wallet-adapter-react";
 import WalletAdaptor from "./WalletAdapterBtn";
+import RegisterForm from "./RegisterForm";
 
 export function HeaderNav() {
   const { isMobileSize, isTabletSize } = useResize();
@@ -174,7 +175,7 @@ export function HeaderNav() {
               {address && !isLoggedin() && (
                 <HStack spacing={4}>
                   <Button
-                    // colorScheme="primaryColor"
+                    colorScheme="black"
                     variant={"outline"}
                     onClick={() => onOpen()}
                   >
@@ -251,7 +252,7 @@ export function HeaderNav() {
                   {address && !isLoggedin() && (
                     <HStack spacing={4}>
                       <Button
-                        // colorScheme='primaryColor'
+                        colorScheme="gray"
                         variant={"outline"}
                         onClick={() => onOpen()}
                       >
@@ -279,6 +280,7 @@ export function HeaderNav() {
           </DrawerContent>
         </Drawer>
       )}
+      <RegisterForm isOpen={isOpen} onClose={onClose} />
     </>
   );
 }
