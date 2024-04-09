@@ -45,7 +45,7 @@ export default function CoachArea() {
                     you&apos;re a nutritonist looking to work with us, send us
                     an email at apply@greenspacedao.xyz and we would be happy to have you on board.
                 </Text>
-                <Button
+                {/* <Button
                     textDecor={"none!important"}
                     as={"a"}
                     colorScheme="gs-yellow"
@@ -54,7 +54,7 @@ export default function CoachArea() {
                     size={"lg"}
                 >
                     Join the waitlist
-                </Button>
+                </Button> */}
             </Stack>
             <Box>
                 <Image
