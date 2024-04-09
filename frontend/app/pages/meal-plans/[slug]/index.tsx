@@ -48,9 +48,9 @@ const MealPlanView = () => {
         <meta property="og:image" content={mealPlan?.image} />
       </Head>
       <HeaderNav />
-      <Box bg={"secondaryColor.100"} py={8}>
+      <Box py={8}>
         <Box
-          bg={"white"}
+          bg={"gray.800"}
           maxW={"1200px"}
           mx={"auto"}
           minH={"100vh"}

@@ -36,7 +36,7 @@ const MealPlansPage = () => {
         <title>Rejuvenate | Meal Plans</title>
       </Head>
       <HeaderNav />
-      <Box className="bg-primaryBeige">
+      <Box minH={400}>
         <Stack
           direction={"row"}
           px={{ lg: 6, base: 4 }}
@@ -45,7 +45,7 @@ const MealPlansPage = () => {
           spacing={{ base: 4, lg: 6 }}
           mx={"auto"}
           maxW={1200}
-          bg={"gray.100"}
+          // bg={"gray.100"}
         >
           {!isLoading &&
             mealPlans?.length &&
@@ -54,7 +54,7 @@ const MealPlansPage = () => {
                 key={plan?.id}
                 rounded={"lg"}
                 boxShadow={"md"}
-                bg={"white"}
+                bg={"gray.800"}
                 minH={"250px"}
                 p={2}
                 maxW={350}

@@ -64,11 +64,18 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         mx={"auto"}
         maxW={"1350"}
         h={"var(--chakra-vh,100vh)"}
-        minH={600}
+        minH={700}
+        maxH={750}
         bg={"black"}
       >
         <DashboardSideNav links={navLinks} entryPath="/member/dashboard/" />
-        <Flex direction={"column"} h={"full"} w={"full"}>
+        <Flex
+          direction={"column"}
+          h={"full"}
+          flex={1}
+          w={"full"}
+          overflowY={"auto"}
+        >
           <DashboardHeader />
           {children}
         </Flex>
