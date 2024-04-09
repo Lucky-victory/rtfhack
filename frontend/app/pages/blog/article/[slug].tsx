@@ -49,9 +49,9 @@ const ArticleView = () => {
         <meta property="og:image" content={article?.image} />
       </Head>
       <HeaderNav />
-      <Box bg={"secondaryColor.100"} py={8}>
+      <Box bg={"gray.800"} py={8}>
         <Box
-          bg={"white"}
+          // bg={"white"}
           maxW={"1200px"}
           mx={"auto"}
           minH={"100vh"}

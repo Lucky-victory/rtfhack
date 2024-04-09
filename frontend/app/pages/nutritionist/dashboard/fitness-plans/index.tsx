@@ -20,22 +20,19 @@ import {
 import NutritionistDashBoardLayout from "@/components/NutritionistDashboardLayout";
 import Head from "next/head";
 import { Link } from "@chakra-ui/next-js";
-import { useGetArticlesQuery } from "@/state/services";
+import { useGetFitnessPlansQuery } from "@/state/services";
 import { removeKeyFromObject, selectObjectKeys } from "@/utils";
-import { Article } from "@/types/shared";
+import { FitnessPlan } from "@/types/shared";
 import TableItems from "@/components/TableItems";
-import isEmpty from "just-is-empty";
 import DashboardEmptyArea from "@/components/DashboardEmptyArea";
 
 export default function ArticlesDashBoard() {
-  const { data, isLoading, isFetching } = useGetArticlesQuery({
+  const { data, isLoading, isFetching } = useGetFitnessPlansQuery({
     status: "all",
   });
-  const articles = removeKeyFromObject(data?.data || ([] as Article[]), [
+  const _data = removeKeyFromObject(data?.data || ([] as FitnessPlan[]), [
     "author",
   ]);
-  console.log({ _data: articles });
-
   const tableHeadStyles = {
     // pb: 4,
     fontSize: "15px",
@@ -46,31 +43,30 @@ export default function ArticlesDashBoard() {
   return (
     <>
       <Head>
-        <title>Dashboard | Articles</title>
+        <title>Dashboard | Fitness Plans</title>
       </Head>
       <NutritionistDashBoardLayout>
         <Box className="min-h-full h-full px-4 mt-6">
           {" "}
           <Flex align={"center"} justify={"space-between"}>
             <Flex align={"center"} gap={6}>
-              <Heading size={"lg"}>Articles</Heading>{" "}
+              <Heading size={"lg"}>Fitness Plans</Heading>{" "}
             </Flex>
             <Button
               as={Link}
-              href={"articles/new"}
-              //   className="bg-primaryGreen text-primaryBeige hover:bg-primaryYellowTrans hover:text-primaryGreen"
+              href={"fitness-plans/new"}
+              // className="bg-primaryGreen text-primaryBeige hover:bg-primaryYellowTrans hover:text-primaryGreen"
             >
-              Create Post
+              Create a plan
             </Button>
           </Flex>
-          {(!isLoading || !isFetching) && !articles?.length && (
+          {!_data || !_data?.length ? (
             <DashboardEmptyArea
-              text=" You don't have any articles yet."
+              text="No Posts yet"
               isEmpty={true}
-              isLoading={isLoading || isFetching}
+              isLoading={false}
             ></DashboardEmptyArea>
-          )}
-          {!isEmpty(articles) && (
+          ) : (
             <Box
               my={8}
               maxW={"full"}
@@ -95,29 +91,28 @@ export default function ArticlesDashBoard() {
                       borderBottom={"2px"}
                       borderBottomColor={"gray.100"}
                     >
-                      {!isEmpty(articles) &&
-                        selectObjectKeys(articles[0]).map((key, i) => {
+                      {_data &&
+                        selectObjectKeys(_data[0]).map((key, i) => {
                           return (
-                            <Th key={"article-th" + key} {...tableHeadStyles}>
+                            <Th key={"fitness-th" + key} {...tableHeadStyles}>
                               {key}
                             </Th>
                           );
                         })}
-
-                      <Th {...tableHeadStyles} key={"article-th-actions"}>
+                      <Th {...tableHeadStyles} key={"fitness-th-actions"}>
                         Actions
                       </Th>
                     </Tr>
                   </Thead>
                   <Tbody className="files-table-body">
-                    {!isEmpty(articles) &&
-                      articles.map((d, i) => (
-                        <Tr key={"article-item" + d.id + i}>
-                          <TableItems keyPrefix={"article"} dataItem={d} />
+                    {_data &&
+                      _data.map((d, i) => (
+                        <Tr key={"fitness-data" + i}>
+                          <TableItems keyPrefix={"fitness"} dataItem={d} />
                           <Td>
                             <HStack>
                               <Button
-                                href={"/blog/article/" + d.slug}
+                                href={"/fitness-plans/" + d.slug}
                                 variant={"outline"}
                                 as={Link}
                                 size={"sm"}

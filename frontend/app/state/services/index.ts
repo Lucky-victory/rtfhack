@@ -9,7 +9,14 @@ import {
   NEW_USER,
   USER,
 } from "../types";
-import { FitnessPlan, Article, MealPlan } from "@/types/shared";
+import {
+  FitnessPlan,
+  Article,
+  MealPlan,
+  NewArticle,
+  NewFitnessPlan,
+  NewMealPlan,
+} from "@/types/shared";
 
 export const GreenSpaceDAOApi = createApi({
   reducerPath: "GreenSpaceDAOApi",
@@ -34,6 +41,22 @@ export const GreenSpaceDAOApi = createApi({
   ],
 
   endpoints: (builder) => ({
+    addFitnessPlan: builder.mutation<APIResponse<FitnessPlan>, NewFitnessPlan>({
+      query: (data) => ({
+        url: `fitness-plans`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: [{ type: "FitnessPlans" as const, id: "LIST" }],
+    }),
+    addMealPlan: builder.mutation<APIResponse<MealPlan>, NewMealPlan>({
+      query: ({ ...rest }) => ({
+        url: `meal-plans`,
+        method: "POST",
+        body: { ...rest },
+      }),
+      invalidatesTags: [{ type: "MealPlans" as const, id: "LIST" }],
+    }),
     sendUserInfoToAI: builder.mutation<APIResponse<any>, any>({
       query: (data) => ({
         url: `ai/`,
@@ -579,14 +602,25 @@ export const GreenSpaceDAOApi = createApi({
       }),
       invalidatesTags: [{ type: "MeetingRecords" as const, id: "LIST" }],
     }),
+    addArticle: builder.mutation<APIResponse<Article>, NewArticle>({
+      query: (data) => ({
+        url: `articles`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: [{ type: "Articles" as const, id: "LIST" }],
+    }),
   }),
 });
 export const {
   useSendUserInfoToAIMutation,
+  useAddFitnessPlanMutation,
+  useAddMealPlanMutation,
   useGetUsersQuery,
   useAddMeetingMutation,
   useGetArticleQuery,
   useGetArticlesQuery,
+  useAddArticleMutation,
   useGetFitnessPlanQuery,
   useGetFitnessPlansQuery,
   useGetMealPlanQuery,

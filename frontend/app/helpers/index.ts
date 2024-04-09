@@ -7,7 +7,9 @@ import {
   formatDistanceStrict,
 } from "date-fns";
 import slugify from "slugify";
-
+export function shortenText(text: string, len = 50) {
+  return text?.length > len ? text?.substring(0, len) + "..." : text;
+}
 export const formatChatTimestamp = (timestamp: number | Date) => {
   const currentDate = new Date();
   const messageDate = new Date(timestamp);
