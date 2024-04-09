@@ -1,12 +1,12 @@
 import { db } from "@/db";
-import { meetings } from "@/db/schema";
+import { users } from "@/db/schema";
 import {
   HTTP_METHOD_CB,
   errorHandlerCallback,
   mainHandler,
   successHandlerCallback,
 } from "@/utils";
-import { eq, or } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -23,23 +23,16 @@ export const GET: HTTP_METHOD_CB = async (
   res: NextApiResponse
 ) => {
   try {
-    const { roomId } = req.query;
-    const meeting = await db.query.meetings.findFirst({
-      with: {
-        creator: {
-          columns: {
-            chainId: true,
-            authId: true,
-            address: true,
-            id: true,
-          },
-        },
+    const user = await db.query.users.findMany({
+      columns: {
+        email: false,
+        password: false,
       },
-      where: eq(meetings.roomId, roomId as string),
+      where: eq(users.userType, "member"),
     });
     return successHandlerCallback(req, res, {
-      message: "Meeting received successfully",
-      data: meeting,
+      message: "member users retrieved successfully",
+      data: user || null,
     });
   } catch (error) {
     return errorHandlerCallback(req, res, {

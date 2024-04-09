@@ -33,9 +33,11 @@ import axios from "axios";
 export default function MeetingHeader({
   room,
   meetingTitle,
+  isHost,
 }: {
   room: Room;
   meetingTitle?: string;
+  isHost?: boolean;
 }) {
   const { onCopy, hasCopied, value, setValue } = useClipboard("");
   const dispatch = useAppDispatch();
@@ -81,7 +83,7 @@ export default function MeetingHeader({
     <HStack
       justify={"space-between"}
       gap={5}
-      bg={"white"}
+      bg={"black"}
       rounded={"40px"}
       py={3}
       px={4}
@@ -97,7 +99,7 @@ export default function MeetingHeader({
                 mr={3}
                 colorScheme="teal"
                 variant={"ghost"}
-                bg={"teal.50"}
+                bg={"gs-yellow-dark.50"}
                 pos={"relative"}
                 // rounded={"full"}
                 gap={3}
@@ -119,15 +121,15 @@ export default function MeetingHeader({
                     size={"md"}
                     w={"full"}
                     gap={3}
-                    colorScheme="teal"
+                    // colorScheme=""
                     variant={"ghost"}
-                    bg={"teal.50"}
+                    bg={"gs-green.700"}
                     onClick={() => handleCopy()}
                   >
                     {hasCopied ? <LuCheck /> : <LuCopy />}{" "}
                     {hasCopied ? "Copied" : "Copy Link"}
                   </Button>
-                  <Stack bg={"gray.50"} p={2} w={"full"}>
+                  <Stack bg={"gray.800"} p={2} w={"full"}>
                     {/* This code works fine, the ts-ignore is because of the types of Stack(which is a div) and a div doesn't have an onSubmit, but in reality the code renders a form*/}
                     {/* @ts-ignore */}
                     <Stack as={"form"} onSubmit={formik.handleSubmit}>
@@ -139,10 +141,10 @@ export default function MeetingHeader({
                           name="email"
                           value={formik.values.email}
                           onChange={formik.handleChange}
-                          colorScheme="teal"
+                          colorScheme="gs-yellow"
                           _focus={{
-                            boxShadow: "0 0 0 1px teal",
-                            borderColor: "teal",
+                            boxShadow: "0 0 0 1px gray",
+                            borderColor: "gs-yellow.400",
                           }}
                           placeholder="Enter email"
                         />
@@ -151,7 +153,7 @@ export default function MeetingHeader({
                         isLoading={formik.isSubmitting}
                         loadingText={"Sending..."}
                         type="submit"
-                        colorScheme="teal"
+                        colorScheme="gs-green"
                       >
                         {" "}
                         Send Invite
@@ -163,18 +165,29 @@ export default function MeetingHeader({
             </PopoverContent>
           </Popover>
         </Box>
-        <HStack gap={4}>
-          <HStack>
-            <FiUsers />
-            <Text hideBelow={"md"} fontSize={"13px"} as={"span"}>
-              Pending Invites
-            </Text>
+        {isHost ? (
+          <HStack gap={4}>
+            <HStack>
+              <FiUsers />
+              <Text hideBelow={"md"} fontSize={"13px"} as={"span"}>
+                Pending Invites
+              </Text>
+            </HStack>
+
+            <Badge colorScheme="orange">
+              {lobbyPeers.lobbyPeersIds.length}
+            </Badge>
           </HStack>
-
-          <Badge colorScheme="orange">{lobbyPeers.lobbyPeersIds.length}</Badge>
-        </HStack>
-
-        {lobbyPeers.lobbyPeersIds.length > 0 && <NewPeerRequest room={room} />}
+        ) : (
+          <Box></Box>
+        )}
+        {isHost && (
+          <>
+            {lobbyPeers.lobbyPeersIds.length > 0 && (
+              <NewPeerRequest room={room} />
+            )}
+          </>
+        )}
       </HStack>
     </HStack>
   );

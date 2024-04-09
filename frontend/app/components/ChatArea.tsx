@@ -114,7 +114,7 @@ export const ChatArea = ({
   return (
     <>
       <Button
-        colorScheme="teal"
+        colorScheme="gs-green"
         size={{ base: "md", md: "lg" }}
         rounded={"full"}
         shadow={"lg"}
@@ -134,7 +134,7 @@ export const ChatArea = ({
       <Box
         zIndex={993}
         border={"1px"}
-        borderColor={"gray.300"}
+        borderColor={"gray.600"}
         overflow={"hidden"}
         pos={"absolute"}
         right={3}
@@ -143,7 +143,7 @@ export const ChatArea = ({
         maxW={"350px"}
         top={2}
         // h={"full"}
-        bg={"gray.100"}
+        bg={"gray.800"}
         rounded={"30px"}
         transition={"0.5s ease-in-out"}
         transform={"auto"}
@@ -157,7 +157,7 @@ export const ChatArea = ({
             roundedTop={"20px"}
             px={4}
             py={2}
-            bg={"white"}
+            bg={"black"}
           >
             <Heading flex={1} size={"sm"}>
               Room Chat
@@ -207,7 +207,7 @@ export const ChatArea = ({
                   <Text
                     py={1}
                     px={3}
-                    bg={"teal.100"}
+                    bg={"gs-green.800"}
                     // color={"white"}
                     roundedBottomRight={"35px"}
                     roundedLeft={"35px"}
@@ -249,7 +249,7 @@ export const ChatArea = ({
                   <Text
                     py={1}
                     px={3}
-                    bg={"white"}
+                    bg={"black"}
                     roundedBottomLeft={"35px"}
                     roundedRight={"35px"}
                     shadow={"sm"}

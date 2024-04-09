@@ -1,12 +1,12 @@
 import { db } from "@/db";
-import { meetings, users } from "@/db/schema";
+import { users } from "@/db/schema";
 import {
   HTTP_METHOD_CB,
   errorHandlerCallback,
   mainHandler,
   successHandlerCallback,
 } from "@/utils";
-import { and, eq } from "drizzle-orm";
+import { and, eq, or } from "drizzle-orm";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -24,20 +24,14 @@ export const GET: HTTP_METHOD_CB = async (
   res: NextApiResponse
 ) => {
   try {
-    const { authId, chainId, address } = req.query;
-    let where = authId
-      ? { where: eq(users.authId, authId as string) }
-      : {
-          where: and(
-            eq(users.chainId, chainId as string),
-            eq(users.address, address as string)
-          ),
-        };
-    const user = await db.query.users.findFirst({
-      ...where,
+    const user = await db.query.users.findMany({
+      columns: {
+        email: false,
+        password: false,
+      },
     });
     return successHandlerCallback(req, res, {
-      message: "user received successfully",
+      message: "users retrieved successfully",
       data: user || null,
     });
   } catch (error) {
@@ -52,7 +46,23 @@ export const POST: HTTP_METHOD_CB = async (
   res: NextApiResponse
 ) => {
   try {
-    const data = req.body;
+    const { authId, email, address, ...data } = req.body;
+    const existingUser = await db.query.users.findFirst({
+      columns: {
+        password: false,
+      },
+      where: or(
+        eq(users.email, email as string),
+        eq(users.authId, authId as string),
+        eq(users.address, address as string)
+      ),
+    });
+    if (existingUser) {
+      return successHandlerCallback(req, res, {
+        message: "user already exists",
+        data: existingUser,
+      });
+    }
     const user = await db.transaction(async (tx) => {
       const [insertRes] = await tx.insert(users).values(data);
 
