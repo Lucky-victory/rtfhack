@@ -9,6 +9,7 @@
     "prod": "next out",
     "lint": "next lint",
     "dev:static": "serve ./out",
+    "db:init": "tsc ./helpers/db-init-data.ts && node ./helpers/db-init-data.js",
     "db:push": "drizzle-kit push:mysql",
     "db:gen": "drizzle-kit generate:mysql",
     "format": "prettier --check --ignore-path .gitignore .",
@@ -66,6 +67,8 @@
     "next-auth": "^4.10.3",
     "openai": "^4.33.0",
     "pino-pretty": "^10.2.3",
+    "pusher": "^5.2.0",
+    "pusher-js": "^8.4.0-rc2",
     "react": "18.2.0",
     "react-datepicker": "^4.18.0",
     "react-dom": "18.2.0",
@@ -108,6 +111,7 @@
     "lint-staged": "^14.0.1",
     "prettier": "^2.8.8",
     "serve": "^14.2.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }
