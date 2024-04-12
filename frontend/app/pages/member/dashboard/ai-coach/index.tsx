@@ -300,11 +300,11 @@ const AiCoachPage = () => {
               <div className="w-full bg-white p-4 rounded shadow-[0_0_50px_7px_rgba(0,0,0,0.08)]">
                 {/* This enables the textarea to auto grow! */}
                 <div className="relative">
-                  <div className="whitespace-pre-line invisible min-h-[4rem] w-full">
+                  <div className="whitespace-pre-line bg-white invisible min-h-[4rem] w-full">
                     {state.active_question}
                   </div>
                   <textarea
-                    className="absolute inset-0 w-full overflow-y-hidden border-none focus:outline-none text-[#4C505F] h-[4.5rem] resize-none h-[initial]"
+                    className="absolute inset-0 w-full overflow-y-hidden border-none focus:outline-none text-[#fff] h-[4.5rem] resize-none h-[initial]"
                     placeholder="Ask me anything..."
                     onChange={(e) => {
                       updateState({

@@ -7,11 +7,13 @@ Pitch Deck - [Figma slides](https://www.figma.com/proto/kbNH39bNAHi5LMqBysGlHD/G
 
 ## ✨ Description
 
-[GreenspaceDAO](https://greenspacedao.xyz/) is the first community blockchain based project powered by community built for community to promote healthy living and achieve healthy locations where people live up to a 100 years all around the world. We are trying to make sure people live healthy by incorporating healthy habits into their lifestyle and trying to make sure they get the most out of the human experience by discovering their purpose if they haven't already and enjoying this life, all while doing it together as a community being accountable to each other.
+[GreenspaceDAO](https://greenspacedao.xyz/) is the first community blockchain based project powered by community and built for community to promote healthy living and achieve healthy locations where people live up to a 100 years all around the world. We are trying to make sure people live healthy by incorporating healthy living habits into their lifestyle and trying to make living healthy fun again by introducing community inclusive programs like weekly challenges where people can even try to compete against each other on a leaderboard, events, video call sessions with certified nutritionists and incentivizing these nutritionists as a focal point, to improve health, productivity and making our members live happier, more fulfilled lives with a sense of purpose and belonging in their community. 
+
+Think of what we're building as AA for longevity, it's not just about wanting to live longer but having a roadmap, a mission and a group to journey with and be accountable to. 
 
 ## Inspiration
 
-People are becoming obsessed with living longer, but they don't know how, they are spending so much money on drugs and supplements, but are they really doing it correctly? We don't think so, so that's why we at GreenspaceDAO have come up with this idea to focus on nutrition and fitness. What if we can create communities that are focused on living up to 100 years.
+People are becoming obsessed with living longer, but they don't know how, they are spending so much money on drugs and supplements, but are they really doing it correctly? We don't think so, so that's why we at GreenspaceDAO have come up with this idea to focus on nutrition and longevity. What if we can create communities that are focused on living up to 100 years.
 
 ## What we built
 
@@ -23,6 +25,7 @@ Our features empower personal healthy living habits by:
 - Users can interact with each other in our communities and work on health goals/challenges together.
 - Users can set up in real life events in communities and meet up and do healthy activities together like long walks, marathons etc.
 - AI Coach
+- Weekly community sessions with nutritionists and accountability sessions
 
 ## 💻 How we built GreenspaceDAO
 
@@ -39,3 +42,13 @@ Here's a breakdown of how it was built:
 6. Users can join communities and chat in these communities, the chat feature is powered by socket, there are also ongoing challenges and events going on in communities.
 
 7. Our calling feature is powered by huddle01
+
+## Where we deployed to/contract details
+
+We created and deployed our smart contracts on the Solana Devnet chain.
+
+### Solana Devnet
+
+GreenspaceDAO program - 3oAwHdjpEYojMcTe5qvSTFPWM5voXm7AMXrXxD4cfJLF - [View on Solana Devnet](https://explorer.solana.com/address/3oAwHdjpEYojMcTe5qvSTFPWM5voXm7AMXrXxD4cfJLF?cluster=devnet)
+
+
