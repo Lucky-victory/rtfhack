@@ -33,7 +33,7 @@ export default function Chats({ spaceIdOrId }: { spaceIdOrId: string }) {
     isFetching,
     isLoading,
   } = useGetCommunityMessagesQuery({ spaceIdOrId });
-  const prevMessages = messagesRes?.data;
+  const prevMessages = messagesRes?.data!;
   const [messages, setMessages] = useState<any[]>(prevMessages!);
   console.log({ messages });
   const channelRef = useRef<Channel>();
@@ -100,26 +100,42 @@ export default function Chats({ spaceIdOrId }: { spaceIdOrId: string }) {
       >
         Chats
       </Heading>
-      <Stack gap={5}>
-        {messages?.length > 0 &&
-          messages.map((message: any, index: number) => (
-            <HStack gap={3} key={message?.id} align={"flex-start"}>
-              <Avatar size={"sm"} src={message?.author?.avatar} />
+      <Stack gap={5} pb={24}>
+        {prevMessages?.length > 0 &&
+          prevMessages.map((message: any, index: number) => (
+            <HStack
+              bg={"gray.900"}
+              gap={3}
+              key={message?.id}
+              align={"flex-start"}
+            >
+              <Avatar
+                mt={1}
+                size={"sm"}
+                name={message?.author?.fullName}
+                src={message?.author?.avatar}
+              />
               <Stack>
                 <HStack align={"flex-start"}>
                   <Text fontWeight={600}>{message?.author?.fullName}</Text>
                 </HStack>
-                <Text fontWeight={300}>{message?.message}</Text>
+                <Text fontSize={"15px"} fontWeight={300}>
+                  {message?.message}
+                </Text>
                 {/* {message.message} */}
               </Stack>
             </HStack>
           ))}
       </Stack>
       <HStack
+        bg={"black"}
+        px={2}
+        py={3}
         as={"form"}
         onSubmit={handleSubmit}
         pos={"fixed"}
         bottom={"0"}
+        left={0}
         w={"full"}
       >
         <Input

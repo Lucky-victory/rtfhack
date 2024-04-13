@@ -361,6 +361,19 @@ export const GreenSpaceDAOApi = createApi({
           )}`,
         };
       },
+      onCacheEntryAdded(
+        id,
+        {
+          dispatch,
+          getState,
+          extra,
+          requestId,
+          cacheEntryRemoved,
+          cacheDataLoaded,
+          getCacheEntry,
+          updateCachedData,
+        }
+      ) {},
       providesTags: (result) =>
         // is result available?
         result?.data

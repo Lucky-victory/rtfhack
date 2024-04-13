@@ -26,15 +26,15 @@ export default function PageLoader({
           align={"center"}
           justify={"center"}
         >
-          <Stack>
+          <Stack align={"center"}>
             <Spinner
               mb={4}
               borderWidth={4}
               color="gs-yellow.500"
               speed="0.55s"
               emptyColor="gray.900"
-              w={{ md: "80px", base: "60px" }}
-              h={{ md: "80px", base: "60px" }}
+              w={{ md: "70px", base: "60px" }}
+              h={{ md: "70px", base: "60px" }}
             ></Spinner>
             {text && (
               <Text
