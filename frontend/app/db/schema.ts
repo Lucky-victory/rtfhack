@@ -211,7 +211,7 @@ export const communities = mysqlTable("Communities", {
 export const communityMessages = mysqlTable("CommunityMessages", {
   id: int("id").autoincrement().primaryKey(),
   communityId: int("community_id"),
-  userId: int("user_id"),
+  userId: varchar("user_id", { length: 255 }),
   message: text("message"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").onUpdateNow(),
@@ -259,23 +259,24 @@ export const communityChallenges = mysqlTable("CommunityChallenges", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").onUpdateNow(),
 });
-export const communityMembers = mysqlTable("communityMembers", {
+export const communityMembers = mysqlTable("CommunityMembers", {
   id: int("id").autoincrement().primaryKey(),
   communityId: int("community_id"),
-  userId: int("user_id"),
+  userId: varchar("user_id", { length: 255 }),
   role: mysqlEnum("role", ["moderator", "admin", "member"]).default("member"),
   xp: int("xp").default(0),
+  joinedOn: timestamp("joined_on").defaultNow(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").onUpdateNow(),
 });
-export const communityEventsTags = mysqlTable("communityEventsTags", {
+export const communityEventsTags = mysqlTable("CommunityEventsTags", {
   id: int("id").autoincrement().primaryKey(),
   eventId: int("event_id"),
   name: varchar("name", { length: 50 }),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").onUpdateNow(),
 });
-export const communityChallengesTags = mysqlTable("communityChallengesTags", {
+export const communityChallengesTags = mysqlTable("CommunityChallengesTags", {
   id: int("id").autoincrement().primaryKey(),
   challengeId: int("challenges_id"),
   name: varchar("name", { length: 50 }),

@@ -66,9 +66,12 @@ export const GET: HTTP_METHOD_CB = async (
       data: communityMessages,
     });
   } catch (error) {
+    console.log({ error });
+
     return errorHandlerCallback(req, res, {
       message: "Something went wrong...",
       data: null,
+      error,
     });
   }
 };

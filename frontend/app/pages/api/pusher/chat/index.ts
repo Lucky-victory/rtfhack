@@ -6,7 +6,7 @@ import {
   mainHandler,
   successHandlerCallback,
 } from "@/utils";
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 import { NextApiRequest, NextApiResponse } from "next";
 
 import { getPusherInstance } from "@/lib/pusher/server";
@@ -30,13 +30,15 @@ export const pusherHandler: HTTP_METHOD_CB = async (
   const data = req.body;
   if (!communityId) throw new Error("communityId is required");
   try {
-    const community = (await (
-      await fetch("/api/community/" + communityId)
-    ).json()) as typeof communities.$inferSelect;
+    const community = (await getCommunity(
+      req
+    )) as typeof communities.$inferSelect;
     const storedData = await db.transaction(async (tx) => {
-      const [insertRes] = await tx
-        .insert(communityMessages)
-        .values({ communityId: community.id, userId: data?.userId });
+      const [insertRes] = await tx.insert(communityMessages).values({
+        communityId: community.id,
+        userId: data?.userId,
+        message: data?.message,
+      });
       return tx.query.communityMessages.findFirst({
         where: eq(communityMessages.id, insertRes.insertId),
         with: {
@@ -65,5 +67,19 @@ export const pusherHandler: HTTP_METHOD_CB = async (
       { message: "Failed to test sockets", error: error },
       500
     );
+  }
+};
+export const getCommunity = async (req: NextApiRequest) => {
+  try {
+    const { communityId } = req.query as { communityId: string | number };
+    const community = await db.query.communities.findFirst({
+      where: or(
+        eq(communities.spaceId, communityId as string),
+        eq(communities.id, communityId as number)
+      ),
+    });
+    return community;
+  } catch (error) {
+    throw error;
   }
 };

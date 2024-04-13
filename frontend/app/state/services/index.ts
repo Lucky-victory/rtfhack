@@ -288,7 +288,7 @@ export const GreenSpaceDAOApi = createApi({
     >({
       query: ({ spaceIdOrId, params }) => {
         return {
-          url: `community/${spaceIdOrId}?${objectToSearchParams(params!)}`,
+          url: `communities/${spaceIdOrId}?${objectToSearchParams(params!)}`,
         };
       },
       providesTags: (result, error, { spaceIdOrId }) => {
