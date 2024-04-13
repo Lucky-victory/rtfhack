@@ -24,6 +24,9 @@ import { HiPaperAirplane } from "react-icons/hi";
 import { useAuth } from "@/hooks";
 import { FiSend } from "react-icons/fi";
 import { useGetCommunityMessagesQuery } from "@/state/services";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, useAppDispatch } from "@/state/store";
+import { addMessage } from "@/state/slices";
 
 export default function Chats({ spaceIdOrId }: { spaceIdOrId: string }) {
   // const [message, setMessage] = useState<string>("");
@@ -34,8 +37,14 @@ export default function Chats({ spaceIdOrId }: { spaceIdOrId: string }) {
     isLoading,
   } = useGetCommunityMessagesQuery({ spaceIdOrId });
   const prevMessages = messagesRes?.data!;
-  const [messages, setMessages] = useState<any[]>(prevMessages!);
-  console.log({ messages });
+  const dispatch = useAppDispatch();
+  const messages = useSelector(
+    (state: RootState) => state.communityMessagesState.data
+  );
+  // console.log({ select });
+
+  // const [messages, setMessages] = useState<any[]>([]);
+  // console.log({ messages });
   const channelRef = useRef<Channel>();
   const messageForm = useFormik({
     initialValues: {
@@ -63,7 +72,7 @@ export default function Chats({ spaceIdOrId }: { spaceIdOrId: string }) {
       .subscribe(spaceIdOrId)
       .bind("evt::message", (data: any) => {
         console.log("test", data);
-        setMessages([...messages, data]);
+        // dispatch(addMessage(data));
       });
 
     return () => {
@@ -101,8 +110,8 @@ export default function Chats({ spaceIdOrId }: { spaceIdOrId: string }) {
         Chats
       </Heading>
       <Stack gap={5} pb={24}>
-        {prevMessages?.length > 0 &&
-          prevMessages.map((message: any, index: number) => (
+        {messages?.length > 0 &&
+          messages.map((message: any, index: number) => (
             <HStack
               bg={"gray.900"}
               gap={3}

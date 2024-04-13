@@ -17,6 +17,7 @@ import {
   NewFitnessPlan,
   NewMealPlan,
 } from "@/types/shared";
+import { update } from "../slices";
 
 export const GreenSpaceDAOApi = createApi({
   reducerPath: "GreenSpaceDAOApi",
@@ -361,7 +362,7 @@ export const GreenSpaceDAOApi = createApi({
           )}`,
         };
       },
-      onCacheEntryAdded(
+      async onCacheEntryAdded(
         id,
         {
           dispatch,
@@ -373,7 +374,10 @@ export const GreenSpaceDAOApi = createApi({
           getCacheEntry,
           updateCachedData,
         }
-      ) {},
+      ) {
+        const { data } = (await cacheDataLoaded).data;
+        dispatch(update({ data: data! }));
+      },
       providesTags: (result) =>
         // is result available?
         result?.data

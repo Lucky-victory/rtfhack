@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
-import { meetingCreator } from "./slices";
+import { communityMessagesState } from "./slices";
 import { GreenSpaceDAOApi } from "./services";
 
 const store = configureStore({
   reducer: {
-    meetingCreator: meetingCreator.reducer,
+    communityMessagesState: communityMessagesState.reducer,
     [GreenSpaceDAOApi.reducerPath]: GreenSpaceDAOApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
