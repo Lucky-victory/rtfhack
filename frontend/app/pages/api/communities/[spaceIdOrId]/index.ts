@@ -27,7 +27,7 @@ export const GET: HTTP_METHOD_CB = async (
     const { spaceIdOrId } = req.query as { spaceIdOrId: string | number };
     const community = await getData(req);
 
-    if (community) {
+    if (!community) {
       return await successHandlerCallback(
         req,
         res,
@@ -58,7 +58,7 @@ export const PUT: HTTP_METHOD_CB = async (
     const { spaceIdOrId } = req.query as { spaceIdOrId: string | number };
     const community = await getData(req);
 
-    if (community) {
+    if (!community) {
       return await successHandlerCallback(
         req,
         res,
@@ -92,6 +92,7 @@ export const PUT: HTTP_METHOD_CB = async (
       data: updatedRecord,
     });
   } catch (error) {
+    console.log({ error });
     return errorHandlerCallback(req, res, {
       message: "Something went wrong...",
       data: null,

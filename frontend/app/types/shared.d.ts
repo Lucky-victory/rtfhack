@@ -4,7 +4,7 @@ export type Article = {
   title: string;
   content: string;
   image?: string;
-  authId: string;
+  userId: string;
   status?: PostStatus;
   intro?: string;
   createdAt: string | Date;
@@ -16,7 +16,7 @@ export type PostStatus = "published" | "draft" | "deleted";
 
 export type NewArticle = Pick<
   Article,
-  "slug" | "title" | "content" | "image" | "authId" | "intro" | "status"
+  "slug" | "title" | "content" | "image" | "userId" | "intro" | "status"
 >;
 export type MealPlan = {
   id: number;
@@ -24,7 +24,7 @@ export type MealPlan = {
   title: string;
   content: string;
   image?: string;
-  authId: string;
+  userId: string;
   status?: PostStatus;
   intro?: string;
   views?: number;
@@ -66,7 +66,7 @@ export type NewMealPlan = Pick<
   | "title"
   | "content"
   | "image"
-  | "authId"
+  | "userId"
   | "intro"
   | "status"
   | "time"
@@ -77,7 +77,7 @@ export type FitnessPlan = {
   title: string;
   content: string;
   image?: string;
-  authId: string;
+  userId: string;
   status?: PostStatus;
   intro?: string;
   views?: number;
@@ -95,7 +95,7 @@ export type AUTHOR = {
 };
 export type NewFitnessPlan = Pick<
   FitnessPlan,
-  "slug" | "title" | "content" | "image" | "authId" | "intro" | "status"
+  "slug" | "title" | "content" | "image" | "userId" | "intro" | "status"
 >;
 
 export type StateStatus = "loading" | "error" | "loaded";

@@ -39,15 +39,23 @@ const MarkdownRenderer = ({ markdown }: { markdown: string }) => {
       remarkPlugins={[remarkGfm]}
       components={{
         a: ({ node, ...props }) => (
-          <Link {...props} color={"primaryColor.600"} isExternal />
+          <Link {...props} color={"blue.600"} isExternal />
         ),
-        p: ({ node, ...props }) => <Text {...props} my={4} />,
+        p: ({ node, ...props }) => (
+          <Text
+            {...props}
+            fontWeight={300}
+            // color={"gray.00"}
+            letterSpacing={1.1}
+            my={4}
+          />
+        ),
         table: ({ node, ...props }) => (
           <TableContainer
             my={8}
             borderRadius={"md"}
             border={"1px"}
-            borderColor={"gray.300"}
+            borderColor={"gray.600"}
             py={4}
           >
             <Table {...props} variant={"striped"} />
@@ -118,10 +126,10 @@ const MarkdownRenderer = ({ markdown }: { markdown: string }) => {
             {...props}
             my={6}
             pl={{ lg: 8, base: 6 }}
-            maxW={"700"}
-            py={6}
+            maxW={"1000"}
+            py={4}
             pr={4}
-            bg={"orange.50"}
+            bg={"gray.900"}
           />
         ),
       }}

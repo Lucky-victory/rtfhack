@@ -101,6 +101,7 @@ export default function TableItems({
             </Text>
           </Td>
         );
+        break;
       case "updatedAt":
         acc.push(
           <Td key={`${keyPrefix}-${item}`}>

@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState, useCallback } from "react";
 import { Accept, useDropzone } from "react-dropzone";
-import { FiDelete } from "react-icons/fi";
+import { FiDelete, FiTrash } from "react-icons/fi";
 
 import { generateUrlSafeId } from "@/utils";
 function DragAndDropImage({
@@ -46,10 +46,17 @@ function DragAndDropImage({
       return file;
     });
   }, []);
+  const onUpload = useCallback(
+    (hasImage: boolean, files: File[], image: string) => {
+      onUploadChange(hasImage, files, image);
+    },
+    [images, files]
+  );
 
   useEffect(() => {
-    onUploadChange(images.length > 0, files, images?.[0]?.src as string);
-  }, [images, files, onUploadChange]);
+    onUpload(images.length > 0, files, images?.[0]?.src as string);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [images, files]);
   const { getRootProps, getInputProps } = useDropzone({
     onError(err) {
       console.log(err);
@@ -135,7 +142,7 @@ function DragAndDropImage({
                 rounded={"full"}
                 zIndex={2}
               >
-                <FiDelete /> Remove
+                <FiTrash /> Remove
               </Button>
               <Image
                 w={"100%"}

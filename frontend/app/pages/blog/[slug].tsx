@@ -40,7 +40,7 @@ const ArticleView = () => {
         <meta property="og:type" content="article" />
         <meta
           property="og:url"
-          content={`https://greenspacedao/blog/${article?.slug}`}
+          content={`https://greenspacedao/blog${article?.slug}`}
         />
         <meta property="og:image" content={article?.image} />
       </Head>

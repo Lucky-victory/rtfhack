@@ -15,7 +15,7 @@ const MAX_CHARACTER_LENGTH = 100;
 const ArticleCard = ({ article }: { article: Article | Partial<Article> }) => {
   return (
     <LinkBox
-      _hover={{ bg: "white", shadow: "md" }}
+      _hover={{ bg: "gray.700", shadow: "md" }}
       display={"flex"}
       flexDir={"column"}
       gap={"2"}
@@ -25,7 +25,7 @@ const ArticleCard = ({ article }: { article: Article | Partial<Article> }) => {
       pb={4}
       minW={"250px"}
       border={"1px"}
-      borderColor={"gray.300"}
+      borderColor={"gray.600"}
     >
       <Image
         alt=""

@@ -17,6 +17,7 @@ import {
   NewFitnessPlan,
   NewMealPlan,
 } from "@/types/shared";
+import { update } from "../slices";
 
 export const GreenSpaceDAOApi = createApi({
   reducerPath: "GreenSpaceDAOApi",
@@ -288,7 +289,7 @@ export const GreenSpaceDAOApi = createApi({
     >({
       query: ({ spaceIdOrId, params }) => {
         return {
-          url: `community/${spaceIdOrId}?${objectToSearchParams(params!)}`,
+          url: `communities/${spaceIdOrId}?${objectToSearchParams(params!)}`,
         };
       },
       providesTags: (result, error, { spaceIdOrId }) => {
@@ -361,6 +362,22 @@ export const GreenSpaceDAOApi = createApi({
           )}`,
         };
       },
+      // async onCacheEntryAdded(
+      //   id,
+      //   {
+      //     dispatch,
+      //     getState,
+      //     extra,
+      //     requestId,
+      //     cacheEntryRemoved,
+      //     cacheDataLoaded,
+      //     getCacheEntry,
+      //     updateCachedData,
+      //   }
+      // ) {
+      //   const { data } = (await cacheDataLoaded).data;
+      //   dispatch(update({ data: data! }));
+      // },
       providesTags: (result) =>
         // is result available?
         result?.data
