@@ -19,7 +19,7 @@ import DragAndDropImage from "@/components/DragAndDropImage";
 import { generateSlug } from "@/utils";
 
 import { useRouter } from "next/router";
-import { NewArticle, PostStatus } from "@/types/shared";
+import { NewArticle, NewFitnessPlan, PostStatus } from "@/types/shared";
 import {
   useAddArticleMutation,
   useAddFitnessPlanMutation,
@@ -43,7 +43,7 @@ export default function NewPostPage() {
   const [imageFile, setImageFile] = useState<string>();
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [contentValue, setContentValue] = useState("");
-  const [post, setPost] = useState<NewArticle>({
+  const [post, setPost] = useState<NewFitnessPlan>({
     title: "",
     slug: "",
     content: "",
