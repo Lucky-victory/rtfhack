@@ -362,22 +362,22 @@ export const GreenSpaceDAOApi = createApi({
           )}`,
         };
       },
-      async onCacheEntryAdded(
-        id,
-        {
-          dispatch,
-          getState,
-          extra,
-          requestId,
-          cacheEntryRemoved,
-          cacheDataLoaded,
-          getCacheEntry,
-          updateCachedData,
-        }
-      ) {
-        const { data } = (await cacheDataLoaded).data;
-        dispatch(update({ data: data! }));
-      },
+      // async onCacheEntryAdded(
+      //   id,
+      //   {
+      //     dispatch,
+      //     getState,
+      //     extra,
+      //     requestId,
+      //     cacheEntryRemoved,
+      //     cacheDataLoaded,
+      //     getCacheEntry,
+      //     updateCachedData,
+      //   }
+      // ) {
+      //   const { data } = (await cacheDataLoaded).data;
+      //   dispatch(update({ data: data! }));
+      // },
       providesTags: (result) =>
         // is result available?
         result?.data

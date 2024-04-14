@@ -8,7 +8,7 @@ const defaultCommunities = [
   {
     name: "All for good",
     id: "1",
-    slug: "all-for-good-erd4",
+    slug: "GS_238491048",
     membersCount: 20,
     members: [{}],
     cover: "",

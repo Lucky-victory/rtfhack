@@ -75,7 +75,6 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
   };
   const elem = [
     <>
-      {" "}
       <h2 className="text-[45px]">Register as a Nutritionist</h2>
       <form
         className="w-full flex flex-col gap-7"

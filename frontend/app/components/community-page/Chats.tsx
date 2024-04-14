@@ -2,6 +2,7 @@ import {
   Avatar,
   Box,
   Button,
+  Divider,
   Heading,
   HStack,
   Input,
@@ -29,22 +30,18 @@ import { RootState, useAppDispatch } from "@/state/store";
 import { addMessage } from "@/state/slices";
 
 export default function Chats({ spaceIdOrId }: { spaceIdOrId: string }) {
-  // const [message, setMessage] = useState<string>("");
   const { user } = useAuth();
   const {
     data: messagesRes,
     isFetching,
     isLoading,
   } = useGetCommunityMessagesQuery({ spaceIdOrId });
-  const prevMessages = messagesRes?.data!;
+
   const dispatch = useAppDispatch();
   const messages = useSelector(
     (state: RootState) => state.communityMessagesState.data
   );
-  // console.log({ select });
 
-  // const [messages, setMessages] = useState<any[]>([]);
-  // console.log({ messages });
   const channelRef = useRef<Channel>();
   const messageForm = useFormik({
     initialValues: {
@@ -53,9 +50,8 @@ export default function Chats({ spaceIdOrId }: { spaceIdOrId: string }) {
     onSubmit: async (values, formikHelpers) => {
       const { message } = values;
 
-      await sendMessage(message);
-
       formikHelpers.setFieldValue("message", "");
+      await sendMessage(message);
     },
   });
   async function sendMessage(message: string) {
@@ -72,7 +68,7 @@ export default function Chats({ spaceIdOrId }: { spaceIdOrId: string }) {
       .subscribe(spaceIdOrId)
       .bind("evt::message", (data: any) => {
         console.log("test", data);
-        // dispatch(addMessage(data));
+        dispatch(addMessage(data));
       });
 
     return () => {
@@ -90,17 +86,10 @@ export default function Chats({ spaceIdOrId }: { spaceIdOrId: string }) {
     messageForm.handleSubmit(event as FormEvent<HTMLFormElement>);
   };
 
-  async function handleInputKeyUp(
-    event: React.KeyboardEvent<HTMLInputElement>
-  ) {
-    if (event.key === "Enter" && !event.shiftKey) {
-      await sendMessage(messageForm.values.message);
-    }
-  }
   return (
     <>
       <Heading
-        size={"md"}
+        size={"lg"}
         fontWeight={600}
         mb={4}
         borderBottom={"2px"}
@@ -109,64 +98,67 @@ export default function Chats({ spaceIdOrId }: { spaceIdOrId: string }) {
       >
         Chats
       </Heading>
-      <Stack gap={5} pb={24}>
-        {messages?.length > 0 &&
-          messages.map((message: any, index: number) => (
-            <HStack
-              bg={"gray.900"}
-              gap={3}
-              key={message?.id}
-              align={"flex-start"}
-            >
-              <Avatar
-                mt={1}
-                size={"sm"}
-                name={message?.author?.fullName}
-                src={message?.author?.avatar}
-              />
-              <Stack>
-                <HStack align={"flex-start"}>
-                  <Text fontWeight={600}>{message?.author?.fullName}</Text>
-                </HStack>
-                <Text fontSize={"15px"} fontWeight={300}>
-                  {message?.message}
-                </Text>
-                {/* {message.message} */}
-              </Stack>
-            </HStack>
-          ))}
-      </Stack>
-      <HStack
-        bg={"black"}
-        px={2}
-        py={3}
-        as={"form"}
-        onSubmit={handleSubmit}
-        pos={"fixed"}
-        bottom={"0"}
-        left={0}
-        w={"full"}
-      >
-        <Input
-          // rounded={"full"}
-          _focus={{
-            boxShadow: "0 0 0 1px transparent",
-            borderColor: "gs-yellow.400",
-          }}
-          onKeyUp={handleInputKeyUp}
-          autoComplete="off"
-          name="message"
-          value={messageForm.values.message}
-          placeholder="Type a message..."
-          onChange={messageForm.handleChange}
-        />
-        <Button
-          colorScheme="gs-yellow"
-          isDisabled={messageForm.values.message === ""}
+      <Box pos={"relative"}>
+        <Stack divider={<Divider />} pb={24}>
+          {messages?.length > 0 &&
+            messages.map((message: any, index: number) => (
+              <HStack
+                py={3}
+                px={3}
+                rounded={"md"}
+                // bg={"gs-gray.900"}
+                gap={3}
+                key={message?.id + "" + index}
+                align={"flex-start"}
+              >
+                <Avatar
+                  mt={1}
+                  size={"sm"}
+                  name={message?.author?.fullName}
+                  src={message?.author?.avatar}
+                />
+                <Stack>
+                  <HStack align={"flex-start"}>
+                    <Text fontWeight={600}>{message?.author?.fullName}</Text>
+                  </HStack>
+                  <Text fontSize={"15px"} fontWeight={300}>
+                    {message?.message}
+                  </Text>
+                </Stack>
+              </HStack>
+            ))}
+        </Stack>
+        <HStack
+          bg={"black"}
+          px={2}
+          py={3}
+          as={"form"}
+          onSubmit={handleSubmit}
+          pos={"sticky"}
+          bottom={"0"}
+          // left={0}
+          w={"full"}
         >
-          <FiSend />
-        </Button>
-      </HStack>
+          <Input
+            // rounded={"full"}
+            _focus={{
+              boxShadow: "0 0 0 1px transparent",
+              borderColor: "gs-yellow.400",
+            }}
+            autoComplete="off"
+            name="message"
+            value={messageForm.values.message}
+            placeholder="Type a message..."
+            onChange={messageForm.handleChange}
+          />
+          <Button
+            colorScheme="gs-yellow"
+            isDisabled={messageForm.values.message === ""}
+          >
+            <FiSend />
+          </Button>
+        </HStack>
+      </Box>
     </>
   );
 }

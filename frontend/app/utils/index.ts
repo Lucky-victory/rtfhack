@@ -130,8 +130,8 @@ export function flattenArray<T extends NestedObject, U>(
 export function isDuplicate<T>(array: T[], property: keyof T, value: string) {
   return array.some((item) => item[property] === value);
 }
-export function shortenText(text: string, len = 50) {
-  return text?.length > len ? text?.substring(0, len) + "..." : text;
+export function shortenText(text: string, len = 50, end = "..."): string {
+  return text?.length > len ? text?.substring(0, len) + end : text;
 }
 
 export const apiPost = async (
@@ -192,7 +192,7 @@ export function selectObjectKeys<T extends object>(obj: T) {
   // return resultArray;
 }
 export const generateSlug = (text: string) =>
-  slugify(text + "-" + nanoid(6), {
+  slugify(shortenText(text, 60, "") + "-" + nanoid(6), {
     lower: true,
     remove: /[*+~.()'"!:@]/g,
     strict: true,

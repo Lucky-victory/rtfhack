@@ -7,6 +7,17 @@
 :root {
   --chat-area-width: 330px;
 }
+.mde-header {
+  background: #000 !important;
+}
+.mde-header ul.mde-header-group li.mde-header-item button {
+  color: #f0f0ef !important;
+}
+
+.mde-textarea-wrapper textarea.mde-text {
+  background: #000 !important;
+  color: #f0f0ef !important;
+}
 .link-in-chat {
   color: var(--chakra-colors-blue-700);
   text-decoration: underline;
