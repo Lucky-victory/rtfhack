@@ -10,22 +10,13 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { pusherClient } from "@/lib/pusher/client";
-import {
-  FormEvent,
-  FormEventHandler,
-  ReactComponentElement,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { FormEvent, FormEventHandler, useEffect, useRef } from "react";
 import { Channel } from "pusher-js";
 import { useFormik } from "formik";
-import { LuPlane } from "react-icons/lu";
-import { HiPaperAirplane } from "react-icons/hi";
 import { useAuth } from "@/hooks";
 import { FiSend } from "react-icons/fi";
 import { useGetCommunityMessagesQuery } from "@/state/services";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "@/state/store";
 import { addMessage } from "@/state/slices";
 

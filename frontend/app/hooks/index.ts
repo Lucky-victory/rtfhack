@@ -83,7 +83,7 @@ export const useAuth = () => {
 };
 
 export const useActiveTab = (
-  paramName: string
+  paramName: string = "tab"
 ): [string, (tabName: string) => void] => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("");
