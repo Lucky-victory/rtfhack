@@ -26,6 +26,7 @@ import {
 } from "@/state/services";
 import { shortenText } from "@/utils";
 import { useAppContext } from "@/context/state";
+import { useAuth } from "@/hooks";
 
 export default function NewPostPage() {
   const [addFitnessPlan, { isLoading, status, isSuccess, isError, data }] =
@@ -38,7 +39,7 @@ export default function NewPostPage() {
     status: "success",
     title: " Successful",
   });
-  const { user } = useAppContext();
+  const { user } = useAuth();
   const [imageFile, setImageFile] = useState<string>();
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [contentValue, setContentValue] = useState("");
@@ -49,7 +50,7 @@ export default function NewPostPage() {
     intro: "",
     image: "",
     status: "draft",
-    authId: user?.userAddress || "0xed65da3exd8fe888dce89834ae",
+    userId: user?.authId!,
   });
 
   const [selectedTab, setSelectedTab] = useState<"write" | "preview">("write");
@@ -142,7 +143,7 @@ export default function NewPostPage() {
       intro: "",
       image: "",
       status: "draft",
-      authId: user?.userAddress || "0xed65da3exd8fe888dce89834ae",
+      userId: user?.authId!,
     });
     setContentValue("");
     setImageFile(undefined);
@@ -160,6 +161,13 @@ export default function NewPostPage() {
     return () => clearTimeout(timeoutId);
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.message, isSuccess]);
+  useEffect(() => {
+    setPost((prev) => ({
+      ...prev,
+      content: contentValue,
+      userId: user?.authId!,
+    }));
+  }, [post]);
   return (
     <>
       <NutritionistDashboardLayout>
