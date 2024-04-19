@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 //import { useRouter } from 'next/router'
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { uploadPromptToIpfs } from "@/helpers";
+import { uploadPromptToIpfs, uploadToThirdWeb } from "@/helpers";
 import { toast } from "react-toastify";
 import {
   Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
   Input,
   Modal,
   ModalBody,
@@ -17,20 +20,52 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
+  Stack,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { countries } from "@/utils/countries";
 import { Link } from "@chakra-ui/next-js";
+import { useFormik } from "formik";
+import { useStorageUpload } from "@thirdweb-dev/react";
 
 const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
   //const auth = useAuth()
+  const { mutateAsync: uploadToThirdWeb } = useStorageUpload();
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [cid, setCid] = useState("");
-  const [Image, setImage] = useState<File | null>(null);
+  const [fileToUpload, setFileToUpload] = useState<File | null>(null);
   const [ImageUrl, setImageUrl] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const formik = useFormik({
+    initialValues: {
+      fullName: "",
+      email: "",
+      sex: "",
+      country: "",
+      birthDate: "",
+      credentials: "",
+    },
+    onSubmit: async (values, formikHelpers) => {
+      formikHelpers.setSubmitting(true);
+      setIsSubmitting(true);
+      try {
+        const credentialUri = await handleFileUpload();
+        const dataToUpload = { ...values, credentials: credentialUri };
+        const [uploadUri] = await uploadToThirdWeb({ data: [dataToUpload] });
+        console.log({ uploadUri });
+
+        setTimeout(() => {
+          // router.push('/nutritionist/dashboard');
+          onOpen();
+          setIsSubmitting(false);
+        }, 2000);
+        formikHelpers.setSubmitting(false);
+      } catch (error) {}
+    },
+  });
+
   // form validation rules
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required("Field is required"),
@@ -68,30 +103,68 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
     //const {file} = data;
   };
 
-  const handleFileChange = (e: any) => {
-    setImage(e.target.files[0]);
-    toast.success("Successfully added!");
-    setImageUrl(URL.createObjectURL(e.target.files[0]));
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files![0];
+    setFileToUpload(file);
   };
+  const handleFileUpload = async () => {
+    try {
+      const [fileUri] = await uploadToThirdWeb({ data: [fileToUpload] });
+
+      console.log({ fileUri });
+
+      return fileUri;
+    } catch (error) {}
+    // setFileToUpload(e.target.files[0]);
+    // toast.success("Successfully added!");
+    // setImageUrl(URL.createObjectURL(e.target.files[0]));
+  };
+
   const elem = [
     <>
-      <h2 className="text-[45px]">Register as a Nutritionist</h2>
-      <form
-        className="w-full flex flex-col gap-7"
-        onSubmit={handleSubmit(onSubmit)}
+      {/* <h2 className="text-[45px]">Register as a Nutritionist</h2> */}
+      <Stack
+        as={"form"}
+        // className="w-full flex flex-col gap-7"
+        //@ts-ignore
+        onSubmit={formik.handleSubmit}
       >
-        <div>
+        <FormControl>
+          <FormLabel>Full Name:</FormLabel>
           <Input
+            isRequired
             className="w-full max-w-[100%]"
-            {...register("fullName")}
-            placeholder="Full name"
+            name="fullName"
+            onChange={formik.handleChange}
+            value={formik.values.fullName}
+            placeholder="Full Name"
           />
-          <div className="text-red-200">{errors.fullName?.message}</div>
-        </div>
-        <div>
+          <FormErrorMessage className="text-red-200">
+            {formik.errors?.fullName}
+          </FormErrorMessage>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Email:</FormLabel>
+          <Input
+            isRequired
+            className="w-full max-w-[100%]"
+            name="email"
+            onChange={formik.handleChange}
+            value={formik.values.email}
+            placeholder="john@example.com"
+          />
+          <FormErrorMessage className="text-red-200">
+            {formik.errors?.email}
+          </FormErrorMessage>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Country:</FormLabel>
           <Select
             className="Select w-full max-w-[100%]"
-            {...register("country")}
+            onChange={formik.handleChange}
+            value={formik.values.country}
+            isRequired
+            name="country"
             // placeholder="What's your biological sex?"
             defaultValue=""
           >
@@ -105,21 +178,33 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
               </option>
             ))}
           </Select>
-          <div className="text-red-500">{errors.country?.message}</div>
-        </div>
-        <div>
+          <FormErrorMessage className="text-red-500">
+            {formik.errors?.country}
+          </FormErrorMessage>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Date of birth:</FormLabel>
           <Input
             type="date"
             id="start"
-            {...register("birthDate")}
+            isRequired
+            onChange={formik.handleChange}
+            name="birthDate"
+            value={formik.values.birthDate}
             className=" w-full max-w-[100%]"
           />
-          <div className="text-red-200">{errors.birthDate?.message}</div>
-        </div>
-        <div>
+          <FormErrorMessage className="text-red-200">
+            {formik.errors?.birthDate}
+          </FormErrorMessage>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Sex:</FormLabel>
           <Select
             className="select w-full max-w-[100%]"
-            {...register("sex")}
+            name="sex"
+            isRequired
+            onChange={formik.handleChange}
+            value={formik.values.sex}
             placeholder="What's your biological sex?"
             defaultValue=""
           >
@@ -128,96 +213,35 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
             </option>
             <option value="name">Male</option>
             <option value="female">Female</option>
+            <option value="other">Other</option>
           </Select>
-          <div className="text-red-200">{errors.sex?.message}</div>
-        </div>
-        <div>
+          <FormErrorMessage className="text-red-200">
+            {formik.errors?.sex}
+          </FormErrorMessage>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Upload your credentials:</FormLabel>
           <Input
             type="file"
-            {...register("credentials")}
+            isRequired
+            name="credentials"
             className="Input w-full max-w-[100%]"
             placeholder="Upload your credentials"
             onChange={handleFileChange}
-          ></Input>
-          <div className="text-red-200">{errors.credentials?.message}</div>
-        </div>
+          />
+          {/* <FormErrorMessage className="text-red-200">{errors.credentials?.message}</FormErrorMessage> */}
+        </FormControl>
         <div className="flex">
           <Button type="submit" isLoading={isSubmitting}>
             Register as a Nutritionist
           </Button>
         </div>
-      </form>
+      </Stack>
     </>,
   ];
   return (
     <>
-      {showModal ? (
-        <div className="modal">
-          <label className="modal-overlay" htmlFor="modal-3"></label>
-          <div className="modal-content flex flex-col gap-5 max-w-[90%] lg:max-w-[60%] w-full">
-            <label
-              htmlFor="modal-3"
-              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            >
-              ✕
-            </label>
-            {...elem}
-          </div>
-        </div>
-      ) : (
-        <form
-          className="w-full flex flex-col gap-7"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <div>
-            <Input
-              className="w-full max-w-[100%]"
-              {...register("fullName")}
-              placeholder="Full name"
-            />
-            <div className="text-red-200">{errors.fullName?.message}</div>
-          </div>
-          <div>
-            <Input
-              type="date"
-              id="start"
-              {...register("birthDate")}
-              className=" w-full max-w-[100%]"
-            />
-            <div className="text-red-200">{errors.birthDate?.message}</div>
-          </div>
-          <div>
-            <Select
-              className="select w-full max-w-[100%]"
-              {...register("sex")}
-              placeholder="What's your biological sex?"
-              defaultValue=""
-            >
-              <option value="" disabled>
-                What&apos;s your biological sex?
-              </option>
-              <option value="name">Male</option>
-              <option value="female">Female</option>
-            </Select>
-            <div className="text-red-200">{errors.sex?.message}</div>
-          </div>
-          <div>
-            <Input
-              type="file"
-              {...register("credentials")}
-              className="Input w-full max-w-[100%]"
-              placeholder="Upload your credentials"
-              onChange={handleFileChange}
-            ></Input>
-            <div className="text-red-200">{errors.credentials?.message}</div>
-          </div>
-          <div className="flex">
-            <Button type="submit" isLoading={isSubmitting}>
-              Register as a Nutritionist
-            </Button>
-          </div>
-        </form>
-      )}
+      {[elem]}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -248,3 +272,67 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
 };
 
 export default NutritionistForm;
+//  <div className="modal">
+//    <label className="modal-overlay" htmlFor="modal-3"></label>
+//    <div className="modal-content flex flex-col gap-5 max-w-[90%] lg:max-w-[60%] w-full">
+//      <label
+//        htmlFor="modal-3"
+//        className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+//      >
+//        ✕
+//      </label>
+//      {[elem]}
+//    </div>
+//  </div>;
+//  <form
+//           className="w-full flex flex-col gap-7"
+//           onSubmit={handleSubmit(onSubmit)}
+//         >
+//           <div>
+//             <Input
+//               className="w-full max-w-[100%]"
+//               {...register("fullName")}
+//               placeholder="Full name"
+//             />
+//             <div className="text-red-200">{errors.fullName?.message}</div>
+//           </div>
+//           <div>
+//             <Input
+//               type="date"
+//               id="start"
+//               {...register("birthDate")}
+//               className=" w-full max-w-[100%]"
+//             />
+//             <div className="text-red-200">{errors.birthDate?.message}</div>
+//           </div>
+//           <div>
+//             <Select
+//               className="select w-full max-w-[100%]"
+//               {...register("sex")}
+//               placeholder="What's your biological sex?"
+//               defaultValue=""
+//             >
+//               <option value="" disabled>
+//                 What&apos;s your biological sex?
+//               </option>
+//               <option value="name">Male</option>
+//               <option value="female">Female</option>
+//             </Select>
+//             <div className="text-red-200">{errors.sex?.message}</div>
+//           </div>
+//           <div>
+//             <Input
+//               type="file"
+//               {...register("credentials")}
+//               className="Input w-full max-w-[100%]"
+//               placeholder="Upload your credentials"
+//               onChange={handleFileChange}
+//             ></Input>
+//             <div className="text-red-200">{errors.credentials?.message}</div>
+//           </div>
+//           <div className="flex">
+//             <Button type="submit" isLoading={isSubmitting}>
+//               Register as a Nutritionist
+//             </Button>
+//           </div>
+//         </form>

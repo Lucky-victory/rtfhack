@@ -102,20 +102,26 @@ export const fitnessPlans = mysqlTable(
 );
 export const nutritionists = mysqlTable("Nutritionists", {
   bio: varchar("bio", { length: 255 }),
-  location: varchar("location", { length: 255 }),
+  city: varchar("city", { length: 100 }),
+  country: varchar("country", { length: 255 }),
   id: int("id").autoincrement().primaryKey(),
   username: varchar("username", { length: 50 })
     .unique()
-
     .$defaultFn(() => generateUsername("GN_")),
   userType: mysqlEnum("user_type", ["member", "nutritionist"])
     .default("nutritionist")
     .notNull(),
+  sex: mysqlEnum("sex", ["male", "female", "other"]),
+  birthDate: datetime("birth_date"),
   fullName: varchar("full_name", { length: 255 }),
   avatar: varchar("avatar", { length: 255 }),
   authId: varchar("auth_id", { length: 255 }).$defaultFn(generateUrlSafeId),
   emailVerified: boolean("email_verified").default(false),
-  isVerified: boolean("is_verified").default(false),
+  verificationStatus: mysqlEnum("verification_status", [
+    "verified",
+    "pending",
+    "rejected",
+  ]).default("pending"),
   updatedAt: timestamp("updated_at").onUpdateNow(),
   createdAt: timestamp("created_at").defaultNow(),
 });
@@ -177,8 +183,8 @@ export const meetings = mysqlTable(
     meetId: varchar("meet_id", { length: 255 }).$defaultFn(() =>
       generateUrlSafeId(14)
     ),
-    startTime: timestamp("start_time"),
-    endTime: timestamp("end_time"),
+    startTime: datetime("start_time"),
+    endTime: datetime("end_time"),
     roomId: varchar("room_id", { length: 100 }).notNull(),
     userId: varchar("user_id", { length: 255 }),
     createdAt: timestamp("created_at").defaultNow(),
@@ -231,8 +237,8 @@ export const communityEvents = mysqlTable("CommunityEvents", {
   ),
   coverImage: mediumtext("cover_image"),
   communityId: int("community_id"),
-  startDate: timestamp("start_date"),
-  endDate: timestamp("end_date"),
+  startDate: datetime("start_date"),
+  endDate: datetime("end_date"),
   venue: varchar("venue", {
     enum: ["online", "in-person"],
     length: 255,
@@ -250,8 +256,8 @@ export const communityChallenges = mysqlTable("CommunityChallenges", {
   details: mediumtext("details"),
   coverImage: mediumtext("cover_image"),
   communityId: int("community_id"),
-  startDate: timestamp("start_date"),
-  endDate: timestamp("end_date"),
+  startDate: datetime("start_date"),
+  endDate: datetime("end_date"),
   venue: varchar("venue", {
     enum: ["online", "in-person"],
     length: 255,
@@ -319,9 +325,9 @@ export const appointmentsRelations = relations(
       fields: [appointments.requestedBy],
       references: [users.authId],
     }),
-    nutritionist: one(users, {
+    nutritionist: one(nutritionists, {
       fields: [appointments.nutritionistId],
-      references: [users.authId],
+      references: [nutritionists.authId],
     }),
   })
 );
