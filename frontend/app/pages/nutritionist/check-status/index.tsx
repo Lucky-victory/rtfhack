@@ -25,14 +25,14 @@ const NutritionistStatusPage = () => {
   return (
     <>
       <Head>
-        <title>Nutrionist | Check Application Status</title>
+        <title>Nutritionist | Check Application Status</title>
       </Head>
-      <Flex className="h-screen" bg={"secondaryColor.50"} align={"center"}>
+      <Flex className="h-screen" align={"center"}>
         <Stack
           shadow={"md"}
           rounded={"md"}
           spacing={6}
-          bg={"white"}
+          bg={"black"}
           mx={"auto"}
           py={{ lg: 8, base: 6 }}
           px={{ base: 3, lg: 6 }}
@@ -41,7 +41,7 @@ const NutritionistStatusPage = () => {
             <Heading textAlign={"center"} size={"lg"}>
               Application status
             </Heading>
-            <Text color={"gray.600"} fontSize={"14px"} textAlign={"center"}>
+            <Text color={"gray.400"} fontSize={"14px"} textAlign={"center"}>
               Enter your address to check your application status
             </Text>
           </Stack>
@@ -50,7 +50,7 @@ const NutritionistStatusPage = () => {
               value={value}
               onChange={(e) => setValue(e.target.value)}
               onKeyUp={handleInputKeyup}
-              placeholder="0xb48c794fd8d9....."
+              placeholder="Enter wallet address"
             />
             <Button
               isDisabled={!value || isSubmitting}

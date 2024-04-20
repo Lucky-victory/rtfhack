@@ -1,4 +1,4 @@
-import React, { RefObject, useRef, useState } from "react";
+import React, { RefObject, useEffect, useRef, useState } from "react";
 
 import { useRouter } from "next/router";
 import { FieldValues, SubmitErrorHandler, useForm } from "react-hook-form";
@@ -92,7 +92,7 @@ const RegisterForm = ({
   const swiperRef = useRef<SwiperRef>();
   const swiperNestedRef = useRef<SwiperRef>();
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
-  const [SelectedUserType, setSelectedUserType] =
+  const [selectedUserType, setSelectedUserType] =
     useState<RegisterType>("member");
   const { user, setUser, allTokensData } = useAppContext();
   const [amount, setAmount] = useState("0.01");
@@ -228,7 +228,7 @@ const RegisterForm = ({
         await createUser({
           fullName: data?.fullName,
           address: address!,
-          userType: SelectedUserType,
+          userType: selectedUserType,
         }).unwrap();
         sendUserToAI(formDataObject);
         //TODO: Call contract to register user
@@ -304,13 +304,17 @@ const RegisterForm = ({
     "11 to 20 cigarettes",
     "above 20 cigarettes",
   ];
+  // useEffect(() => {
+  //   setSelectedUserType(selectedUserType);
+  // }, [selectedUserType]);
   return (
     <div>
       <Modal
+        scrollBehavior="inside"
         blockScrollOnMount={false}
         isOpen={isOpen}
         onClose={onClose}
-        size={"xl"}
+        size={"lg"}
       >
         <ModalOverlay />
         <ModalContent>
@@ -328,17 +332,19 @@ const RegisterForm = ({
               )}
               <span>Register</span>
             </HStack>
-            {hasError && (
-              <Text
-                color="red.600"
-                my={1}
-                fontWeight={"medium"}
-                fontSize={"md"}
-                as={"span"}
-              >
-                Please fill out all fields
-              </Text>
-            )}
+            {hasError &&
+              activeSlideIndex > 0 &&
+              selectedUserType !== "nutritionist" && (
+                <Text
+                  color="red.600"
+                  my={1}
+                  fontWeight={"medium"}
+                  fontSize={"md"}
+                  as={"span"}
+                >
+                  Please fill out all fields
+                </Text>
+              )}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -357,7 +363,7 @@ const RegisterForm = ({
                 />
               </SwiperSlide>
               <SwiperSlide>
-                {SelectedUserType == "member" && (
+                {selectedUserType == "member" && activeSlideIndex > 0 && (
                   <form onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}>
                     <Swiper
                       nested
@@ -705,21 +711,17 @@ const RegisterForm = ({
                     </Swiper>
                   </form>
                 )}
-                {SelectedUserType === "nutritionist" && (
-                  <Box>
-                    <NutritionistForm showModal={false} />
-                  </Box>
-                )}
+                {selectedUserType === "nutritionist" &&
+                  activeSlideIndex === 1 && (
+                    <Box>
+                      <NutritionistForm showModal={false} />
+                    </Box>
+                  )}
               </SwiperSlide>
             </Box>
           </ModalBody>
 
-          <ModalFooter>
-            {/* <Button colorScheme='blue' mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button variant='ghost'>Secondary Action</Button> */}
-          </ModalFooter>
+          <ModalFooter></ModalFooter>
         </ModalContent>
       </Modal>
     </div>

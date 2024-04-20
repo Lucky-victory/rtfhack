@@ -4,9 +4,14 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { uploadPromptToIpfs, uploadToThirdWeb } from "@/helpers";
+import {
+  resolveIPFSURI,
+  uploadPromptToIpfs,
+  uploadToThirdWeb,
+} from "@/helpers";
 import { toast } from "react-toastify";
 import {
+  Box,
   Button,
   FormControl,
   FormErrorMessage,
@@ -54,7 +59,7 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
         const credentialUri = await handleFileUpload();
         const dataToUpload = { ...values, credentials: credentialUri };
         const [uploadUri] = await uploadToThirdWeb({ data: [dataToUpload] });
-        console.log({ uploadUri });
+        console.log({ uploadUri: resolveIPFSURI(uploadUri) });
 
         setTimeout(() => {
           // router.push('/nutritionist/dashboard');
@@ -113,14 +118,12 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
 
       console.log({ fileUri });
 
-      return fileUri;
+      return resolveIPFSURI(fileUri, false);
     } catch (error) {}
-    // setFileToUpload(e.target.files[0]);
-    // toast.success("Successfully added!");
-    // setImageUrl(URL.createObjectURL(e.target.files[0]));
   };
 
-  const elem = [
+  const elem = [];
+  return (
     <>
       {/* <h2 className="text-[45px]">Register as a Nutritionist</h2> */}
       <Stack
@@ -129,7 +132,7 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
         //@ts-ignore
         onSubmit={formik.handleSubmit}
       >
-        <FormControl>
+        <FormControl isRequired>
           <FormLabel>Full Name:</FormLabel>
           <Input
             isRequired
@@ -143,7 +146,7 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
             {formik.errors?.fullName}
           </FormErrorMessage>
         </FormControl>
-        <FormControl>
+        <FormControl isRequired>
           <FormLabel>Email:</FormLabel>
           <Input
             isRequired
@@ -157,7 +160,7 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
             {formik.errors?.email}
           </FormErrorMessage>
         </FormControl>
-        <FormControl>
+        <FormControl isRequired>
           <FormLabel>Country:</FormLabel>
           <Select
             className="Select w-full max-w-[100%]"
@@ -166,7 +169,6 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
             isRequired
             name="country"
             // placeholder="What's your biological sex?"
-            defaultValue=""
           >
             <option value="" disabled>
               Select your country
@@ -182,11 +184,13 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
             {formik.errors?.country}
           </FormErrorMessage>
         </FormControl>
-        <FormControl>
+        <FormControl isRequired>
           <FormLabel>Date of birth:</FormLabel>
           <Input
             type="date"
             id="start"
+            min={"1930"}
+            max={"2010"}
             isRequired
             onChange={formik.handleChange}
             name="birthDate"
@@ -197,7 +201,7 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
             {formik.errors?.birthDate}
           </FormErrorMessage>
         </FormControl>
-        <FormControl>
+        <FormControl isRequired>
           <FormLabel>Sex:</FormLabel>
           <Select
             className="select w-full max-w-[100%]"
@@ -206,12 +210,11 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
             onChange={formik.handleChange}
             value={formik.values.sex}
             placeholder="What's your biological sex?"
-            defaultValue=""
           >
             <option value="" disabled>
               What&apos;s your biological sex?
             </option>
-            <option value="name">Male</option>
+            <option value="male">Male</option>
             <option value="female">Female</option>
             <option value="other">Other</option>
           </Select>
@@ -219,7 +222,7 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
             {formik.errors?.sex}
           </FormErrorMessage>
         </FormControl>
-        <FormControl>
+        <FormControl isRequired>
           <FormLabel>Upload your credentials:</FormLabel>
           <Input
             type="file"
@@ -231,31 +234,29 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
           />
           {/* <FormErrorMessage className="text-red-200">{errors.credentials?.message}</FormErrorMessage> */}
         </FormControl>
-        <div className="flex">
+        <Box mt={4} className="flex">
           <Button type="submit" isLoading={isSubmitting}>
             Register as a Nutritionist
           </Button>
-        </div>
+        </Box>
       </Stack>
-    </>,
-  ];
-  return (
-    <>
-      {[elem]}
+
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Application success</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text fontWeight={"bold"}>
+            <Text fontWeight={"semibold"} mb={4}>
               Your application has been successfully submitted. We will contact
               you shortly.
             </Text>
-            <Text>
+            <Text fontSize={"15px"}>
               You can also visit the{" "}
-              <Link href={"/nutritionist/check-status"}>status page</Link> to
-              check your application status{" "}
+              <Link href={"/nutritionist/check-status"} color={"gs-yellow.400"}>
+                status page
+              </Link>{" "}
+              to check your application status{" "}
             </Text>
           </ModalBody>
 
@@ -263,7 +264,6 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Close
             </Button>
-            {/* <Button variant="ghost">Ch</Button> */}
           </ModalFooter>
         </ModalContent>
       </Modal>

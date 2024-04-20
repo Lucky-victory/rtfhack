@@ -23,7 +23,7 @@ export const NewUserType = ({
               <Text as={"span"} fontWeight={"medium"}>
                 Individual
               </Text>
-              <Text as={"span"} fontSize={"sm"} color={"gray.500"}>
+              <Text as={"span"} fontSize={"sm"} color={"gray.400"}>
                 I want to join a community
               </Text>
             </Stack>
@@ -33,7 +33,7 @@ export const NewUserType = ({
               <Text as={"span"} fontWeight={"medium"}>
                 Nutritionist
               </Text>
-              <Text as={"span"} fontSize={"sm"} color={"gray.500"}>
+              <Text as={"span"} fontSize={"sm"} color={"gray.400"}>
                 I want to contribute as a nutritionist
               </Text>
             </Stack>

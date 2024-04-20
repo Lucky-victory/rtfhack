@@ -7,6 +7,21 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { apiPost } from "@/utils";
 type UpdateSession = (data?: any) => Promise<USER_SESSION | null>;
 
+export const useWalletAccount = () => {
+  const [_address, setAddress] = useState<string | null>(null);
+
+  const { publicKey } = useWallet();
+  const address = publicKey?.toBase58();
+  useEffect(() => {
+    if (address) {
+      setAddress(address);
+    } else {
+      setAddress(null);
+    }
+  }, [address]);
+
+  return { address: _address };
+};
 export function useCustomSign() {
   const { publicKey, signMessage } = useWallet();
   const [signed, setSigned] = useState(false);
