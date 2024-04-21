@@ -57,14 +57,14 @@ export default function NutritionistDashboardLayout({
         h={"var(--chakra-vh,100vh)"}
         minH={600}
         bg={"black"}
-        overflowY={"auto"}
-        maxH={650}
+        // overflowY={"auto"}
+        maxH={700}
       >
         <DashboardSideNav
           links={navLinks}
           entryPath="/nutritionist/dashboard/"
         />
-        <Flex direction={"column"} w={"full"}>
+        <Flex direction={"column"} flex={1} overflowY={"auto"}>
           <DashboardHeader />
           {children}
         </Flex>

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 //import { useRouter } from 'next/router'
 import { useForm } from "react-hook-form";
@@ -10,6 +10,7 @@ import {
   uploadToThirdWeb,
 } from "@/helpers";
 import { toast } from "react-toastify";
+import axios from "axios";
 import {
   Box,
   Button,
@@ -34,14 +35,20 @@ import { Link } from "@chakra-ui/next-js";
 import { useFormik } from "formik";
 import { useStorageUpload } from "@thirdweb-dev/react";
 
-const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
+const NutritionistForm = ({
+  showModal = true,
+  closeFormModal,
+}: {
+  showModal?: boolean;
+  closeFormModal: () => void;
+}) => {
   //const auth = useAuth()
   const { mutateAsync: uploadToThirdWeb } = useStorageUpload();
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [cid, setCid] = useState("");
   const [fileToUpload, setFileToUpload] = useState<File | null>(null);
-  const [ImageUrl, setImageUrl] = useState("");
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const formik = useFormik({
     initialValues: {
@@ -60,7 +67,12 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
         const dataToUpload = { ...values, credentials: credentialUri };
         const [uploadUri] = await uploadToThirdWeb({ data: [dataToUpload] });
         console.log({ uploadUri: resolveIPFSURI(uploadUri) });
-
+        setCid(uploadUri);
+        await axios.post("/api/email/nutritionist/apply", {
+          email: values.email,
+          name: values.fullName,
+        });
+        closeFormModal?.();
         setTimeout(() => {
           // router.push('/nutritionist/dashboard');
           onOpen();
@@ -226,6 +238,7 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
           <FormLabel>Upload your credentials:</FormLabel>
           <Input
             type="file"
+            ref={fileInputRef!}
             isRequired
             name="credentials"
             className="Input w-full max-w-[100%]"

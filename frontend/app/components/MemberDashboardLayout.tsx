@@ -64,8 +64,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         mx={"auto"}
         maxW={"1350"}
         h={"var(--chakra-vh,100vh)"}
-        minH={700}
-        maxH={750}
+        minH={600}
+        maxH={700}
         bg={"black"}
       >
         <DashboardSideNav links={navLinks} entryPath="/member/dashboard/" />
@@ -73,7 +73,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           direction={"column"}
           h={"full"}
           flex={1}
-          w={"full"}
+          // w={"full"}
           overflowY={"auto"}
         >
           <DashboardHeader />

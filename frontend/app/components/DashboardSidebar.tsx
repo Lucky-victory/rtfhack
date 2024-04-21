@@ -75,6 +75,9 @@ export default function DashboardSideNav(props: {
   });
   return (
     <Box
+      pos={"sticky"}
+      top={0}
+      zIndex={10}
       flexShrink={0}
       borderRight={"1px"}
       borderRightColor={"gray.500"}

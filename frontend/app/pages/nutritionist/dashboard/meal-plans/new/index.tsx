@@ -136,7 +136,7 @@ export default function NewPostPage() {
       content: contentValue,
       userId: user?.authId!,
     }));
-  }, [post]);
+  }, [contentValue]);
   return (
     <>
       <NutritionistDashboardLayout>

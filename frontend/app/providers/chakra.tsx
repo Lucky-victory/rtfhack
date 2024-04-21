@@ -16,6 +16,17 @@ export const theme = extendTheme({
     body: "var(--font-poppins)",
     a: "var(--font-poppins)",
   },
+  styles: {
+    global: {
+      "html, body": {
+        // color: "gray.600",
+        // lineHeight: "tall",
+      },
+      a: {
+        color: "gs-yellow.400",
+      },
+    },
+  },
   colors: {
     "gs-green": {
       50: "#e1fff0",

@@ -1,8 +1,9 @@
-import { EmailTemplate } from "@/components/EmailTemplate";
-import { HTTP_METHOD_CB, mainHandler } from "@/utils";
+import { EmailTemplate } from "@/components/NutritionistApplyEmailTemplate";
+import { mainHandler, HTTP_METHOD_CB } from "@/utils";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Resend } from "resend";
 const { RESEND_API_KEY } = process.env;
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -21,9 +22,10 @@ export const POST: HTTP_METHOD_CB = async (
     const resend = new Resend(RESEND_API_KEY);
 
     await resend.emails.send({
-      from: `GreenspaceDAO <mail@devvick.com>`,
+      from: `GreenspaceDAO <no-reply@greenspacedao.xyz>`,
+      reply_to: "<apply@greenspacedao.xyz>",
       to: [email],
-      subject: "Meeting Invitation",
+      subject: "Nutritionist Application",
       text: "",
       react: EmailTemplate({ name, email, message, link }),
     });

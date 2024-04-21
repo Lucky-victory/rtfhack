@@ -1,21 +1,14 @@
+// This will be replaced with plunk api
+
 import { EmailTemplate } from "@/components/EmailTemplate";
-import { HTTP_METHOD_CB, mainHandler } from "@/utils";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Resend } from "resend";
 const { RESEND_API_KEY } = process.env;
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  return mainHandler(req, res, {
-    POST,
-  });
-}
-
-export const POST: HTTP_METHOD_CB = async (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => {
   try {
     const { name, email, message, link } = await req.body;
     const resend = new Resend(RESEND_API_KEY);
@@ -34,4 +27,4 @@ export const POST: HTTP_METHOD_CB = async (
       .status(500)
       .json({ error, message: "An error occurred, please try again..." });
   }
-};
+}

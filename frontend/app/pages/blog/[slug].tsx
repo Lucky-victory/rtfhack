@@ -1,7 +1,7 @@
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import Footer from "@/components/Footer";
 import { HeaderNav } from "@/components/HeaderNav";
-import { maskHexAddress } from "@/helpers";
+import { maskHexAddress, resolveIPFSURI } from "@/helpers";
 import { useGetArticleQuery } from "@/state/services";
 import {
   Box,
@@ -40,7 +40,7 @@ const ArticleView = () => {
         <meta property="og:type" content="article" />
         <meta
           property="og:url"
-          content={`https://greenspacedao/blog${article?.slug}`}
+          content={`https://greenspacedao.xyz/blog/${article?.slug}`}
         />
         <meta property="og:image" content={article?.image} />
       </Head>
@@ -128,12 +128,15 @@ const ArticleView = () => {
             </Stack>
           </Box>
           <Skeleton isLoaded={!isLoading && !isFetching && !isEmpty(article)}>
-            <Box>
+            <Box my={5}>
               <Image
                 w={"full"}
                 bg={"gray.900"}
                 alt=""
-                src={article?.image || "/images/placeholder-image.png"}
+                src={
+                  article?.image ||
+                  "/images/placeholder-image.png"
+                }
                 h={"auto"}
                 // maxH={{ lg: 500, base: 400 }}
                 // objectFit={'contain'}

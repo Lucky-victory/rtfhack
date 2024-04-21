@@ -27,10 +27,9 @@ function DragAndDropImage({
 }) {
   const [files, setFiles] = useState<File[]>([]);
 
-  const [images, setImages] =
-    useState<
-      Array<{ id: string; index?: number; src: string | ArrayBuffer | null }>
-    >(initialImages);
+  const [images, setImages] = useState<
+    Array<{ id: string; index?: number; src: string | ArrayBuffer | null }>
+  >(initialImages || []);
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setFiles((prev) => [...prev, ...acceptedFiles]);
     acceptedFiles.map((file, index) => {

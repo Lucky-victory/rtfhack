@@ -308,7 +308,7 @@ const RegisterForm = ({
   //   setSelectedUserType(selectedUserType);
   // }, [selectedUserType]);
   return (
-    <div>
+    <>
       <Modal
         scrollBehavior="inside"
         blockScrollOnMount={false}
@@ -714,7 +714,7 @@ const RegisterForm = ({
                 {selectedUserType === "nutritionist" &&
                   activeSlideIndex === 1 && (
                     <Box>
-                      <NutritionistForm showModal={false} />
+                      <NutritionistForm closeFormModal={onClose} />
                     </Box>
                   )}
               </SwiperSlide>
@@ -724,7 +724,7 @@ const RegisterForm = ({
           <ModalFooter></ModalFooter>
         </ModalContent>
       </Modal>
-    </div>
+    </>
   );
 };
 
