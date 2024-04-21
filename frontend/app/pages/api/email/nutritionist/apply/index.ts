@@ -22,8 +22,8 @@ export const POST: HTTP_METHOD_CB = async (
     const resend = new Resend(RESEND_API_KEY);
 
     await resend.emails.send({
-      from: `GreenspaceDAO <no-reply@greenspacedao.xyz>`,
-      reply_to: "<apply@greenspacedao.xyz>",
+      from: `GreenspaceDAO <mail@devvick.com>`,
+      // reply_to: "<apply@greenspacedao.xyz>",
       to: [email],
       subject: "Nutritionist Application",
       text: "",

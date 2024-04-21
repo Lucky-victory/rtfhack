@@ -18,13 +18,13 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
     <p>Hi, {name}</p>
     <p>
       Thanks for applying as a Nutritionist on <b>GreenspaceDAO</b>,<br /> Your
-      application was nutritionist was successful.
+      application was successful.
     </p>
     <p>
       We will reach out to you soon once the verification process is complete.
     </p>
 
-    <div style={{ margin: "12px 0" }}>
+    <div style={{ margin: "16px 0" }}>
       <p>
         Haven't heard from us?, You can also
         <a
@@ -33,7 +33,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
           style={{
             display: "inline-block",
 
-            color: "yellow",
+            color: "blue",
 
             fontWeight: 500,
           }}
@@ -44,8 +44,14 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
     </div>
 
     <div style={{ margin: "1rem 0" }}>
-      <p>Best Regards</p>,<p>Lucky victory</p>
-      <em>Co-founder</em>
+      <span>Best Regards,</span>
+      <div style={{
+        marginTop: "0.875rem",
+      }}>
+        <b>Lucky victory</b>
+        <br />
+        <em>Co-founder</em>
+      </div>
     </div>
   </div>
 );

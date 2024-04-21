@@ -74,6 +74,8 @@ const NutritionistForm = ({
         });
         closeFormModal?.();
         setTimeout(() => {
+          if (fileInputRef.current) fileInputRef.current.value = "";
+          formik.resetForm();
           // router.push('/nutritionist/dashboard');
           onOpen();
           setIsSubmitting(false);
