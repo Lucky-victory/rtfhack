@@ -130,8 +130,6 @@ const NutritionistForm = ({
     try {
       const [fileUri] = await uploadToThirdWeb({ data: [fileToUpload] });
 
-      console.log({ fileUri });
-
       return resolveIPFSURI(fileUri, false);
     } catch (error) {}
   };

@@ -27,6 +27,8 @@ import {
 import { shortenText } from "@/utils";
 import { useAppContext } from "@/context/state";
 import { useAuth } from "@/hooks";
+import { useStorageUpload } from "@thirdweb-dev/react";
+import { resolveIPFSURI } from "@/helpers";
 
 export default function NewPostPage() {
   const [addFitnessPlan, { isLoading, status, isSuccess, isError, data }] =
@@ -41,6 +43,9 @@ export default function NewPostPage() {
   });
   const { user } = useAuth();
   const [imageFile, setImageFile] = useState<string>();
+  const { mutateAsync: uploadToThirdWeb } = useStorageUpload();
+
+  const [coverImageFile, setCoverImageFile] = useState<File>();
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [contentValue, setContentValue] = useState("");
   const [post, setPost] = useState<NewFitnessPlan>({
@@ -57,69 +62,49 @@ export default function NewPostPage() {
   const onImageChangeHandler = useCallback(
     (hasImage: boolean, files: File[], image: string) => {
       if (hasImage) {
-        // setPost((prev) => ({ ...prev, image: image }));
         setImageFile(image);
-        // const reader = new FileReader();
-
-        //         reader.onload = function (e) {
-        //           const base64String = e.target?.result as string;
-
-        //           setPost((prev) => ({ ...prev, image: base64String }));
-        //         };
-        //         reader.readAsDataURL(files[0]);
       }
     },
     []
   );
-  function saveAsDraft() {
+  const handleFileUpload = async () => {
     try {
+      const [fileUri] = await uploadToThirdWeb({ data: [coverImageFile] });
+
+      return resolveIPFSURI(fileUri);
+    } catch (error) {}
+  };
+  async function saveAsDraft() {
+    try {
+      let imageUrl = "";
+      if (coverImageFile) {
+        imageUrl = (await handleFileUpload())!;
+      }
       const postToSave = {
         ...post,
         slug: generateSlug(post.title),
-        image: imageFile,
+        image: imageUrl,
       };
-      // if (imageFile) {
-      //   const reader = new FileReader();
 
-      //   reader.onload = function (e) {
-      //     const base64String = e.target?.result as string;
-      //     postToSave.image = base64String;
-      //   };
-      //   reader.readAsDataURL(imageFile);
-      // }
-
-      // if (submitted || isSuccess) {
-      //   resetFields();
-      //   toast({ title: data?.message });
-      //   setTimeout(() => {
-      //     router.replace('/nutritionist/dashboard/fitness-plans');
-      //   }, 2000);
-      // }
-      addFitnessPlan(postToSave);
+      await addFitnessPlan(postToSave).unwrap();
     } catch (error) {
       toast({ title: "An error occurred, please try again", status: "error" });
     }
   }
-  function saveAsPublished() {
+  async function saveAsPublished() {
     try {
+      let imageUrl = "";
+      if (coverImageFile) {
+        imageUrl = (await handleFileUpload())!;
+      }
       const postToSave = {
         ...post,
         status: "published" as PostStatus,
         slug: generateSlug(post.title),
-        image: imageFile,
+        image: imageUrl,
       };
-      // if (imageFile) {
-      //   const reader = new FileReader();
 
-      //   reader.onload = function (e) {
-      //     const base64String = e.target?.result as string;
-      //     postToSave.image = base64String;
-      //   };
-
-      //   reader.readAsDataURL(imageFile);
-      // }
-
-      addFitnessPlan(postToSave);
+      await addFitnessPlan(postToSave).unwrap();
     } catch (error) {
       toast({ title: "An error occurred, please try again", status: "error" });
     }

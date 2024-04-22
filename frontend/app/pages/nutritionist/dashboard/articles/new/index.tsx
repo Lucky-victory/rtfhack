@@ -70,40 +70,37 @@ export default function NewPostPage() {
     try {
       const [fileUri] = await uploadToThirdWeb({ data: [coverImageFile] });
 
-      console.log({ fileUri });
-
       return resolveIPFSURI(fileUri);
     } catch (error) {}
   };
   async function saveAsDraft() {
     try {
-      let imageUri = "";
+      let imageUrl = "";
       if (coverImageFile) {
-        imageUri = (await handleFileUpload())!;
-        console.log({ image: imageUri });
+        imageUrl = (await handleFileUpload())!;
       }
-      // const postToSave = {
-      //   ...post,
-      //   slug: generateSlug(post.title),
-      //   image: imageUri,
-      // };
+      const postToSave = {
+        ...post,
+        slug: generateSlug(post.title),
+        image: imageUrl,
+      };
 
-      // await addArticle(postToSave).unwrap();
+      await addArticle(postToSave).unwrap();
     } catch (error) {
       toast({ title: "An error occurred, please try again", status: "error" });
     }
   }
   async function saveAsPublished() {
     try {
-      let imageUri = "";
+      let imageUrl = "";
       if (coverImageFile) {
-        imageUri = (await handleFileUpload())!;
+        imageUrl = (await handleFileUpload())!;
       }
       const postToSave = {
         ...post,
         status: "published" as PostStatus,
         slug: generateSlug(post.title),
-        image: imageUri,
+        image: imageUrl,
       };
 
       await addArticle(postToSave).unwrap();

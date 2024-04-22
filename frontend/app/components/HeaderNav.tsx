@@ -145,7 +145,7 @@ export function HeaderNav() {
         <HStack
           clipPath={"polygon(14% 0, 100% 0%, 100% 100%, 0% 100%);"}
           bg={"gs-yellow.400"}
-          minW={{ base: 150, lg: 350 }}
+          minW={{ base: 250, lg: 350 }}
           px={4}
           pr={8}
           py={2}

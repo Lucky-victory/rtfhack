@@ -72,133 +72,13 @@ export default function DashBoard() {
     status: "success",
     title: "Meal Plan added successfully",
   });
-  // // form validation rules
-  // const validationSchema = Yup.object().shape({
-  //   title: Yup.string().required('Field is required'),
-  //   time: Yup.string().required('Field is required'),
-  //   content: Yup.string().required('Field is required'),
-  // });
-  // const formOptions = { resolver: yupResolver(validationSchema) };
 
-  // // get functions to build form with useForm() hook
-  // const { register, handleSubmit, formState, reset, setValue } =
-  //   useForm(formOptions);
-  // const { errors, isValid } = formState;
-  // const onValidSubmit = (data: any) => {
-  //   if (isValid) {
-  //     const dataObject = {
-  //       id: uuid(),
-  //       title: data?.title,
-  //       time: data?.time,
-  //       content: data?.content,
-  //       createdAt: new Date().getTime(),
-  //       userAddress: user?.userAddress,
-  //     };
-  //     console.log('meal plan', { dataObject });
-  //     setIsSubmitting(true);
-  //     setTimeout(() => {
-  //       setIsSubmitting(false);
-
-  //       const prevPlans = mealPlans || [];
-  //       setMealPlans([...prevPlans, dataObject]);
-  //       toast();
-  //       reset();
-  //       onClose();
-  //     }, 3000);
-  //   }
-  // };
-
-  // function editMealPlan(plan: MealPlan) {
-  //   onOpen();
-  //   setValue('time', plan.time);
-  //   setValue('title', plan.title);
-  //   setValue('content', plan.content);
-  // }
   return (
     <>
       <Head>
         <title>Dashboard | Meal Plans</title>
       </Head>
       <NutritionistDashBoardLayout>
-        {/* <Modal
-          isOpen={isOpen}
-          onClose={() => {
-            onClose();
-            reset();
-          }}
-          size={'xl'}
-          closeOnOverlayClick={false}
-        >
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>
-              <Heading as='h3' size='lg'>
-                {' '}
-                Add a New Plan
-              </Heading>
-            </ModalHeader>
-            <ModalCloseButton />
-
-            <ModalBody mb={5}>
-              <FormControl as={'form'} onSubmit={handleSubmit(onValidSubmit)}>
-                <Stack spacing='2'>
-                  <Box>
-                    <FormLabel htmlFor='meal-title'>Meal Title</FormLabel>
-                    <Input
-                      id={'meal-title'}
-                      placeholder='Meal Title'
-                      {...register('title')}
-                    />
-                    <Text my={2} color='red.600'>
-                      {errors.title?.message}
-                    </Text>
-                  </Box>
-                  <Box>
-                    <FormLabel htmlFor='meal-time'>Choose Meal Time</FormLabel>
-                    <Select
-                      id='meal-time'
-                      defaultValue={''}
-                      {...register('time')}
-                    >
-                      <option value='' disabled></option>
-                      <option value='breakfast'>Breakfast</option>
-                      <option value='lunch'>Lunch</option>
-                      <option value='dinner'>Dinner</option>
-                      <option value='snack'>Snack</option>
-                    </Select>
-                    <Text my={2} color='red.600'>
-                      {errors.time?.message}
-                    </Text>
-                  </Box>
-
-                  <Box>
-                    <HStack justify={'space-between'} mb={2}>
-                      <FormLabel htmlFor='meal-content'>
-                        Content for this Meal plan:
-                      </FormLabel>
-                      <Text color={'gray.500'} as={'em'} fontSize={'small'}>
-                        *markdown supported*
-                      </Text>
-                    </HStack>
-                    <Textarea
-                      minH={150}
-                      maxH={450}
-                      id='meal-content'
-                      {...register('content')}
-                      placeholder='Write a well detailed information about this meal...'
-                    ></Textarea>
-                    <Text my={2} color='red.600'>
-                      {errors.content?.message}
-                    </Text>
-                  </Box>
-                  <Button type='submit' mt={3} isLoading={isSubmitting}>
-                    Create Plan
-                  </Button>
-                </Stack>
-              </FormControl>
-            </ModalBody>
-          </ModalContent>
-        </Modal> */}
         <Box className="min-h-full h-full px-4 mt-6">
           <Flex align={"center"} justify={"space-between"}>
             <Flex align={"center"} gap={6}>

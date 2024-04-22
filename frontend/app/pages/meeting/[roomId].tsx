@@ -8,6 +8,7 @@ import {
   Input,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -46,6 +47,11 @@ export default function MeetPage({
   roomId: roomIdFromServer,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
+  const toast = useToast({
+    duration: 3000,
+    position: "top",
+    status: "success",
+  });
   const roomId = roomIdFromServer || (router.query.roomId as string);
   const [createToken] = useCreateTokenMutation();
   const [meeting, setMeeting] = useState<MEETING | undefined>();
@@ -130,6 +136,10 @@ export default function MeetPage({
         token: token as string,
       });
     } catch (error) {
+      toast({
+        status: "error",
+        title: "Couldn't join room, please try again",
+      });
       console.log("Error while joining room", { error });
     }
   }

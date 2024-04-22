@@ -23,6 +23,7 @@ import { TPeerMetadata } from "@/types";
 
 type Props = {
   peerId: string;
+  isPinned: false;
   activePeers: {
     activePeerIds: string[];
     dominantSpeakerId: string;
@@ -30,7 +31,7 @@ type Props = {
   };
 };
 
-const RemotePeer = ({ peerId, activePeers }: Props) => {
+const RemotePeer = ({ peerId, activePeers, isPinned }: Props) => {
   const remotePeer = useRemotePeer<TPeerMetadata>({ peerId });
   const { stream: videoStream, state } = useRemoteVideo({ peerId });
   const { stream: audioStream, state: audioState } = useRemoteAudio({ peerId });
@@ -167,7 +168,7 @@ const RemotePeer = ({ peerId, activePeers }: Props) => {
             backdropFilter={"auto"}
             backdropBlur={"10px"}
           >
-            {remotePeer.metadata.displayName}
+            {remotePeer.metadata?.displayName}
           </Text>
         )}
         <IconButton

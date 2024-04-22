@@ -26,6 +26,8 @@ import { NewMealPlan, PostStatus } from "@/types/shared";
 import { useAddMealPlanMutation } from "@/state/services";
 import { useAppContext } from "@/context/state";
 import { useAuth } from "@/hooks";
+import { resolveIPFSURI, uploadToThirdWeb } from "@/helpers";
+import { useStorageUpload } from "@thirdweb-dev/react";
 
 export default function NewPostPage() {
   const [addMealPlan, { isLoading, status, isSuccess, isError, data }] =
@@ -40,6 +42,10 @@ export default function NewPostPage() {
   });
   const { user } = useAuth();
   const [imageFile, setImageFile] = useState<string>();
+  const { mutateAsync: uploadToThirdWeb } = useStorageUpload();
+
+  const [coverImageFile, setCoverImageFile] = useState<File>();
+
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [contentValue, setContentValue] = useState("");
   const [post, setPost] = useState<NewMealPlan>({
@@ -62,21 +68,36 @@ export default function NewPostPage() {
     },
     []
   );
-  function saveAsDraft() {
+  async function saveAsDraft() {
     try {
+      let imageUrl = "";
+      if (coverImageFile) {
+        imageUrl = (await handleFileUpload())!;
+      }
       const postToSave = {
         ...post,
         slug: generateSlug(post.title),
-        image: imageFile,
+        image: imageUrl,
       };
 
-      addMealPlan(postToSave);
+      await addMealPlan(postToSave).unwrap();
     } catch (error) {
       toast({ title: "An error occurred, please try again", status: "error" });
     }
   }
-  function saveAsPublished() {
+  const handleFileUpload = async () => {
     try {
+      const [fileUri] = await uploadToThirdWeb({ data: [coverImageFile] });
+
+      return resolveIPFSURI(fileUri);
+    } catch (error) {}
+  };
+  async function saveAsPublished() {
+    try {
+      let imageUrl = "";
+      if (coverImageFile) {
+        imageUrl = (await handleFileUpload())!;
+      }
       const postToSave = {
         ...post,
         status: "published" as PostStatus,
@@ -84,7 +105,7 @@ export default function NewPostPage() {
         image: imageFile,
       };
 
-      addMealPlan(postToSave);
+      await addMealPlan(postToSave).unwrap();
     } catch (error) {
       toast({ title: "An error occurred, please try again", status: "error" });
     }
@@ -127,7 +148,6 @@ export default function NewPostPage() {
       }, 2000);
     }
     return () => clearTimeout(timeoutId);
-    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.message, isSuccess]);
 
   useEffect(() => {
