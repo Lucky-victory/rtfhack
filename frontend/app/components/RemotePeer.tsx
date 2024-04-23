@@ -53,9 +53,9 @@ const RemotePeer = ({ peerId, activePeers, isPinned }: Props) => {
     // flexShrink: 0,
     maxH: { lg: 200, base: 300 },
     bg: "gray.800",
-    rounded: "20px",
+    rounded: "10px",
     pos: "relative" as ResponsiveValue<"relative">,
-    maxW: 300,
+    // maxW: 300,
     transition: "ease-in-out",
     transitionProperty: "boxShadow",
   };
@@ -71,81 +71,10 @@ const RemotePeer = ({ peerId, activePeers, isPinned }: Props) => {
     // console.log("from remote", { isSpeaking, activePeers });
   }, [dominantSpeakerId, activePeerIds, peerId, audioStream]);
 
-  // useEffect(() => {
-  //   if (videoStream && vidRef.current && state === "playable") {
-  //     vidRef.current.srcObject = videoStream;
-
-  //     vidRef.current.onloadedmetadata = async () => {
-  //       try {
-  //         vidRef.current?.play();
-  //       } catch (error) {
-  //         console.error(error);
-  //       }
-  //     };
-
-  //     vidRef.current.onerror = () => {
-  //       console.error("videoCard() | Error is happening...");
-  //     };
-  //   }
-  // }, [state, videoStream]);
-
-  // useEffect(() => {
-  //   if (audioStream && audioRef.current && audioState === "playable") {
-  //     audioRef.current.srcObject = audioStream;
-
-  //     audioRef.current.onloadedmetadata = async () => {
-  //       try {
-  //         audioRef.current?.play();
-  //       } catch (error) {
-  //         console.error(error);
-  //       }
-  //     };
-
-  //     audioRef.current.onerror = () => {
-  //       console.error("videoCard() | Error is happening...");
-  //     };
-  //   }
-  // }, [audioState, audioStream]);
-
-  // useEffect(() => {
-  //   if (screenShareVideo && screenVideoRef.current) {
-  //     screenVideoRef.current.srcObject = screenShareVideo;
-
-  //     screenVideoRef.current.onloadedmetadata = async () => {
-  //       try {
-  //         screenVideoRef.current?.play();
-  //       } catch (error) {
-  //         console.error(error);
-  //       }
-  //     };
-
-  //     screenVideoRef.current.onerror = () => {
-  //       console.error("videoCard() | Error is happening...");
-  //     };
-  //   }
-  // }, [screenShareVideo]);
-
-  // useEffect(() => {
-  //   if (screenAudio && screenAudioRef.current) {
-  //     screenAudioRef.current.srcObject = screenAudio;
-
-  //     screenAudioRef.current.onloadedmetadata = async () => {
-  //       try {
-  //         screenAudioRef.current?.play();
-  //       } catch (error) {
-  //         console.error(error);
-  //       }
-  //     };
-
-  //     screenAudioRef.current.onerror = () => {
-  //       console.error("videoCard() | Error is happening...");
-  //     };
-  //   }
-  // }, [screenAudio]);
-
   return (
     <Box
       {...participantsCardStyle}
+      maxW={{ base: 300, lg: "auto" }}
       boxShadow={isSpeaking ? "0 0 0 2px yellow" : "none"}
     >
       <HStack

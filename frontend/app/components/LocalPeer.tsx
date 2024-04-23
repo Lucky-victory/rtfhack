@@ -107,7 +107,7 @@ export default function LocalPeer(props: Props) {
         flex={1}
         overflow={"hidden"}
         pos={"relative"}
-        rounded={"20px"}
+        rounded={"10px"}
         w={"full"}
         h={"full"}
         transition={"ease-in-out"}
@@ -159,7 +159,9 @@ export default function LocalPeer(props: Props) {
             </HStack>
             {shareScreenStream && videoStream && (
               <Box
-                w={"200px"}
+                w={"240px"}
+                border={"2px"}
+                borderColor={"gray.600"}
                 zIndex={3}
                 h={"150px"}
                 rounded={"lg"}
@@ -173,7 +175,7 @@ export default function LocalPeer(props: Props) {
                   stream={videoStream}
                   muted
                   autoPlay
-                  ref={miniVideoRef}
+                  // ref={miniVideoRef}
                   h={"full"}
                   w={"full"}
                   left={0}
@@ -184,7 +186,7 @@ export default function LocalPeer(props: Props) {
                 ></Box>
               </Box>
             )}
-            {!(isVideoOn && shareScreenStream) && (
+            {!(isVideoOn || shareScreenStream) && (
               <Stack flex={1} align={"center"} justify={"center"} h={"full"}>
                 <Avatar
                   name={props?.local?.displayName}
@@ -219,6 +221,7 @@ export default function LocalPeer(props: Props) {
                 as={Video}
                 stream={shareScreenStream!}
                 muted
+                bg={"gray.800"}
                 autoPlay
                 // ref={screenShareRef}
                 h={"full"}

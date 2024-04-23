@@ -83,8 +83,8 @@ export default function MeetingHeader({
     <HStack
       justify={"space-between"}
       gap={5}
-      bg={"black"}
-      rounded={"40px"}
+      // bg={"black"}
+      rounded={"10px"}
       py={3}
       px={4}
     >

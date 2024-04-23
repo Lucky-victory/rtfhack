@@ -228,10 +228,10 @@ export default function MeetPage({
       <PageWrapper>
         <Flex
           as="main"
-          h={"var(--chakra-vh)"}
-          minH={"730px"}
+          // h={"var(--chakra-vh)"}
+          minH={"700px"}
           maxH={"1000px"}
-          bg={"gray.900"}
+          bg={"red"}
           p={2}
         >
           {isIdle && (
@@ -289,7 +289,7 @@ export default function MeetPage({
               textAlign={"center"}
             >
               <Heading>Asking to join</Heading>
-              <Text>Hold on, an admin will let you in in a moment.</Text>
+              <Text>Hold on, someone will let you in soon.</Text>
             </Stack>
           )}
           {!isIdle && isConnected && (
@@ -301,8 +301,8 @@ export default function MeetPage({
               />
               <Flex
                 h={"full"}
-                bg={"black"}
-                rounded={"30px"}
+                bg={"gray.700"}
+                rounded={"15px"}
                 p={2}
                 gap={3}
                 overflow={"hidden"}
@@ -317,17 +317,21 @@ export default function MeetPage({
               transition={"0.65s ease-in-out"}
              */}
                 <Flex
+                  bg={"blue"}
                   direction={{ base: "column", lg: "row" }}
                   minH="full"
                   flex={1}
-                  gap={3}
+                  gap={2}
                   mr={{
-                    lg: !isMinimized ? "var(--chat-area-width,330px)" : "auto",
+                    lg: !isMinimized
+                      ? "calc(var(--chat-area-width,330px) + 10px)"
+                      : "auto",
                     base: 0,
                   }}
                 >
                   <Box maxW={1000} minH={450} w={"full"}>
                     <LocalPeer
+                      isPinned={false}
                       {...roomInstance}
                       local={{
                         isRecording: isRecording,
@@ -350,7 +354,7 @@ export default function MeetPage({
                       flexShrink={0}
                       overflowX={{ lg: "auto" }}
                       overflowY={{ base: "auto", lg: "hidden" }}
-                      p={2}
+                      p={{ base: "6px 2px", lg: "0 6px " }}
                     >
                       <Flex
                         gap={3}
@@ -363,6 +367,7 @@ export default function MeetPage({
                           (peerId) =>
                             isNotBot(peerId) && (
                               <RemotePeer
+                                isPinned={false}
                                 activePeers={activePeers}
                                 key={peerId}
                                 peerId={peerId}
