@@ -49,6 +49,8 @@ function DragAndDropImage({
     (hasImage: boolean, files: File[], image: string) => {
       onUploadChange(hasImage, files, image);
     },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [images, files]
   );
 

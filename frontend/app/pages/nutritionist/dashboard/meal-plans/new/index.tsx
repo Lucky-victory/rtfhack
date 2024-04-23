@@ -148,6 +148,7 @@ export default function NewPostPage() {
       }, 2000);
     }
     return () => clearTimeout(timeoutId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.message, isSuccess]);
 
   useEffect(() => {
@@ -156,7 +157,7 @@ export default function NewPostPage() {
       content: contentValue,
       userId: user?.authId!,
     }));
-  }, [contentValue]);
+  }, [contentValue,user?.authId]);
   return (
     <>
       <NutritionistDashboardLayout>

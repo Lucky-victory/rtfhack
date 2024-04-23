@@ -65,7 +65,8 @@ export default function Chats({ spaceIdOrId }: { spaceIdOrId: string }) {
     return () => {
       if (channelRef.current) channelRef.current.unbind();
     };
-  }, [messages]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages, spaceIdOrId]);
 
   /**
    * The function was used in other to stop typescript types warning for chakra

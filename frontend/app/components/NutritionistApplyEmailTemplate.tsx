@@ -26,7 +26,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
 
     <div style={{ margin: "16px 0" }}>
       <p>
-        Haven't heard from us?, You can also
+        Haven&apos;t heard from us?, You can also
         <a
           href={"https://greenspacedao.xyz/nutritionist/check-status/"}
           target="_blank"
@@ -45,9 +45,11 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
 
     <div style={{ margin: "1rem 0" }}>
       <span>Best Regards,</span>
-      <div style={{
-        marginTop: "0.875rem",
-      }}>
+      <div
+        style={{
+          marginTop: "0.875rem",
+        }}
+      >
         <b>Lucky victory</b>
         <br />
         <em>Co-founder</em>

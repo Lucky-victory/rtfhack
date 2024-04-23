@@ -25,6 +25,7 @@ export default function Home({ userSession }: { userSession: USER_SESSION }) {
         router.push("/");
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disconnecting]);
 
   useEffect(() => {

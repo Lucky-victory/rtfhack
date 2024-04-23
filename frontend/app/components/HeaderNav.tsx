@@ -79,7 +79,7 @@ export function HeaderNav() {
     isLoading,
     session: userSession,
   } = useAuth();
-  console.log({ authUser });
+  // console.log({ authUser });
 
   // console.log({ session, status, user, isAuthenticated, isLoading });
   // useEffect(() => {
