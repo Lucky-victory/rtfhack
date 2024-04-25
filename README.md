@@ -1,5 +1,5 @@
 
-# GreenspaceDAO x Solana Renaissance Hack
+# GreenspaceDAO x Ready to Fight Hack
 
 Video Demo - [Demo video](https://www.loom.com/share/830b631d4e7b4a4d887ec28fd148f2ae) <br />
 Live Link - [GreenspaceDAO dapp](https://greenspacedao.xyz/) <br />
@@ -45,10 +45,10 @@ Here's a breakdown of how it was built:
 
 ## Where we deployed to/contract details
 
-We created and deployed our smart contracts on the Solana Devnet chain.
+We created and deployed our smart contracts on the Ready to Fight Chain.
 
-### Solana Devnet
+### Ready to Fight Chain
 
-GreenspaceDAO program - 3oAwHdjpEYojMcTe5qvSTFPWM5voXm7AMXrXxD4cfJLF - [View on Solana Devnet](https://explorer.solana.com/address/3oAwHdjpEYojMcTe5qvSTFPWM5voXm7AMXrXxD4cfJLF?cluster=devnet)
+GreenspaceDAO program - 3oAwHdjpEYojMcTe5qvSTFPWM5voXm7AMXrXxD4cfJLF - [View on Ready to Fight Chain](https://explorer.solana.com/address/3oAwHdjpEYojMcTe5qvSTFPWM5voXm7AMXrXxD4cfJLF?cluster=devnet)
 
 
