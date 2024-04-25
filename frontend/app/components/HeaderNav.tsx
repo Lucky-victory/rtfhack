@@ -109,8 +109,8 @@ export function HeaderNav() {
         </Link>
       </ListItem>
       <ListItem>
-        <Link {...linkStyles} href={"/our-mission"}>
-          Our mission
+        <Link {...linkStyles} href={"/proposals"}>
+          Governance
         </Link>
       </ListItem>
     </>,
