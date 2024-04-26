@@ -1,12 +1,17 @@
-import { Box, Heading } from "@chakra-ui/react";
+import { Box, Heading, Stack } from "@chakra-ui/react";
+import ChallengeCard from "./ChallengeCard";
 
 export default function Challenges({ spaceIdOrId }: { spaceIdOrId: string }) {
   return (
-    <>
-      <Heading size={"md"} fontWeight={600} mb={4}>
+    <Box pb={6}>
+      <Heading size={"lg"} fontWeight={600} mb={4}>
         Challenges
       </Heading>
-      <Box>Challenges here</Box>
-    </>
+      <Stack gap={5}>
+        {[0, 0].map((event, i) => (
+          <ChallengeCard spaceIdOrId={spaceIdOrId} key={i} />
+        ))}
+      </Stack>
+    </Box>
   );
 }

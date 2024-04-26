@@ -6,6 +6,9 @@ import {
   Heading,
   HStack,
   Input,
+  Skeleton,
+  SkeletonCircle,
+  SkeletonText,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -19,6 +22,7 @@ import { useGetCommunityMessagesQuery } from "@/state/services";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "@/state/store";
 import { addMessage } from "@/state/slices";
+import CommunityChatInput from "./ChatInput";
 
 export default function Chats({ spaceIdOrId }: { spaceIdOrId: string }) {
   const { user } = useAuth();
@@ -34,26 +38,7 @@ export default function Chats({ spaceIdOrId }: { spaceIdOrId: string }) {
   );
 
   const channelRef = useRef<Channel>();
-  const messageForm = useFormik({
-    initialValues: {
-      message: "",
-    },
-    onSubmit: async (values, formikHelpers) => {
-      const { message } = values;
 
-      formikHelpers.setFieldValue("message", "");
-      await sendMessage(message);
-    },
-  });
-  async function sendMessage(message: string) {
-    try {
-      await fetch(`/api/pusher/chat?communityId=${spaceIdOrId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, userId: user?.authId }),
-      });
-    } catch (error) {}
-  }
   useEffect(() => {
     channelRef.current = pusherClient
       .subscribe(spaceIdOrId)
@@ -68,16 +53,6 @@ export default function Chats({ spaceIdOrId }: { spaceIdOrId: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, spaceIdOrId]);
 
-  /**
-   * The function was used in other to stop typescript types warning for chakra
-   * @param event
-   */
-  const handleSubmit: FormEventHandler<HTMLDivElement | HTMLFormElement> = (
-    event
-  ) => {
-    messageForm.handleSubmit(event as FormEvent<HTMLFormElement>);
-  };
-
   return (
     <>
       <Heading
@@ -90,9 +65,21 @@ export default function Chats({ spaceIdOrId }: { spaceIdOrId: string }) {
       >
         Chats
       </Heading>
+
       <Box pos={"relative"}>
         <Stack divider={<Divider />} pb={24}>
-          {messages?.length > 0 &&
+          {(isFetching || isLoading) &&
+            [0, 0, 0, 0, 0, 0].map((_, i) => (
+              <ChatLoading key={"loading-skeleton" + i} />
+            ))}
+          {!isFetching && !isLoading && messages?.length === 0 && (
+            <Box py={8} textAlign={"center"}>
+              <Text> No messages yet.</Text>
+            </Box>
+          )}
+          {!isFetching &&
+            !isLoading &&
+            messages?.length > 0 &&
             messages.map((message: any, index: number) => (
               <HStack
                 py={3}
@@ -120,37 +107,21 @@ export default function Chats({ spaceIdOrId }: { spaceIdOrId: string }) {
               </HStack>
             ))}
         </Stack>
-        <HStack
-          bg={"black"}
-          px={2}
-          py={3}
-          as={"form"}
-          onSubmit={handleSubmit}
-          pos={"sticky"}
-          bottom={"0"}
-          // left={0}
-          w={"full"}
-        >
-          <Input
-            // rounded={"full"}
-            _focus={{
-              boxShadow: "0 0 0 1px transparent",
-              borderColor: "gs-yellow.400",
-            }}
-            autoComplete="off"
-            name="message"
-            value={messageForm.values.message}
-            placeholder="Type a message..."
-            onChange={messageForm.handleChange}
-          />
-          <Button
-            colorScheme="gs-yellow"
-            isDisabled={messageForm.values.message === ""}
-          >
-            <FiSend />
-          </Button>
-        </HStack>
       </Box>
+      <CommunityChatInput user={user} spaceIdOrId={spaceIdOrId} />
     </>
   );
 }
+
+export const ChatLoading = ({ isLoaded = false }: { isLoaded?: boolean }) => {
+  return (
+    <HStack>
+      <SkeletonCircle w={10} h={10} />
+      <Stack flex={1}>
+        <Skeleton h={3} w={"full"} rounded={"full"}></Skeleton>
+        <Skeleton h={3} w={"40"} rounded={"full"}></Skeleton>
+        <Skeleton h={3} w={"full"} rounded={"full"}></Skeleton>
+      </Stack>
+    </HStack>
+  );
+};
