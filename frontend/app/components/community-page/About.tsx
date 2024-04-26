@@ -10,7 +10,7 @@ export default function About({
 }) {
   return (
     <>
-      <Heading size={"md"} fontWeight={600} mb={5}>
+      <Heading size={"lg"} fontWeight={600} mb={5}>
         About this community
       </Heading>
 

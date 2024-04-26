@@ -153,6 +153,7 @@ export default function CommunityViewPage({
             <meta property="og:locale:alternate" content="en_US" />
             <meta property="og:locale:alternate" content="en_GB" />
           </Head>
+
           <Box>
             {/* BANNER AREA */}
             <Box>
@@ -230,7 +231,7 @@ export default function CommunityViewPage({
                 </Heading>
               </Flex>
             </Box>
-            <Flex direction={{ lg: "row", base: "column" }} gap={4}>
+            <Flex direction={{ lg: "row", base: "column" }} gap={3}>
               <Stack>
                 <Flex
                   borderBottom={{ base: "2px", lg: "none" }}
@@ -241,6 +242,8 @@ export default function CommunityViewPage({
                   overflowX={"auto"}
                   px={{ base: 2, lg: 4 }}
                   gap={{ base: 3, lg: 4 }}
+                  pos={"sticky"}
+                  top={0}
                 >
                   {[tabButtons]}
                 </Flex>
@@ -257,8 +260,8 @@ export default function CommunityViewPage({
                   description={community?.description}
                 />
               </Box>
-              <Box px={5} hideBelow={"lg"}>
-                <Box bg={"gray.900"} borderRadius={"15px"} minW={250}>
+              <Box px={4} hideBelow={"lg"} pos={"sticky"} top={0}>
+                <Box borderRadius={"10px"} minW={250}>
                   <Heading
                     size={"md"}
                     fontWeight={500}
@@ -268,7 +271,7 @@ export default function CommunityViewPage({
                   >
                     Members
                   </Heading>
-                  <Stack p={4} as={List} divider={<Divider />}>
+                  <Stack py={4} as={List} divider={<Divider />}>
                     {members?.length > 0 &&
                       members.map((member, i) => {
                         return (
