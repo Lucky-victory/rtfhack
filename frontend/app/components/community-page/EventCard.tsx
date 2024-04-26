@@ -11,6 +11,7 @@ import {
 import { Link } from "@chakra-ui/next-js";
 import { useGetCommunitiesQuery } from "@/state/services";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
+import { shortenText } from "@/utils";
 export default function EventCards({
   spaceIdOrId,
   event,
@@ -53,7 +54,7 @@ export default function EventCards({
       <Stack flex={1}>
         <Heading size={"md"}>{event?.title}</Heading>
         <Box>
-          <MarkdownRenderer markdown={event?.details} />
+          <MarkdownRenderer markdown={shortenText(event?.details, 150)} />
         </Box>
         <Box>
           <HStack>

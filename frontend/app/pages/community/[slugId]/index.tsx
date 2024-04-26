@@ -153,6 +153,7 @@ export default function CommunityViewPage({
             <meta property="og:locale:alternate" content="en_US" />
             <meta property="og:locale:alternate" content="en_GB" />
           </Head>
+
           <Box>
             {/* BANNER AREA */}
             <Box>
@@ -241,6 +242,8 @@ export default function CommunityViewPage({
                   overflowX={"auto"}
                   px={{ base: 2, lg: 4 }}
                   gap={{ base: 3, lg: 4 }}
+                  pos={"sticky"}
+                  top={0}
                 >
                   {[tabButtons]}
                 </Flex>
@@ -257,7 +260,7 @@ export default function CommunityViewPage({
                   description={community?.description}
                 />
               </Box>
-              <Box px={4} hideBelow={"lg"}>
+              <Box px={4} hideBelow={"lg"} pos={"sticky"} top={0}>
                 <Box borderRadius={"10px"} minW={250}>
                   <Heading
                     size={"md"}
