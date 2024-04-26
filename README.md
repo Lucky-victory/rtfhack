@@ -54,9 +54,9 @@ We created and deployed our smart contracts on the Ready to Fight Testnet Chain.
 
 
 
-2. CommunityNetwork contract - 0x3a65168B746766066288B83417329a7F901b5569 - (https://github.com/degencodebeast/rtfhack/blob/main/backend/contracts/CommunityNetwork.sol) | [View on Ready to Fight Chain](https://network.rtfight.com/address/0x3a65168B746766066288B83417329a7F901b5569)
+2. CommunityNetwork contract - 0x3a65168B746766066288B83417329a7F901b5569 - [View source code](https://github.com/degencodebeast/rtfhack/blob/main/backend/contracts/CommunityNetwork.sol) | [View on Ready to Fight Chain](https://network.rtfight.com/address/0x3a65168B746766066288B83417329a7F901b5569)
 
-3. NutritionistNFT contract - 0x6D919b8dC30BEf41b56Aa8b18b2052c9459F8E9A - (https://github.com/degencodebeast/rtfhack/blob/main/backend/contracts/NutritionistNFT.sol) | [View on Ready to Fight Chain](https://network.rtfight.com/address/0x6D919b8dC30BEf41b56Aa8b18b2052c9459F8E9A)
+3. NutritionistNFT contract - 0x6D919b8dC30BEf41b56Aa8b18b2052c9459F8E9A -[View source code](https://github.com/degencodebeast/rtfhack/blob/main/backend/contracts/NutritionistNFT.sol) | [View on Ready to Fight Chain](https://network.rtfight.com/address/0x6D919b8dC30BEf41b56Aa8b18b2052c9459F8E9A)
 
-4. UserNFT contract - 0xA39d26482B5c226Fd02A5f3e159C72ee03d63Fc0 -(https://github.com/degencodebeast/rtfhack/blob/main/backend/contracts/UserNFT.sol) | [View on Ready to Fight Chain](https://network.rtfight.com/address/0xA39d26482B5c226Fd02A5f3e159C72ee03d63Fc0)
+4. UserNFT contract - 0xA39d26482B5c226Fd02A5f3e159C72ee03d63Fc0 - [View source code](https://github.com/degencodebeast/rtfhack/blob/main/backend/contracts/UserNFT.sol) | [View on Ready to Fight Chain](https://network.rtfight.com/address/0xA39d26482B5c226Fd02A5f3e159C72ee03d63Fc0)
 
