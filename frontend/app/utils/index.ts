@@ -137,13 +137,13 @@ export function shortenText(text: string, len = 50, end = "..."): string {
 export const apiPost = async (
   endpoint: string,
   params: Record<string, any>
-) => {
+): Promise<{ message: string }> => {
   const result = await axios.post(`${endpoint}`, params, {
     headers: {
       "content-type": "application/json",
     },
   });
-  return result.data;
+  return { message: result.data };
 };
 // export const getUserFromDB = async (
 //   usernameOrIdOrAddress: string | number,

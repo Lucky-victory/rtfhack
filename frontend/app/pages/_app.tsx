@@ -1,37 +1,19 @@
 import { configureChains, WagmiConfig, createConfig } from "wagmi";
-import { publicProvider } from "wagmi/providers/public";
 //import { mainnet, bscTestnet } from "wagmi/chains";
 //import { BNBTestnet } from '@wagmi/core/chains'
-
-import { InjectedConnector } from "wagmi/connectors/injected";
-
+import "@rainbow-me/rainbowkit/styles.css";
 import { fonts } from "@/fonts";
 import { AppChakraProvider } from "@/providers/chakra";
 import { HuddleClient, HuddleProvider } from "@huddle01/react";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
-import { Provider } from "react-redux";
-import store from "@/state/store";
 import "swiper/css";
 import { SessionProvider } from "next-auth/react";
-import {
-  ConnectionProvider,
-  WalletProvider,
-} from "@solana/wallet-adapter-react";
-import {
-  PhantomWalletAdapter,
-  SolflareWalletAdapter,
-} from "@solana/wallet-adapter-wallets";
-import { clusterApiUrl } from "@solana/web3.js";
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
-import { useMemo } from "react";
-import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import AppProviders from "@/providers";
-
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
-import { pego } from '@/utils/constants';
+import { pego } from "@/utils/constants";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 const huddleClient = new HuddleClient({
   projectId: process.env.NEXT_PUBLIC_HUDDLE_PROJECT_ID!,
   options: {
@@ -43,8 +25,6 @@ const huddleClient = new HuddleClient({
 });
 
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID as string;
-
-
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [pego],
@@ -59,11 +39,10 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 );
 
 const { connectors } = getDefaultWallets({
-  appName: 'RevitalizeAI',
+  appName: "GreenspaceDAO",
   projectId: projectId,
   chains,
 });
-
 
 // const config = createConfig({
 //   connectors: [new InjectedConnector({ chains })],
@@ -77,7 +56,7 @@ const config = createConfig({
   publicClient,
   webSocketPublicClient,
 });
-
+const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
   // const network = WalletAdapterNetwork.Devnet;
@@ -97,25 +76,27 @@ export default function App({ Component, pageProps }: AppProps) {
       </style>{" "}
       {/*  TODO: Add the appropriate types */}
       {/* @ts-ignore */}
-      
-      <SessionProvider session={pageProps.session}>
       <WagmiConfig config={config}>
-        <AppProviders>
-          {/* <ConnectionProvider endpoint={endpoint}>
+        <SessionProvider session={pageProps.session}>
+          <QueryClientProvider client={queryClient}>
+            <RainbowKitProvider chains={chains}>
+              <AppProviders>
+                {/* <ConnectionProvider endpoint={endpoint}>
             <WalletProvider wallets={wallets} autoConnect>
-              <WalletModalProvider> */}
+          <WalletModalProvider> */}
                 <HuddleProvider client={huddleClient}>
                   <AppChakraProvider>
                     <Component {...pageProps} />
                   </AppChakraProvider>
                 </HuddleProvider>
-              {/* </WalletModalProvider>
+                {/* </WalletModalProvider>
             </WalletProvider>
           </ConnectionProvider> */}
-        </AppProviders>
-        </WagmiConfig>
-      </SessionProvider>
-      
+              </AppProviders>
+            </RainbowKitProvider>
+          </QueryClientProvider>
+        </SessionProvider>
+      </WagmiConfig>
     </>
   );
 }

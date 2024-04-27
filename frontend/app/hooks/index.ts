@@ -10,8 +10,7 @@ type UpdateSession = (data?: any) => Promise<USER_SESSION | null>;
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { useAccount, useConnect, useSignMessage, useDisconnect } from "wagmi";
 import { useAuthRequestChallengeEvm } from "@moralisweb3/next";
-import {useNetwork} from "wagmi";
-
+import { useNetwork } from "wagmi";
 
 export const useWalletAccount = () => {
   const [_address, setAddress] = useState<string | null>(null);
@@ -34,11 +33,18 @@ export const useWalletAccount = () => {
 };
 export function useCustomSign() {
   //const { publicKey, signMessage } = useWallet();
-  const { connectAsync } = useConnect();
-  const {data, error, isLoading, signMessage} = useSignMessage();
+  // const { connectAsync } = useConnect();
+  const { data, error, isLoading, signMessageAsync } = useSignMessage({
+    onError(error, variables, context) {
+      console.log({ error, variables, context });
+    },
+    onSuccess(data, variables, context) {
+      console.log({ data, variables, context });
+    },
+  });
 
   const { isConnected, address } = useAccount();
-  const {chain} = useNetwork();
+  const { chain } = useNetwork();
 
   // const { account, chain } = await connectAsync({
   //   connector: new MetaMaskConnector(),
@@ -57,9 +63,14 @@ export function useCustomSign() {
     };
     // const message = "Sign to provide access to app";
     const { message } = await apiPost("api/auth/request-message", account);
-    const encodedMessage = new TextEncoder().encode(message);
-    //const signedMessage = signMessage?.(encodedMessage) as unknown;
-    const signedMessage = signMessage?.(message) as unknown as any;
+    // const encodedMessage = new TextEncoder().encode(message);
+    // const signedMessage = signMessage?.(encodedMessage) as unknown;
+    console.log({ signed, message });
+    const signedMessage = signMessageAsync?.({
+      message: message,
+    }) as unknown as any;
+    console.log({ signedMessage, signed, message });
+
     setSigned(true);
     //const signature = base58.encode(signedMessage);
     const signature = signedMessage;
@@ -75,10 +86,11 @@ export function useCustomSign() {
     }
   };
 
-  // useEffect(() => {
-  //   publicKey ? !signed && signCustomMessage() : setSigned(false);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [publicKey]);
+  useEffect(() => {
+    address ? !signed && signCustomMessage() : setSigned(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [address]);
+
   return { signed, setSigned, signCustomMessage };
 }
 export function useDebounce<T>(value: T, delay?: number): T {

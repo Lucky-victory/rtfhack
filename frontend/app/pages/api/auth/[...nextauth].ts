@@ -39,10 +39,10 @@ export default NextAuth({
             await Moralis.Auth.verify({
               message,
               signature,
-              network: "solana",
+              // network: "solana",
             });
 
-          const { address, network, profileId, expirationTime } = raw;
+          const { address, profileId, expirationTime } = raw;
           const existingUser = await db.query.users.findFirst({
             where: eq(users.address, address),
           });
@@ -58,7 +58,7 @@ export default NextAuth({
               emailVerified: existingUser.emailVerified,
               userType: existingUser.userType,
               createdAt: existingUser.createdAt,
-             
+
               expirationTime,
             };
           }
@@ -68,7 +68,6 @@ export default NextAuth({
             });
             return await tx.query.users.findFirst({
               where: eq(users.id, insertRes.insertId),
-
               columns: {
                 id: true,
                 authId: true,
@@ -78,13 +77,13 @@ export default NextAuth({
                 address: true,
                 role: true,
                 userType: true,
-                createdAt: true,emailVerified: true,
+                createdAt: true,
+                emailVerified: true,
               },
             });
           });
           const user = {
             ...createdUser,
-           
             expirationTime,
           };
           return user;

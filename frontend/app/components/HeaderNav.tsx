@@ -1,18 +1,18 @@
 import {
-    Button,
-    Drawer,
-    DrawerBody,
-    DrawerCloseButton,
-    DrawerContent,
-    DrawerHeader,
-    DrawerOverlay,
-    HStack,
-    Heading,
-    IconButton,
-    Image,
-    List,
-    ListItem,
-    useDisclosure,
+  Button,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  HStack,
+  Heading,
+  IconButton,
+  Image,
+  List,
+  ListItem,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
 
@@ -34,128 +34,128 @@ import isEmpty from "just-is-empty";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 export function HeaderNav() {
-    const { isMobileSize, isTabletSize } = useResize();
+  const { isMobileSize, isTabletSize } = useResize();
 
-    const linkStyles = {
-        display: isMobileSize || isTabletSize ? "block" : "inline-block",
-        fontSize: "16px",
-        textTransform: "capitalize" as any,
-        pos: "relative" as any,
-        pb: "2px",
-        _before: {
-            content: `''`,
-            pos: "absolute",
-            bottom: 0,
-            left: 0,
-            w: 0,
-            h: "3px",
-            bg: "gs-yellow.400",
-            transition: "0.4s ease-in-out",
-        },
-        _hover: {
-            textDecoration: "none",
-            color: "gs-yellow.400",
-            _before: { w: "full" },
-        },
-    };
+  const linkStyles = {
+    display: isMobileSize || isTabletSize ? "block" : "inline-block",
+    fontSize: "16px",
+    textTransform: "capitalize" as any,
+    pos: "relative" as any,
+    pb: "2px",
+    _before: {
+      content: `''`,
+      pos: "absolute",
+      bottom: 0,
+      left: 0,
+      w: 0,
+      h: "3px",
+      bg: "gs-yellow.400",
+      transition: "0.4s ease-in-out",
+    },
+    _hover: {
+      textDecoration: "none",
+      color: "gs-yellow.400",
+      _before: { w: "full" },
+    },
+  };
 
-    const router = useRouter();
-    const { data: session, status } = useSession();
-    const [isPending, startTransition] = useTransition();
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const { openConnectModal } = useConnectModal();
-    const {
-        isOpen: isMobileNavbarOpen,
-        onToggle: onMobileNavbarToggle,
-        // onOpen: onMobileNavbarOpen,
-        onClose: onMobileNavbarClose,
-    } = useDisclosure();
+  const router = useRouter();
+  const { data: session, status } = useSession();
+  const [isPending, startTransition] = useTransition();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { openConnectModal } = useConnectModal();
+  const {
+    isOpen: isMobileNavbarOpen,
+    onToggle: onMobileNavbarToggle,
+    // onOpen: onMobileNavbarOpen,
+    onClose: onMobileNavbarClose,
+  } = useDisclosure();
 
-    const { setAddress, setEnsName, user } = useAppContext();
+  const { setAddress, setEnsName, user } = useAppContext();
 
-    const { publicKey, signMessage } = useWallet();
-    const { address } = useAccount();
-    //const address = publicKey?.toBase58();
-    const {
-        user: authUser,
-        isAuthenticated,
-        isLoading,
-        session: userSession,
-    } = useAuth();
-    // console.log({ authUser });
+  // const { publicKey, signMessage } = useWallet();
+  const { address } = useAccount();
+  //const address = publicKey?.toBase58();
+  const {
+    user: authUser,
+    isAuthenticated,
+    isLoading,
+    session: userSession,
+  } = useAuth();
+  // console.log({ authUser });
 
-    // console.log({ session, status, user, isAuthenticated, isLoading });
-    // useEffect(() => {
-    //   if (isAuthenticated) {
-    //     startTransition(() => {
-    //       // router.push("/member/dashboard");
-    //     });
-    //   }
-    // }),
-    //   [isAuthenticated];
-    useEffect(() => {
-        setAddress(`${address}`);
-        //setEnsName(ensName);
-    }, [address, setAddress]);
+  // console.log({ session, status, user, isAuthenticated, isLoading });
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     startTransition(() => {
+  //       // router.push("/member/dashboard");
+  //     });
+  //   }
+  // }),
+  //   [isAuthenticated];
+  useEffect(() => {
+    setAddress(`${address}`);
+    //setEnsName(ensName);
+  }, [address, setAddress]);
 
-    const isLoggedin = () => user && user?.userAddress !== "";
-    const links = [
-        <>
-            <ListItem>
-                <Link {...linkStyles} href={"/blog"}>
-                    Blog
-                </Link>
-            </ListItem>
-            <ListItem>
-                <Link {...linkStyles} href={"/communities"}>
-                    Communities
-                </Link>
-            </ListItem>
-            <ListItem>
-                <Link {...linkStyles} href={"/proposals"}>
-                    Governance
-                </Link>
-            </ListItem>
-        </>,
-    ];
-    return (
-        <>
-            <HStack
-                minH={"50px"}
-                pl={5}
-                bg={"blackAlpha.300"}
-                justify={"space-between"}
-                backdropFilter={"blur(5px)"}
-            >
-                <Heading>
-                    <Image
-                        src={"/logo-with-text.png"}
-                        alt={"Greenspace Logo"}
-                        width={"200px"}
-                        //   height={"100px"}
-                    />
-                </Heading>
+  const isLoggedin = () => user && user?.userAddress !== "";
+  const links = [
+    <>
+      <ListItem>
+        <Link {...linkStyles} href={"/blog"}>
+          Blog
+        </Link>
+      </ListItem>
+      <ListItem>
+        <Link {...linkStyles} href={"/communities"}>
+          Communities
+        </Link>
+      </ListItem>
+      <ListItem>
+        <Link {...linkStyles} href={"/proposals"}>
+          Governance
+        </Link>
+      </ListItem>
+    </>,
+  ];
+  return (
+    <>
+      <HStack
+        minH={"50px"}
+        pl={5}
+        bg={"blackAlpha.300"}
+        justify={"space-between"}
+        backdropFilter={"blur(5px)"}
+      >
+        <Heading>
+          <Image
+            src={"/logo-with-text.png"}
+            alt={"Greenspace Logo"}
+            width={"200px"}
+            //   height={"100px"}
+          />
+        </Heading>
 
-                <List
-                    display={"flex"}
-                    gap={4}
-                    fontWeight={500}
-                    hidden={isMobileSize || isTabletSize}
-                >
-                    {[links]}
-                </List>
+        <List
+          display={"flex"}
+          gap={4}
+          fontWeight={500}
+          hidden={isMobileSize || isTabletSize}
+        >
+          {[links]}
+        </List>
 
-                <HStack
-                    clipPath={"polygon(14% 0, 100% 0%, 100% 100%, 0% 100%);"}
-                    bg={"gs-yellow.400"}
-                    minW={{ base: 250, lg: 350 }}
-                    px={4}
-                    pr={8}
-                    py={2}
-                    justify={"flex-end"}
-                >
-                    <HStack>
-                        {/* {" "}
+        <HStack
+          clipPath={"polygon(14% 0, 100% 0%, 100% 100%, 0% 100%);"}
+          bg={"gs-yellow.400"}
+          minW={{ base: 250, lg: 350 }}
+          px={4}
+          pr={8}
+          py={2}
+          justify={"flex-end"}
+        >
+          <HStack>
+            {/* {" "}
             {ready && !authenticated && (
               <Button
                 shadow={"md"}
@@ -182,35 +182,31 @@ export function HeaderNav() {
                 </Button>
               )}
             </Box> */}
-                    </HStack>
-                    {!(isMobileSize || isTabletSize) && (
-                        <>
-                            {address &&
-                                !isLoggedin() &&
-                                isEmpty(userSession?.user) && (
-                                    <HStack spacing={4}>
-                                        <LoginBtn />
-                                        <Button
-                                            // colorScheme="primaryColor"
-                                            variant={"solid"}
-                                            onClick={() => onOpen()}
-                                        >
-                                            Register
-                                        </Button>
-                                    </HStack>
-                                )}
-                            {/* {!address && <WalletAdaptor />}{" "} */}
-                            {!address && (
-                                <Button size={"lg"} onClick={openConnectModal}>
-                                    Connect Wallet
-                                </Button>
-                            )}{" "}
-                            {userSession && (
-                                <AuthBtn userSession={userSession} />
-                            )}
-                        </>
-                    )}
-                    {/*{!(isMobileSize || isTabletSize) && (
+          </HStack>
+          {!(isMobileSize || isTabletSize) && (
+            <>
+              {address && !isLoggedin() && isEmpty(userSession?.user) && (
+                <HStack spacing={4}>
+                  <LoginBtn />
+                  <Button
+                    // colorScheme="primaryColor"
+                    variant={"solid"}
+                    onClick={() => onOpen()}
+                  >
+                    Register
+                  </Button>
+                </HStack>
+              )}
+              {/* {!address && <WalletAdaptor />}{" "} */}
+              {!address && (
+                <Button size={"lg"} onClick={openConnectModal}>
+                  Connect Wallet
+                </Button>
+              )}{" "}
+              {userSession && <AuthBtn userSession={userSession} />}
+            </>
+          )}
+          {/*{!(isMobileSize || isTabletSize) && (
             <>
               
               {userSession ? (
@@ -221,45 +217,42 @@ export function HeaderNav() {
             </>
           )}*/}
 
-                    {(isMobileSize || isTabletSize) && (
-                        <IconButton
-                            ml={3}
-                            onClick={onMobileNavbarToggle}
-                            fontSize={24}
-                            aria-label="toggle mobile menu"
-                        >
-                            <LuMenu />
-                        </IconButton>
-                    )}
-                </HStack>
-            </HStack>
-            {(isMobileSize || isTabletSize) && (
-                <Drawer
-                    isOpen={isMobileNavbarOpen}
-                    onClose={onMobileNavbarClose}
-                >
-                    <DrawerOverlay />
-                    <DrawerContent>
-                        <DrawerCloseButton />
-                        <DrawerHeader />
-                        <DrawerBody>
-                            <List
-                                my={10}
-                                display={"flex"}
-                                flexDir={"column"}
-                                gap={4}
-                                fontWeight={500}
-                            >
-                                {[links]}
-                            </List>
-                            <HStack
-                                // clipPath={"polygon(14% 0, 100% 0%, 100% 100%, 0% 100%);"}
-                                // bg={"gs-yellow.400"}
-                                minW={{ base: 150, lg: 350 }}
-                                p={2}
-                                // justify={"center"}
-                            >
-                                {/* <Button
+          {(isMobileSize || isTabletSize) && (
+            <IconButton
+              ml={3}
+              onClick={onMobileNavbarToggle}
+              fontSize={24}
+              aria-label="toggle mobile menu"
+            >
+              <LuMenu />
+            </IconButton>
+          )}
+        </HStack>
+      </HStack>
+      {(isMobileSize || isTabletSize) && (
+        <Drawer isOpen={isMobileNavbarOpen} onClose={onMobileNavbarClose}>
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader />
+            <DrawerBody>
+              <List
+                my={10}
+                display={"flex"}
+                flexDir={"column"}
+                gap={4}
+                fontWeight={500}
+              >
+                {[links]}
+              </List>
+              <HStack
+                // clipPath={"polygon(14% 0, 100% 0%, 100% 100%, 0% 100%);"}
+                // bg={"gs-yellow.400"}
+                minW={{ base: 150, lg: 350 }}
+                p={2}
+                // justify={"center"}
+              >
+                {/* <Button
                   display={"block"}
                   w={"full"}
                   layerStyle={"with-shadow"}
@@ -268,46 +261,39 @@ export function HeaderNav() {
                   Connect Wallet
                 </Button> */}
 
-                                <>
-                                    {address &&
-                                        !isLoggedin() &&
-                                        isEmpty(userSession?.user) && (
-                                            <HStack spacing={4}>
-                                                <LoginBtn />
-                                                <Button
-                                                    // colorScheme='primaryColor'
-                                                    variant={"solid"}
-                                                    onClick={() => onOpen()}
-                                                >
-                                                    Register
-                                                </Button>
-                                            </HStack>
-                                        )}
-                                    {/* {!address && <WalletAdaptor />} */}
-                                    {!address && (
-                                        <Button
-                                            size={"lg"}
-                                            onClick={openConnectModal}
-                                        >
-                                            Connect Wallet
-                                        </Button>
-                                    )}
-                                    {/* 
+                <>
+                  {address && !isLoggedin() && isEmpty(userSession?.user) && (
+                    <HStack spacing={4}>
+                      <LoginBtn />
+                      <Button
+                        // colorScheme='primaryColor'
+                        variant={"solid"}
+                        onClick={() => onOpen()}
+                      >
+                        Register
+                      </Button>
+                    </HStack>
+                  )}
+                  {/* {!address && <WalletAdaptor />} */}
+                  {!address && (
+                    <Button size={"lg"} onClick={openConnectModal}>
+                      Connect Wallet
+                    </Button>
+                  )}
+                  {/* 
                   {userSession ? (
                     <AuthBtn userSession={userSession} />
                   ) : (
                     <WalletAdaptor />
                   )} */}
-                                    {userSession && (
-                                        <AuthBtn userSession={userSession} />
-                                    )}
-                                </>
-                            </HStack>
-                        </DrawerBody>
-                    </DrawerContent>
-                </Drawer>
-            )}
-            <RegisterForm isOpen={isOpen} onClose={onClose} />
-        </>
-    );
+                  {userSession && <AuthBtn userSession={userSession} />}
+                </>
+              </HStack>
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
+      )}
+      <RegisterForm isOpen={isOpen} onClose={onClose} />
+    </>
+  );
 }

@@ -70,8 +70,9 @@ const RegisterForm = ({
     createUser,
     { data: createdUser, isLoading: isCreatingUser, isSuccess },
   ] = useAddUserMutation();
-  const { publicKey } = useWallet();
-  const address = publicKey?.toBase58();
+  // const { publicKey } = useWallet();
+  // const address = publicKey?.toBase58();
+  const { address } = useAccount();
   //const [sendUserToAI] = useSendUserInfoToAIMutation();
   // const { chain } = useNetwork();
   // const chainId = chain?.id;
@@ -234,7 +235,7 @@ const RegisterForm = ({
         //TODO: Call contract to register user
         // await registerUserTx();
         await new Promise((resolve) => setTimeout(resolve, 2000));
-        if (publicKey) {
+        if (address) {
           if (!signed) {
             await signCustomMessage();
           }

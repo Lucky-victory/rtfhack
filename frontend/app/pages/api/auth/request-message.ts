@@ -22,7 +22,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { address, chain, network } = req.body;
+  const { address, chain, network, networkType = "evm" } = req.body;
 
   if (!Moralis.Core.isStarted)
     await Moralis.start({ apiKey: process.env.MORALIS_API_KEY });
@@ -34,8 +34,8 @@ export default async function handler(
 
     const message = await Moralis.Auth.requestMessage({
       address: address,
-      networkType: chain,
-      network: network,
+      networkType: networkType as "evm" | "solana" | "aptos",
+      // network: network,
       domain: DOMAIN!,
       statement: STATEMENT,
       uri: URI!,
