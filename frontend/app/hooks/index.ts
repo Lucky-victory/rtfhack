@@ -66,9 +66,9 @@ export function useCustomSign() {
     // const encodedMessage = new TextEncoder().encode(message);
     // const signedMessage = signMessage?.(encodedMessage) as unknown;
     console.log({ signed, message });
-    const signedMessage = signMessageAsync?.({
+    const signedMessage = (await signMessageAsync?.({
       message: message,
-    }) as unknown as any;
+    })) as unknown as any;
     console.log({ signedMessage, signed, message });
 
     setSigned(true);
