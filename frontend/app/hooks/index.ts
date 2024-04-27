@@ -7,11 +7,21 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { apiPost } from "@/utils";
 type UpdateSession = (data?: any) => Promise<USER_SESSION | null>;
 
+import { MetaMaskConnector } from "wagmi/connectors/metaMask";
+import { useAccount, useConnect, useSignMessage, useDisconnect } from "wagmi";
+import { useAuthRequestChallengeEvm } from "@moralisweb3/next";
+import {useNetwork} from "wagmi";
+
+
 export const useWalletAccount = () => {
   const [_address, setAddress] = useState<string | null>(null);
 
-  const { publicKey } = useWallet();
-  const address = publicKey?.toBase58();
+  const { connectAsync } = useConnect();
+  const { isLoading } = useDisconnect();
+  const { isConnected, address } = useAccount();
+
+  //const { publicKey } = useWallet();
+  //const address = publicKey?.toBase58();
   useEffect(() => {
     if (address) {
       setAddress(address);
@@ -23,23 +33,36 @@ export const useWalletAccount = () => {
   return { address: _address };
 };
 export function useCustomSign() {
-  const { publicKey, signMessage } = useWallet();
+  //const { publicKey, signMessage } = useWallet();
+  const { connectAsync } = useConnect();
+  const {data, error, isLoading, signMessage} = useSignMessage();
+
+  const { isConnected, address } = useAccount();
+  const {chain} = useNetwork();
+
+  // const { account, chain } = await connectAsync({
+  //   connector: new MetaMaskConnector(),
+  // });
+
   const [signed, setSigned] = useState(false);
 
   const signCustomMessage = async () => {
-    const address = publicKey?.toBase58();
-    const chain = "solana";
+    //const address = publicKey?.toBase58();
+    //const chain = "solana";
+
     const account = {
       address: address,
       chain: chain,
-      network: "devnet",
+      network: chain?.name,
     };
     // const message = "Sign to provide access to app";
     const { message } = await apiPost("api/auth/request-message", account);
     const encodedMessage = new TextEncoder().encode(message);
-    const signedMessage = (await signMessage?.(encodedMessage)) as Uint8Array;
+    //const signedMessage = signMessage?.(encodedMessage) as unknown;
+    const signedMessage = signMessage?.(message) as unknown as any;
     setSigned(true);
-    const signature = base58.encode(signedMessage);
+    //const signature = base58.encode(signedMessage);
+    const signature = signedMessage;
     try {
       await signIn("credentials", {
         message,

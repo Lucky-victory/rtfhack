@@ -1,4 +1,4 @@
-import { WalletDisconnectButton } from "@solana/wallet-adapter-react-ui";
+import  WalletDisconnectButton  from "./WalletAdapterBtn";
 import { useWallet } from "@solana/wallet-adapter-react";
 import LogoutBtn from "./LogoutBtn";
 import { Box } from "@chakra-ui/react";
@@ -7,39 +7,44 @@ import { getSession, GetSessionParams, signOut } from "next-auth/react";
 import { USER_SESSION } from "@/state/types";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import { useRouter } from "next/router";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
 
 export default function Home({ userSession }: { userSession: USER_SESSION }) {
   const { publicKey, disconnecting } = useWallet();
+  const { isLoading } = useDisconnect();
+  const { isConnected, isConnecting, isReconnecting, address } = useAccount();
+  const {status} = useDisconnect();
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   useEffect(() => {
     startTransition(() => {
-      publicKey && console.log(publicKey.toBase58());
+      //publicKey && console.log(publicKey.toBase58());
+      address && console.log(address)
     });
-  }, [publicKey]);
+  }, [address]);
 
   useEffect(() => {
     startTransition(() => {
-      if (disconnecting) {
+      if (isLoading) {
         signOut({ redirect: false });
         router.push("/");
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [disconnecting]);
+  }, [isLoading]);
 
   useEffect(() => {
     startTransition(() => {
-      console.log({ disconnecting });
+      console.log({ isLoading });
     });
-  }, [disconnecting]);
+  }, [isLoading]);
 
   if (userSession) {
     return (
       <Box>
         {!isPending && (
           <div>
-            <>{publicKey ? <WalletDisconnectButton /> : <></>}</>
+            <>{address ? <WalletDisconnectButton /> : <></>}</>
           </div>
         )}
       </Box>
