@@ -22,7 +22,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { address, chain, network, networkType = "evm" } = req.body;
+  const { address, chainId, network, networkType = "evm" } = req.body;
 
   if (!Moralis.Core.isStarted)
     await Moralis.start({ apiKey: process.env.MORALIS_API_KEY });
@@ -31,10 +31,23 @@ export default async function handler(
     if (!DOMAIN || !URI) {
       throw new Error("Please add APP_DOMAIN in the .env.local");
     }
-
+    // console.log({
+    //   address: address,
+    //   networkType: networkType as "evm" | "solana" | "aptos",
+    //   network: network,
+    //   domain: DOMAIN!,
+    //   chain,
+    //   statement: STATEMENT,
+    //   uri: URI!,
+    //   expirationTime: EXPIRATION_TIME,
+    //   timeout: TIMEOUT,
+    //   notBefore: NOT_BEFORE,
+    // });
     const message = await Moralis.Auth.requestMessage({
       address: address,
-      networkType: networkType as "evm" | "solana" | "aptos",
+      chain: chainId,
+      // publicKey: address,
+      networkType: networkType as "evm",
       // network: network,
       domain: DOMAIN!,
       statement: STATEMENT,

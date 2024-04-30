@@ -58,7 +58,7 @@ export function useCustomSign() {
 
     const account = {
       address: address,
-      chain: chain,
+      chainId: chain?.id,
       network: chain?.name,
     };
     // const message = "Sign to provide access to app";
